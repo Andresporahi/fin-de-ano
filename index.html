@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#280120">
-<meta name="description" content="Tablero familiar para decidir el viaje de fin de año. 29 dic 2026 → 3 ene 2027 · 10 personas · Alma.">
+<meta name="description" content="Tablero familiar para decidir el viaje de fin de año. 29 dic 2026 → 3 ene 2027 · 10 personas.">
 <meta property="og:title" content="Familia Fin de Año">
 <meta property="og:description" content="Doce planes, una decisión. 29 dic → 3 ene · 5 noches · 10 personas.">
 <title>Familia Fin de Año</title>
@@ -271,7 +271,6 @@ input[type=number]{font-family:var(--mono); width:170px}
       <span><b>29 dic → 3 ene</b> · 5 noches</span>
       <span><b>10</b> personas</span>
       <span><b>1</b> niña de 4</span>
-      <span><b>Alma</b> · 14 kg</span>
       <span><b id="d-votos">0</b> votos</span>
     </div>
   </div>
@@ -330,7 +329,6 @@ input[type=number]{font-family:var(--mono); width:170px}
       <th data-s="total" style="text-align:right">Alojamiento 10p/5n <span class="ar">↕</span></th>
       <th data-s="pppn" style="text-align:right">Por persona/noche <span class="ar">↕</span></th>
       <th data-s="brecha" style="text-align:right">Vs. presupuesto <span class="ar">↕</span></th>
-      <th data-s="mascota">Alma <span class="ar">↕</span></th>
       <th data-s="puntaje" style="text-align:right">Puntaje <span class="ar">↕</span></th>
     </tr></thead><tbody id="tbody"></tbody>
   </table></div>
@@ -377,7 +375,7 @@ input[type=number]{font-family:var(--mono); width:170px}
 </section>
 
 <div class="pieaviso wrap" style="padding-left:0; padding-right:0">
-  Cotizaciones recibidas por WhatsApp, PDF y agencia entre agosto y septiembre de 2026. Los valores de «alojamiento 10 personas / 5 noches» son <b>estimados por regla de tres</b> sobre cada cotización original: sirven para comparar, no para reservar. Toda opción debe recotizarse formalmente para 10 personas, 5 noches y una perrita de 14 kg antes de abonar.
+  Cotizaciones recibidas por WhatsApp, PDF y agencia entre agosto y septiembre de 2026. Los valores de «alojamiento 10 personas / 5 noches» son <b>estimados por regla de tres</b> sobre cada cotización original: sirven para comparar, no para reservar. Toda opción debe recotizarse formalmente para 10 personas y 5 noches antes de abonar.
 </div>
 </main>
 
@@ -392,7 +390,7 @@ const OPCIONES = [
     acceso:"tierra", lat:9.43, lon:-75.70, horas:"13–15 h por carretera",
     total:4500000, cotizado:"$90.000 por persona/noche en habitación múltiple (3–4 pers.), temporada alta",
     detalleCosto:"3 habitaciones múltiples × 10 personas × 5 noches",
-    mascota:"si", cabe:true, comida:"No incluye desayuno (confirmar)", estado:"viva",
+    cabe:true, comida:"No incluye desayuno (confirmar)", estado:"viva",
     si:["El más barato de toda la mesa, por un margen enorme","Piscina, asoleadoras y restaurante propio","A dos cuadras de playa de mar tranquilo — ideal para la niña","A 8 minutos del centro de Coveñas: farmacia, mercado, plan B","Carretera hasta la puerta, sin lancha ni traslados"],
     no:["El nombre exacto del hotel está por confirmar (solo tenemos el catálogo de WhatsApp)","No se menciona desayuno incluido","Falta confirmar disponibilidad para el 29 de diciembre"],
     extra:[["Check-in / check-out","2:00 p. m. / 11:00 a. m."],["Tarifa alternativa","Habitación doble $250.000/noche en temporada alta"],["Contacto","WhatsApp +57 312 895 6656"]],
@@ -402,24 +400,24 @@ const OPCIONES = [
   {
     id:"laguna", nombre:"Laguna Beach", zona:"Santiago de Tolú · Playa El Francés", tipo:"Condominio de suites",
     acceso:"tierra", lat:9.47, lon:-75.61, horas:"13–14 h por carretera",
-    total:21550000, cotizado:"$17.160.000 por 4 noches (1 Golden Plus cuádruple + 2 Golden triples) + $100.000 de mascota. Plan solo alojamiento con cena y fiesta de San Silvestre",
-    detalleCosto:"Mezcla más barata para 10 personas en 4 noches, extendida a la quinta + mascota",
-    mascota:"si", cabe:true, comida:"Solo alojamiento + cena y fiesta de San Silvestre (31)", estado:"viva",
-    si:["Se llega por carretera, sin lancha","Alma entra: hasta 15 kg y $100.000, con carné de vacunas","Incluye la cena y fiesta de San Silvestre (brindis, cotillones y hora loca)","Playa El Francés es tranquila y de aguas mansas","Restaurante, bar, piscina y parqueadero por suite"],
+    total:21450000, cotizado:"$17.160.000 por 4 noches (1 Golden Plus cuádruple + 2 Golden triples). Plan solo alojamiento con cena y fiesta de San Silvestre",
+    detalleCosto:"Mezcla más barata para 10 personas en 4 noches, extendida a la quinta",
+    cabe:true, comida:"Solo alojamiento + cena y fiesta de San Silvestre (31)", estado:"viva",
+    si:["Se llega por carretera, sin lancha","Incluye la cena y fiesta de San Silvestre (brindis, cotillones y hora loca)","Playa El Francés es tranquila y de aguas mansas","Restaurante, bar, piscina y parqueadero por suite"],
     no:["La cotización es de 4 noches (ingreso 29 o 30, salida 2 o 3); la quinta noche va prorrateada y hay que confirmarla","La suite se asigna al azar dentro de la categoría: las fotos son referenciales","No se pueden ingresar alimentos ni bebidas a las zonas húmedas","Cada solicitud de cambio o cancelación cuesta $80.000 aparte de la penalidad","Plan solo alojamiento: el resto de comidas se paga aparte"],
-    extra:[["Mezcla usada para comparar","1 Golden Plus cuádruple $6.760.000 + 2 Golden triples $5.200.000 c/u = $17.160.000 / 4 noches"],["Otras tarifas 4 noches","Golden doble $4.640.000 · Golden triple $5.200.000 · Golden Plus cuádruple $6.760.000 · Premium cuádruple $7.840.000 · Premium quíntuple $9.200.000"],["Reserva","Abono del 30 %; la reserva se confirma solo con el pago. Canales oficiales"],["San Silvestre","Cena y fiesta del 31 incluidas: brindis de medianoche, cotillones y hora loca"],["Mascotas","$100.000 por mascota reportada. Raza mediana o pequeña, hasta 15 kg, no PPP. Carné de vacunas y aviso en la reserva. Siempre acompañada; en restaurante, con correa"],["Cancelación en temporada alta","24 dic – 20 ene: 30+ días antes, penalidad 10 %; entre 29 y 10 días, 50 %; menos de 10 días, sin devolución"],["No show","100 % del valor de la reserva"],["Extras","Jacuzzi privado $100.000 · reposición de llave $50.000 · fumar en la suite $1.000.000"],["Horarios","Check-in 3:00 p. m. · check-out 11:00 a. m. · piscina 9–21 h · restaurante 7–21 h"],["Políticas","Carpeta de Drive que envió Angelita"],["Correo de reservas","reservasecohotellagunabeach@gmail.com · Tel. 311 763 4809"]],
+    extra:[["Mezcla usada para comparar","1 Golden Plus cuádruple $6.760.000 + 2 Golden triples $5.200.000 c/u = $17.160.000 / 4 noches"],["Otras tarifas 4 noches","Golden doble $4.640.000 · Golden triple $5.200.000 · Golden Plus cuádruple $6.760.000 · Premium cuádruple $7.840.000 · Premium quíntuple $9.200.000"],["Reserva","Abono del 30 %; la reserva se confirma solo con el pago. Canales oficiales"],["San Silvestre","Cena y fiesta del 31 incluidas: brindis de medianoche, cotillones y hora loca"],["Cancelación en temporada alta","24 dic – 20 ene: 30+ días antes, penalidad 10 %; entre 29 y 10 días, 50 %; menos de 10 días, sin devolución"],["No show","100 % del valor de la reserva"],["Extras","Jacuzzi privado $100.000 · reposición de llave $50.000 · fumar en la suite $1.000.000"],["Horarios","Check-in 3:00 p. m. · check-out 11:00 a. m. · piscina 9–21 h · restaurante 7–21 h"],["Políticas","Carpeta de Drive que envió Angelita"],["Correo de reservas","reservasecohotellagunabeach@gmail.com · Tel. 311 763 4809"]],
     mapsq:"Ecohotel Laguna Beach Playa El Frances Santiago de Tolu Sucre",
     fuente:"WhatsApp Angelita, 8 sept 2026"
   },
   {
     id:"arena", nombre:"Hotel Arena Beach", zona:"Arroyo de Piedra · Km 22 vía al mar", tipo:"Hotel de playa",
     acceso:"tierra", lat:10.65, lon:-75.62, horas:"17–18 h por carretera",
-    total:9842500, cotizado:"$7.650.000 para 10 personas, 4 noches (30 dic – 3 ene) + $280.000 de mascota",
-    detalleCosto:"Cotización real para 10 personas, extendida a la quinta noche + mascota",
-    mascota:"si", cabe:true, comida:"Desayuno + cena de San Silvestre", estado:"viva",
-    si:["Ya está cotizado para exactamente 10 personas: es la cifra más confiable de la tabla","Mascota aceptada y cobrada en la cotización, sin ambigüedades","Incluye la cena de San Silvestre del 31","Playa y club de playa fuera del ruido de Cartagena","Sin lancha, se llega en carro"],
+    total:9562500, cotizado:"$7.650.000 para 10 personas, 4 noches (30 dic – 3 ene)",
+    detalleCosto:"Cotización real para 10 personas, extendida a la quinta noche",
+    cabe:true, comida:"Desayuno + cena de San Silvestre", estado:"viva",
+    si:["Ya está cotizado para exactamente 10 personas: es la cifra más confiable de la tabla","Incluye la cena de San Silvestre del 31","Playa y club de playa fuera del ruido de Cartagena","Sin lancha, se llega en carro"],
     no:["Prohíbe ingresar alimentos y bebidas: toda la comida se compra adentro y eso puede sumar millones","El abono del 50 % no es reembolsable","La cotización es por 4 noches; falta confirmar el 29 de diciembre","Está a 17 horas de Bogotá — el trayecto más largo junto con Santa Marta"],
-    extra:[["Saldo a favor","30 días de vigencia"],["Cargo de mascota","$280.000 por la estadía"]],
+    extra:[["Saldo a favor","30 días de vigencia"]],
     mapsq:"Hotel Arena Beach Arroyo de Piedra Bolivar Colombia",
     fuente:"PDF de cotización Arena Beach"
   },
@@ -428,7 +426,7 @@ const OPCIONES = [
     acceso:"tierra", lat:10.40, lon:-75.56, horas:"17–18 h por carretera",
     total:11375000, cotizado:"$5.460.000 para 6 personas, 4 noches (30 dic – 3 ene)",
     detalleCosto:"$227.500 por persona/noche × 10 personas × 5 noches",
-    mascota:"si", cabe:null, comida:"Desayuno", estado:"secundaria",
+cabe:null, comida:"Desayuno", estado:"secundaria",
     si:["Bocagrande: todo a pie, restaurantes, farmacias, centros comerciales","Desayuno incluido y hotel boutique","Sin lancha, con la ciudad entera como plan B si llueve"],
     no:["Bocagrande el 31 de diciembre es un hervidero: ruido, tráfico y playa llena","Parqueadero sin confirmar, y venimos con carros desde Bogotá","No es una playa para que la niña juegue tranquila"],
     extra:[["Cotizado por","Agencia OnTrip, por chat"]],
@@ -440,7 +438,7 @@ const OPCIONES = [
     acceso:"tierra", lat:11.20, lon:-74.23, horas:"18–19 h por carretera",
     total:6166667, cotizado:"$2.220.000 para 6 personas, 3 noches (3 al 6 de enero)",
     detalleCosto:"$123.333 por persona/noche × 10 personas × 5 noches",
-    mascota:"si", cabe:null, comida:"Desayuno", estado:"secundaria",
+cabe:null, comida:"Desayuno", estado:"secundaria",
     si:["El segundo más barato por persona y por noche","Desayuno y asistencia incluidos","Base urbana cómoda si el plan real es el Tayrona"],
     no:["Las fechas cotizadas son del 3 al 6 de enero: no cubren nuestro viaje","Está lejos del Tayrona pese a lo que sugiere el nombre","El Rodadero en temporada alta es playa de multitud"],
     extra:[["Cotizado por","Agencia OnTrip, por chat"]],
@@ -452,7 +450,7 @@ const OPCIONES = [
     acceso:"isla", lat:9.78, lon:-75.85, horas:"Carretera a Tolú + lancha",
     total:15610000, cotizado:"$15.610.000 por 4 habitaciones (3+3+2+2), 5 noches, sin impuestos",
     detalleCosto:"Cotización real para las 10 personas; la niña no paga alojamiento",
-    mascota:"si", cabe:true, comida:"Desayuno incluido; paquete de alimentación aparte", estado:"secundaria",
+cabe:true, comida:"Desayuno incluido; paquete de alimentación aparte", estado:"secundaria",
     si:["Cotización armada para el grupo completo, con las cuatro habitaciones nombradas","La niña no paga alojamiento (colecho con los papás)","Desayuno, bebida de bienvenida y un kayak sin costo","Isla Múcura tiene el agua más clara de toda la lista"],
     no:["Lancha obligatoria: criterio excluyente para la mamá","Los $15.610.000 son SIN impuestos — la cifra real sube","La comida es aparte: $130.000 por persona por noche","La cena de San Silvestre se cobra aparte, $360.000 por persona, y ese precio es del año pasado: lo confirman en octubre o noviembre","La cotización dice «niña de 2 años» y la nuestra tiene 4: hay que rehacerla"],
     extra:[["Habitaciones cotizadas","$4.930.000 (3 pers.) + $4.355.000 (3 pers.) + $3.475.000 (2 pers.) + $2.850.000 (2 pers.)"],["Alimentación","Paquete $130.000 por persona/noche, o platos a la carta desde $30.000"],["Estimado de comida","≈ $10.100.000 para 10 personas incluyendo la fiesta del 31"],["Presión de venta","«Última disponibilidad, tengo un grupo pendiente»"]],
@@ -464,7 +462,7 @@ const OPCIONES = [
     acceso:"isla", lat:9.38, lon:-76.18, horas:"Carretera a Cartagena/Paso Nuevo + lancha",
     total:20618684, cotizado:"$13.861.300 + IVA por 4 cabañas (8 personas), 30 dic – 4 ene",
     detalleCosto:"$412.374 por persona/noche × 10 personas × 5 noches. Las 4 cabañas de hoy solo alcanzan para 8",
-    mascota:"si", cabe:false, comida:"Desayuno y café hasta las 10:30", estado:"secundaria",
+cabe:false, comida:"Desayuno y café hasta las 10:30", estado:"secundaria",
     si:["Cabañas privadas con baño, no habitaciones compartidas","Isla Fuerte es de las playas más limpias del Caribe colombiano","Desayuno, café, wifi y agua potable incluidos"],
     no:["Solo hay 4 cabañas disponibles: caben 8 personas, faltan 2. La cifra de arriba asume dos cupos que hoy no existen","Hay bar y fiesta cerca de las habitaciones hasta la madrugada, sobre todo fines de semana — pésimo con una niña de 4 años","Los menores de 4 años no pagan, pero la nuestra ya tiene 4: paga completo","Los precios son sin IVA; el 19 % se paga al llegar","La tarifa vence en 24 horas","Lancha obligatoria"],
     extra:[["Cabañas cotizadas","2 × Privada primer piso $3.405.600 · 1 × Privada segundo piso $3.505.600 · 1 × Superior $3.544.500 (todas +IVA)"],["Fechas","Entrada 30 dic 2026, salida 4 ene 2027"],["Regla de menores","Los niños solo pueden alojarse en habitaciones privadas"]],
@@ -474,12 +472,12 @@ const OPCIONES = [
   {
     id:"coral", nombre:"Hotel Coral de Fuego", zona:"Isla Fuerte · Playa San Diego", tipo:"Hotel de isla",
     acceso:"isla", lat:9.40, lon:-76.16, horas:"Carretera + lancha",
-    total:27400000, cotizado:"$21.800.000 para 8 personas, 5 noches (30 dic – 4 ene) + $150.000 de mascota",
-    detalleCosto:"$545.000 por persona/noche × 10 personas × 5 noches + mascota",
-    mascota:"si", cabe:null, comida:"Desayuno y kayak", estado:"descartable",
-    si:["Pet friendly declarado, con tarifa específica para razas grandes","Playa San Diego es preciosa y muy tranquila","Kayak incluido"],
+    total:27250000, cotizado:"$21.800.000 para 8 personas, 5 noches (30 dic – 4 ene)",
+    detalleCosto:"$545.000 por persona/noche × 10 personas × 5 noches",
+    cabe:null, comida:"Desayuno y kayak", estado:"descartable",
+    si:["Playa San Diego es preciosa y muy tranquila","Kayak incluido"],
     no:["El más caro de toda la mesa: casi $27 millones solo en alojamiento","Traslado marítimo casi seguro","Solo incluye desayuno: la comida en isla es cara y no hay alternativas cerca"],
-    extra:[["Cargo de mascota","$150.000 para razas grandes"]],
+    extra:[],
     mapsq:"Hotel Coral de Fuego Isla Fuerte Playa San Diego",
     fuente:"Cotización por chat"
   },
@@ -488,7 +486,7 @@ const OPCIONES = [
     acceso:"isla", lat:10.18, lon:-75.75, horas:"Carretera a Cartagena + lancha",
     total:20381008, cotizado:"$19.565.768 para 8 personas, 6 noches (30 dic – 5 ene)",
     detalleCosto:"$407.620 por persona/noche × 10 personas × 5 noches",
-    mascota:"si", cabe:null, comida:"Desayuno", estado:"descartable",
+cabe:null, comida:"Desayuno", estado:"descartable",
     si:["Islas del Rosario, con snorkel a un paso","Cotización formal de Aviatur, con respaldo de agencia"],
     no:["Traslado marítimo obligatorio","Almuerzos y cenas no incluidos, en una isla donde no hay dónde más comer","El traslado a playa se cobra aparte"],
     extra:[["Operado por","Aviatur"]],
@@ -498,12 +496,12 @@ const OPCIONES = [
   {
     id:"marazao", nombre:"Marazao Beach", zona:"Ubicación por confirmar", tipo:"Bungalows de playa",
     acceso:"isla", lat:10.17, lon:-75.68, horas:"Con transporte marítimo",
-    total:21239004, cotizado:"$16.919.203 para 8 personas, 5 noches + $90.000 de mascota",
-    detalleCosto:"$422.980 por persona/noche × 10 personas × 5 noches + mascota",
-    mascota:"si", cabe:null, comida:"Desayuno", estado:"descartable",
-    si:["Rubro pet friendly explícito y barato ($90.000)","Bungalows independientes"],
+    total:21149004, cotizado:"$16.919.203 para 8 personas, 5 noches",
+    detalleCosto:"$422.980 por persona/noche × 10 personas × 5 noches",
+    cabe:null, comida:"Desayuno", estado:"descartable",
+    si:["Bungalows independientes"],
     no:["No sabemos con certeza dónde queda: la cotización llegó como imagen, sin dirección","Penalización del 100 % por cancelación — el riesgo más alto de la lista","Transporte marítimo","Las fechas exactas no aparecen en la cotización"],
-    extra:[["Cargo de mascota","$90.000"],["Cancelación","Penalidad del 100 %"]],
+    extra:[["Cancelación","Penalidad del 100 %"]],
     mapsq:"Marazao Beach Colombia",
     fuente:"Imagen de cotización por chat"
   },
@@ -512,7 +510,7 @@ const OPCIONES = [
     acceso:"isla", lat:9.80, lon:-75.86, horas:"Carretera + lancha",
     total:23950000, cotizado:"$19.160.000 para 8 personas, 5 noches (30 dic – 4 ene)",
     detalleCosto:"$479.000 por persona/noche × 10 personas × 5 noches",
-    mascota:"si", cabe:null, comida:"Alimentación completa + traslado náutico", estado:"descartable",
+cabe:null, comida:"Alimentación completa + traslado náutico", estado:"descartable",
     si:["Todo incluido de verdad: comidas y traslado náutico dentro del precio","Isla Tintipán y el Mar de las Siete Colores"],
     no:["Lancha obligatoria: criterio excluyente para la mamá","La cotización se contradice: habla de 5 noches y de 3 noches / 4 días"],
     extra:[],
@@ -524,7 +522,7 @@ const OPCIONES = [
     acceso:"ruta", lat:8.75, lon:-75.88, horas:"12–13 h desde Bogotá",
     total:3250000, cotizado:"$130.000 por habitación/noche con 2 desayunos",
     detalleCosto:"5 habitaciones × $130.000 × 5 noches (como destino sería absurdo; sirve como escala)",
-    mascota:"si", cabe:true, comida:"2 desayunos por habitación", estado:"complemento",
+cabe:true, comida:"2 desayunos por habitación", estado:"complemento",
     si:["Resuelve la noche de la mitad del camino: 12 horas hasta aquí y el resto al día siguiente","Aire acondicionado, TV y parqueadero","Barato: 5 habitaciones por $650.000 la noche"],
     no:["No es un destino, es una cama en la carretera"],
     extra:[["Uso recomendado","Una noche a la ida y otra al regreso: ≈ $1.300.000 en total"]],
@@ -534,7 +532,6 @@ const OPCIONES = [
 ];
 
 const PENDIENTES = [
-  {id:"p1", prio:"media", t:"Avisar a Alma en la reserva del finalista y pagar el cargo", d:"Todos aceptan mascota. Falta declarar a Alma, el carné de vacunas y el valor exacto del cargo en el hotel que gane.", q:"Angela"},
   {id:"p2", prio:"alta", t:"Laguna Beach: confirmar la quinta noche (29 dic – 3 ene)", d:"La cotización es de 4 noches. Pedir tarifa del 29 al 3 y si hay 1 Golden Plus cuádruple + 2 Golden triples.", q:"Angela"},
   {id:"p3", prio:"media", t:"Laguna Beach: pedir la mezcla de suites por escrito", d:"La asignación es aleatoria. Confirmar que esa combinación cabe y el abono del 30 %.", q:"Angela"},
   {id:"p4", prio:"alta", t:"Averiguar el nombre real del hotel de El Porvenir", d:"Solo tenemos el catálogo de WhatsApp. Pedir razón social y RNT.", q:"Jorge"},
@@ -687,14 +684,13 @@ function guardarConfig(){
 }
 
 /* ══════════════ DIAPOSITIVAS ══════════════ */
-const MASC = {si:["c-ok","🐕 Alma sí entra"], pendiente:["c-warn","🐕 Alma sin confirmar"], no:["c-crit","🐕 No acepta mascotas"], critica:["c-crit","🐕 Límite 13 kg · Alma pesa 14"]};
 const ACC  = {tierra:["c-ok","🚗 Sin lancha"], isla:["c-crit","⛴️ Requiere lancha"], ruta:["c-neu","🛣️ Parada en ruta"]};
 
 function slideOpcion(o){
   const {res, nv} = calcular();
   const r = res[o.id], v = miVoto() || {estrellas:{}};
   const mine = (v.estrellas||{})[o.id] || 0;
-  const m = MASC[o.mascota], a = ACC[o.acceso];
+  const a = ACC[o.acceso];
   const cap = o.cabe === true ? '<span class="chip c-ok">👨‍👩‍👧 Caben los 10</span>'
             : o.cabe === false ? '<span class="chip c-crit">👨‍👩‍👧 Solo caben 8</span>'
             : '<span class="chip c-warn">👨‍👩‍👧 Capacidad por confirmar</span>';
@@ -714,7 +710,6 @@ function slideOpcion(o){
       <div class="zona">${esc(o.zona)} · ${esc(o.horas)}</div>
       <div class="chips">
         <span class="chip ${a[0]}">${a[1]}</span>
-        <span class="chip ${m[0]}">${m[1]}</span>
         ${cap}
         <span class="chip c-neu">🍽️ ${esc(o.comida)}</span>
       </div>
@@ -762,7 +757,7 @@ function slidePortada(){
   return `<div class="portada">
     <span class="eyebrow">Consejo familiar · Caribe colombiano</span>
     <h2>Doce planes,<br>una decisión</h2>
-    <span class="fechas">29 dic 2026 → 3 ene 2027 · 5 noches · 10 personas · Alma</span>
+    <span class="fechas">29 dic 2026 → 3 ene 2027 · 5 noches · 10 personas</span>
     <div class="reglas">
       <div class="regla"><span class="em">⭐</span><b>Califica del 1 al 5</b><span>Todos los planes, sin pensarlo mucho. 70 de los 100 puntos salen de aquí.</span></div>
       <div class="regla"><span class="em">💎</span><b>Una joya por cabeza</b><span>El que de verdad quieres. Vale los otros 30 puntos.</span></div>
@@ -841,7 +836,6 @@ function pintarTabla(){
     if(y == null) y = orden.dir > 0 ? Infinity : -Infinity;
     return typeof x === "string" ? orden.dir * x.localeCompare(y,"es") : orden.dir * (x - y);
   });
-  const mp = {si:'<span class="pill c-ok">Sí</span>', pendiente:'<span class="pill c-warn">Pendiente</span>', no:'<span class="pill c-crit">No</span>', critica:'<span class="pill c-crit">13 kg máx.</span>'};
   document.getElementById("tbody").innerHTML = filas.map(f => `
     <tr class="${f.estado==="descartada"?"desc":""}" data-id="${f.id}" title="Ver ${esc(f.nombre)} en grande">
       <td><b>${esc(f.nombre)}</b>${f.vetos?` <span class="pill c-crit">✋ ${f.vetos}</span>`:""}${f.joyas?` <span class="pill c-warn">💎 ${f.joyas}</span>`:""}</td>
@@ -850,7 +844,6 @@ function pintarTabla(){
       <td class="num">${f.total?cop(f.total):"—"}</td>
       <td class="num">${f.pppn?cop(f.pppn):"—"}</td>
       <td class="num" style="color:${f.brecha===null?"var(--ink-faint)":(f.brecha>=0?"var(--ok)":"var(--crit)")}">${f.brecha===null?"—":(f.brecha>=0?"+":"")+copCorto(f.brecha)}</td>
-      <td>${mp[f.mascota]}</td>
       <td class="num"><b>${config.revelar ? (f.puntaje?f.puntaje.toFixed(1):"—") : "🙈"}</b></td>
     </tr>`).join("");
 }
@@ -1067,15 +1060,13 @@ function baseDatos(){
     ["noches", NOCHES],
     ["personas", PAX],
     ["nina_anios", 4],
-    ["mascota","Alma"],
-    ["mascota_kg", 14],
     ["presupuesto_alojamiento", presu],
     ["votantes", nv],
     ["regla_puntaje","70 por promedio de estrellas + 30 por joyas − 15 por veto"]
   ];
-  const opciones = [["id","nombre","tipo","zona","acceso","lat","lon","horas_trayecto","total_10p_5n","por_persona_noche","cotizado_original","detalle_costo","mascota","caben_10","comida","estado","fuente","maps_query","whatsapp"]];
+  const opciones = [["id","nombre","tipo","zona","acceso","lat","lon","horas_trayecto","total_10p_5n","por_persona_noche","cotizado_original","detalle_costo","caben_10","comida","estado","fuente","maps_query","whatsapp"]];
   for(const o of OPCIONES){
-    opciones.push([o.id, o.nombre, o.tipo, o.zona, o.acceso, o.lat, o.lon, o.horas, o.total, o.total ? Math.round(o.total/(PAX*NOCHES)) : null, o.cotizado, o.detalleCosto, o.mascota, o.cabe === true ? 1 : o.cabe === false ? 0 : null, o.comida, o.estado, o.fuente, o.mapsq, o.wa || null]);
+    opciones.push([o.id, o.nombre, o.tipo, o.zona, o.acceso, o.lat, o.lon, o.horas, o.total, o.total ? Math.round(o.total/(PAX*NOCHES)) : null, o.cotizado, o.detalleCosto, o.cabe === true ? 1 : o.cabe === false ? 0 : null, o.comida, o.estado, o.fuente, o.mapsq, o.wa || null]);
   }
   const aFavor = [["id_opcion","orden","texto"]], alertas = [["id_opcion","orden","texto"]], detalle = [["id_opcion","clave","valor"]];
   for(const o of OPCIONES){
@@ -1209,7 +1200,7 @@ gestos(document.getElementById("votafilas"));
 
 document.getElementById("tabla").querySelectorAll("th").forEach(th => th.addEventListener("click", () => {
   const c = th.dataset.s;
-  orden = {campo:c, dir: orden.campo === c ? -orden.dir : (["nombre","zona","acceso","mascota"].includes(c) ? 1 : -1)};
+  orden = {campo:c, dir: orden.campo === c ? -orden.dir : (["nombre","zona","acceso"].includes(c) ? 1 : -1)};
   pintarTabla();
 }));
 document.getElementById("tbody").addEventListener("click", e => {

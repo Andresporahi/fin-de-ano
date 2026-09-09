@@ -36,21 +36,20 @@ function libro_() {
 
 const CATALOGO = [
   {id:"porvenir", nombre:"Hotel El Porvenir", zona:"Coveñas · Sector El Porvenir", acceso:"tierra", total:4500000, estado:"viva"},
-  {id:"laguna", nombre:"Laguna Beach", zona:"Santiago de Tolú · Playa El Francés", acceso:"tierra", total:21550000, estado:"viva"},
-  {id:"arena", nombre:"Hotel Arena Beach", zona:"Arroyo de Piedra · Km 22 vía al mar", acceso:"tierra", total:9842500, estado:"viva"},
+  {id:"laguna", nombre:"Laguna Beach", zona:"Santiago de Tolú · Playa El Francés", acceso:"tierra", total:21450000, estado:"viva"},
+  {id:"arena", nombre:"Hotel Arena Beach", zona:"Arroyo de Piedra · Km 22 vía al mar", acceso:"tierra", total:9562500, estado:"viva"},
   {id:"baluarte", nombre:"Baluarte Cartagena Boutique", zona:"Cartagena · Bocagrande", acceso:"tierra", total:11375000, estado:"secundaria"},
   {id:"rodadero", nombre:"Rodadero Suites", zona:"Santa Marta · El Rodadero", acceso:"tierra", total:6166667, estado:"secundaria"},
   {id:"mucura", nombre:"Múcura Club Hotel", zona:"Isla Múcura · San Bernardo", acceso:"isla", total:15610000, estado:"secundaria"},
   {id:"playita", nombre:"La Playita", zona:"Isla Fuerte · Bolívar", acceso:"isla", total:20618684, estado:"secundaria"},
-  {id:"coral", nombre:"Hotel Coral de Fuego", zona:"Isla Fuerte · Playa San Diego", acceso:"isla", total:27400000, estado:"descartable"},
+  {id:"coral", nombre:"Hotel Coral de Fuego", zona:"Isla Fuerte · Playa San Diego", acceso:"isla", total:27250000, estado:"descartable"},
   {id:"mulata", nombre:"Hotel Isla Mulata", zona:"Isla Grande · Islas del Rosario", acceso:"isla", total:20381008, estado:"descartable"},
-  {id:"marazao", nombre:"Marazao Beach", zona:"Ubicación por confirmar", acceso:"isla", total:21239004, estado:"descartable"},
+  {id:"marazao", nombre:"Marazao Beach", zona:"Ubicación por confirmar", acceso:"isla", total:21149004, estado:"descartable"},
   {id:"tintipan", nombre:"Hotel Tintipán", zona:"Isla Tintipán · San Bernardo", acceso:"isla", total:23950000, estado:"descartable"},
   {id:"river", nombre:"Hotel River City", zona:"Montería · Córdoba", acceso:"ruta", total:3250000, estado:"complemento"}
 ];
 
 const TAREAS = [
-  {id:"p1", prio:"media", t:"Avisar a Alma en la reserva del finalista y pagar el cargo", q:"Angela"},
   {id:"p2", prio:"alta", t:"Laguna Beach: confirmar la quinta noche (29 dic – 3 ene)", q:"Angela"},
   {id:"p3", prio:"media", t:"Laguna Beach: pedir la mezcla de suites por escrito", q:"Angela"},
   {id:"p4", prio:"alta", t:"Averiguar el nombre real del hotel de El Porvenir", q:"Jorge"},
