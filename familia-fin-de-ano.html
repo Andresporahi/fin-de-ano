@@ -747,9 +747,7 @@ function slidePortada(){
     <div class="reglas">
       <div class="regla"><span class="em">⭐</span><b>Califica del 1 al 5</b><span>Todos los planes. El que saque más estrellas gana.</span></div>
     </div>
-    <p style="color:var(--ink-soft); font-size:14.5px; margin:4px 0 0">
-      ${nv ? `${nv} persona${nv===1?"":"s"} ${nv===1?"ha":"han"} votado. ` : ""}Cada quien vota desde su celular con este mismo enlace.
-    </p>
+    ${nv ? `<p style="color:var(--ink-soft); font-size:14.5px; margin:4px 0 0">${nv} persona${nv===1?"":"s"} ${nv===1?"ha":"han"} votado.</p>` : ""}
   </div>`;
 }
 
