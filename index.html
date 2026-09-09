@@ -604,11 +604,13 @@ const PENDIENTES = [
   {id:"p12", prio:"media", t:"Reservar la parada de Montería para ida y regreso", d:"Solo cuando el destino esté decidido. Confirmar mascota también aquí.", q:"Angela"}
 ];
 
-const NOMBRES_SUGERIDOS = ["Jorge","Angela","Mamá","Papá","Willy","Sol","Daniel","Leidy","Tío","Tía"];
+const NOMBRES_SUGERIDOS = ["Jorge","Angela","Willy","Sol","Daniel","Leidy","Nelson","Alba","Gustavo","Susana"];
 const RENOMBRES = {Hermano:"Willy", Hermana:"Sol", Cuñado:"Daniel", Cuñada:"Leidy"};
+const NOMBRES_FUERA = {mama:1, papa:1, tio:1, tia:1, hermano:1, hermana:1, cunado:1, cunada:1};
 function nombresVivos(lista){
-  const src = Array.isArray(lista) && lista.length ? lista : NOMBRES_SUGERIDOS;
-  return src.map(n => RENOMBRES[n] || n);
+  const mapped = (Array.isArray(lista) ? lista : []).map(n => RENOMBRES[n] || n);
+  const extra = mapped.filter(n => !NOMBRES_FUERA[slug(n)] && !NOMBRES_SUGERIDOS.some(x => slug(x) === slug(n)));
+  return [...NOMBRES_SUGERIDOS, ...extra];
 }
 
 /* ══════════════ BASE ══════════════ */
@@ -1327,6 +1329,8 @@ document.querySelectorAll(".js-csv").forEach(b => b.addEventListener("click", ()
     const inp = document.getElementById("presu");
     if(inp) inp.value = config.presupuesto;
   }
+  config.nombres = nombresVivos(config.nombres);
+  persistir();
   render();
 })();
 
