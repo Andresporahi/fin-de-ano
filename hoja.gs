@@ -12,6 +12,8 @@
  *
  * Cada voto reescribe desde la fila 5 de la hoja Votos (mismas columnas del libro).
  * No toca Resultados ni Resumen decisión: esas hojas siguen calculando solas.
+ * La ficha de cada hotel se guarda en la hoja Planes (solo con la clave ADMIN_CLAVE).
+ * Después de pegar este archivo: Guardar → Implementar → Nueva implementación (o nueva versión).
  */
 
 const PAX = 10;
@@ -64,6 +66,7 @@ const TAREAS = [
 ];
 
 const NOMBRES_DEF = ["Jorge","Angela","Willy","Sol","Daniel","Leidy","Nelson","Alba","Gustavo","Susana"];
+const ADMIN_CLAVE = "FinDeAno2026";
 
 function slug_(s) {
   return String(s || "").toLowerCase()
@@ -121,6 +124,114 @@ function volcar_(sh, filas) {
   });
   sh.getRange(1, 1, rect.length, cols).setValues(rect);
   sh.setFrozenRows(1);
+}
+
+function claveOk_(p) {
+  return String((p && p.clave) || "") === ADMIN_CLAVE;
+}
+
+function planes_() {
+  const all = PropertiesService.getScriptProperties().getProperties();
+  const out = {};
+  Object.keys(all).forEach(function (k) {
+    if (k.indexOf("plan_") !== 0) return;
+    try { out[k.slice(5)] = JSON.parse(all[k]); } catch (e) {}
+  });
+  return out;
+}
+
+function textoCorto_(x, n) {
+  return String(x == null ? "" : x).substring(0, n || 500);
+}
+
+function limpiarPlan_(data) {
+  const si = Array.isArray(data.si) ? data.si.slice(0, 12).map(function (x) {
+    return textoCorto_(x, 400);
+  }).filter(Boolean) : [];
+  const no = Array.isArray(data.no) ? data.no.slice(0, 12).map(function (x) {
+    return textoCorto_(x, 400);
+  }).filter(Boolean) : [];
+  const extra = Array.isArray(data.extra) ? data.extra.slice(0, 16).map(function (p) {
+    if (Array.isArray(p)) return [textoCorto_(p[0], 80), textoCorto_(p[1], 400)];
+    return [textoCorto_(p, 80), ""];
+  }).filter(function (p) { return p[0] || p[1]; }) : [];
+  const total = Number(data.total);
+  let cabe = null;
+  if (data.cabe === true || data.cabe === 1 || data.cabe === "1") cabe = true;
+  if (data.cabe === false || data.cabe === 0 || data.cabe === "0") cabe = false;
+  const acceso = String(data.acceso || "");
+  return {
+    id: textoCorto_(data.id, 40),
+    nombre: textoCorto_(data.nombre, 80),
+    zona: textoCorto_(data.zona, 120),
+    tipo: textoCorto_(data.tipo, 80),
+    acceso: ["tierra", "isla", "ruta"].indexOf(acceso) >= 0 ? acceso : "tierra",
+    horas: textoCorto_(data.horas, 80),
+    total: isFinite(total) && total >= 0 ? total : null,
+    cotizado: textoCorto_(data.cotizado, 500),
+    detalleCosto: textoCorto_(data.detalleCosto, 500),
+    comida: textoCorto_(data.comida, 160),
+    estado: textoCorto_(data.estado, 40),
+    cabe: cabe,
+    fuente: textoCorto_(data.fuente, 120),
+    mapsq: textoCorto_(data.mapsq, 160),
+    wa: textoCorto_(data.wa, 200),
+    si: si,
+    no: no,
+    extra: extra
+  };
+}
+
+function escribirPlanes_(planes) {
+  const ss = libro_();
+  const sh = hoja_(ss, "Planes");
+  const headers = ["id", "nombre", "zona", "tipo", "acceso", "horas", "total", "cotizado", "detalle_costo", "comida", "estado", "caben_10", "fuente", "maps", "whatsapp", "a_favor", "alertas", "letra_menuda"];
+  const filas = [headers];
+  CATALOGO.forEach(function (cat) {
+    const o = planes[cat.id] || {};
+    const si = Array.isArray(o.si) ? o.si.join("\n") : "";
+    const no = Array.isArray(o.no) ? o.no.join("\n") : "";
+    const extra = Array.isArray(o.extra) ? o.extra.map(function (p) {
+      return (p[0] || "") + ": " + (p[1] || "");
+    }).join("\n") : "";
+    let cabe = "";
+    if (o.cabe === true) cabe = 1;
+    if (o.cabe === false) cabe = 0;
+    filas.push([
+      cat.id,
+      o.nombre || cat.nombre || "",
+      o.zona || cat.zona || "",
+      o.tipo || "",
+      o.acceso || cat.acceso || "",
+      o.horas || "",
+      o.total != null ? o.total : (cat.total != null ? cat.total : ""),
+      o.cotizado || "",
+      o.detalleCosto || "",
+      o.comida || "",
+      o.estado || cat.estado || "",
+      cabe,
+      o.fuente || "",
+      o.mapsq || "",
+      o.wa || "",
+      si,
+      no,
+      extra
+    ]);
+  });
+  volcar_(sh, filas);
+}
+
+function guardarPlan_(data) {
+  const limpio = limpiarPlan_(data);
+  const id = String(limpio.id || "").replace(/[^a-z0-9_-]/gi, "");
+  if (!id) throw new Error("Falta el id del plan.");
+  limpio.id = id;
+  PropertiesService.getScriptProperties().setProperty("plan_" + id, JSON.stringify(limpio));
+  escribirPlanes_(planes_());
+}
+
+function snapshot_(s) {
+  return { ok: true, votos: s.votos, config: s.config, hechos: s.hechos, planes: planes_() };
 }
 
 function puntajes_(s) {
@@ -207,9 +318,16 @@ function doGet(e) {
     } else if (p.op === "hechos" && data && typeof data === "object") {
       s.hechos = data;
       guardar_(s);
+    } else if (p.op === "admin") {
+      if (!claveOk_(p)) return responder_(e, { ok: false, error: "clave", votos: s.votos, config: s.config, hechos: s.hechos, planes: planes_() });
+      return responder_(e, snapshot_(s));
+    } else if (p.op === "plan" && data && data.id) {
+      if (!claveOk_(p)) return responder_(e, { ok: false, error: "clave", votos: s.votos, config: s.config, hechos: s.hechos, planes: planes_() });
+      guardarPlan_(data);
+      return responder_(e, snapshot_(s));
     }
   } catch (err) {
-    return responder_(e, { ok: false, error: String(err), votos: s.votos, config: s.config, hechos: s.hechos });
+    return responder_(e, { ok: false, error: String(err), votos: s.votos, config: s.config, hechos: s.hechos, planes: planes_() });
   }
-  return responder_(e, { ok: true, votos: s.votos, config: s.config, hechos: s.hechos });
+  return responder_(e, snapshot_(s));
 }

@@ -224,8 +224,18 @@ details.bloque[open] summary::before{content:"−  "; font-family:var(--mono); c
 .nchip{border:1px solid var(--line); background:var(--paper-2); border-radius:999px; padding:8px 16px; cursor:pointer; font-size:14.5px}
 .nchip[aria-pressed="true"]{background:var(--coral); color:#2B0120; border-color:var(--coral); font-weight:600; box-shadow:0 0 16px -5px var(--coral)}
 .inputrow{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
-input[type=text],input[type=number]{font:inherit; padding:9px 13px; border:1px solid var(--line); border-radius:9px; background:var(--paper); color:var(--ink); min-width:0}
+input[type=text],input[type=number],input[type=password],select,textarea{font:inherit; padding:9px 13px; border:1px solid var(--line); border-radius:9px; background:var(--paper); color:var(--ink); min-width:0}
 input[type=number]{font-family:var(--mono); width:170px}
+select{cursor:pointer}
+textarea{width:100%; min-height:92px; resize:vertical; line-height:1.45}
+.formplan{display:grid; gap:11px}
+.formplan label{display:grid; gap:5px; font-size:13px; color:var(--ink-soft)}
+.formplan label b{color:var(--ink); font-weight:600}
+.formplan .dos{display:grid; grid-template-columns:1fr 1fr; gap:11px}
+#tab-admin{display:none}
+body.soy-admin #tab-admin{display:inline-flex}
+#admin-msg{font-size:13.5px; color:var(--ink-soft); min-height:1.3em}
+@media (max-width:700px){ .formplan .dos{grid-template-columns:1fr} }
 .btn{background:linear-gradient(90deg,var(--uva),#B93BE0); color:#fff; border:1px solid transparent; border-radius:10px; padding:10px 17px; cursor:pointer; font-weight:500}
 .btn:hover{opacity:.88}
 .btn.ghost{background:transparent; color:var(--ink); border-color:var(--line)}
@@ -275,6 +285,7 @@ input[type=number]{font-family:var(--mono); width:170px}
   <button class="tab" role="tab" data-p="presentar" aria-selected="true">Presentar</button>
   <button class="tab" role="tab" data-p="tablero" aria-selected="false">Tablero</button>
   <button class="tab" role="tab" data-p="votar" aria-selected="false">Mi voto</button>
+  <button class="tab" role="tab" data-p="admin" aria-selected="false" id="tab-admin">Editar planes</button>
 </div></div></div>
 
 <main class="wrap">
@@ -367,6 +378,84 @@ input[type=number]{font-family:var(--mono); width:170px}
     <div class="caja" style="padding:6px 17px" id="votafilas"></div>
   </div>
   <div class="aviso info" id="pide-nombre"><span class="ic">👆</span><div>Elige tu nombre y califica. Nada más.</div></div>
+</section>
+
+<!-- ═══════ ADMIN ═══════ -->
+<section class="panel" id="p-admin" role="tabpanel" hidden>
+  <div class="caja" id="admin-login">
+    <span class="eyebrow">Solo el anfitrión</span>
+    <h2 style="font-size:21px; margin-top:5px">Editar la ficha de los planes</h2>
+    <p style="color:var(--ink-soft); font-size:14px; margin:8px 0 14px">Los votos no se tocan. Aquí solo cambia nombre, precio, textos y estado de cada hotel. Al guardar, se escribe en la hoja <b>Planes</b>.</p>
+    <div class="inputrow">
+      <input type="password" id="admin-clave" placeholder="Clave de administrador" maxlength="40" autocomplete="off">
+      <button class="btn" id="admin-entrar">Entrar</button>
+    </div>
+    <div id="admin-login-msg" class="admin-msg" style="margin-top:10px"></div>
+  </div>
+  <div id="admin-editor" hidden>
+    <div class="sechead" style="margin-top:0">
+      <div><h2>Ficha del plan</h2><p>Elige un hotel, corrige lo que haga falta y guarda. La familia ve el cambio en unos segundos. Los votos no se modifican.</p></div>
+      <button class="btn ghost" id="admin-salir">Cerrar sesión</button>
+    </div>
+    <div class="caja">
+      <div class="formplan">
+        <label><b>Plan</b>
+          <select id="adm-id"></select>
+        </label>
+        <div class="dos">
+          <label><b>Nombre</b><input type="text" id="adm-nombre" maxlength="80"></label>
+          <label><b>Tipo</b><input type="text" id="adm-tipo" maxlength="80"></label>
+        </div>
+        <label><b>Zona</b><input type="text" id="adm-zona" maxlength="120"></label>
+        <div class="dos">
+          <label><b>Acceso</b>
+            <select id="adm-acceso">
+              <option value="tierra">Carretera</option>
+              <option value="isla">Lancha</option>
+              <option value="ruta">Parada en ruta</option>
+            </select>
+          </label>
+          <label><b>Trayecto</b><input type="text" id="adm-horas" maxlength="80"></label>
+        </div>
+        <div class="dos">
+          <label><b>Alojamiento 10 personas / 5 noches</b><input type="number" id="adm-total" min="0" step="10000"></label>
+          <label><b>Estado</b>
+            <select id="adm-estado">
+              <option value="viva">Viva</option>
+              <option value="secundaria">Secundaria</option>
+              <option value="descartable">Descartable</option>
+              <option value="descartada">Descartada</option>
+              <option value="complemento">Complemento</option>
+            </select>
+          </label>
+        </div>
+        <label><b>Cotizado (texto original)</b><input type="text" id="adm-cotizado" maxlength="500"></label>
+        <label><b>Detalle del costo</b><input type="text" id="adm-detalle" maxlength="500"></label>
+        <div class="dos">
+          <label><b>Comida</b><input type="text" id="adm-comida" maxlength="160"></label>
+          <label><b>Caben los 10</b>
+            <select id="adm-cabe">
+              <option value="">Por confirmar</option>
+              <option value="1">Sí</option>
+              <option value="0">No</option>
+            </select>
+          </label>
+        </div>
+        <label><b>A favor</b> (un punto por línea)<textarea id="adm-si"></textarea></label>
+        <label><b>Ojo con esto</b> (un punto por línea)<textarea id="adm-no"></textarea></label>
+        <label><b>Letra menuda</b> (una línea: Clave: valor)<textarea id="adm-extra"></textarea></label>
+        <div class="dos">
+          <label><b>Fuente</b><input type="text" id="adm-fuente" maxlength="120"></label>
+          <label><b>Búsqueda en Maps</b><input type="text" id="adm-mapsq" maxlength="160"></label>
+        </div>
+        <label><b>WhatsApp (opcional)</b><input type="text" id="adm-wa" maxlength="200" placeholder="https://wa.me/..."></label>
+        <div class="inputrow">
+          <button class="btn" id="admin-guardar">Guardar en la hoja</button>
+          <span id="admin-msg"></span>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <div class="pieaviso wrap" style="padding-left:0; padding-right:0">
@@ -525,6 +614,7 @@ cabe:true, comida:"2 desayunos por habitación", estado:"complemento",
     fuente:"Cotización por chat"
   }
 ];
+const BASE_OPCIONES = OPCIONES.map(o => JSON.parse(JSON.stringify(o)));
 
 const PENDIENTES = [
   {id:"p2", prio:"alta", t:"Laguna Beach: confirmar la quinta noche (29 dic – 3 ene)", d:"La cotización es de 4 noches. Pedir tarifa del 29 al 3 y si hay 1 Golden Plus cuádruple + 2 Golden triples.", q:"Angela"},
@@ -564,8 +654,12 @@ let hechos = {};
 let yo = null;
 let slide = 0;
 let orden = {campo:"prom", dir:-1};
+let adminClave = "";
+let adminOk = false;
+let planDirty = false;
 const TOTAL_SLIDES = ORDEN.length + 2;
 const API = (new URLSearchParams(location.search).get("api") || HOJA_API || "").trim();
+const QUIERE_ADMIN = new URLSearchParams(location.search).has("admin");
 
 const LS = {
   get(k,d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
@@ -627,6 +721,7 @@ function aplicarRemoto(s){
     if(inp) inp.value = config.presupuesto;
   }
   if(s.hechos && typeof s.hechos === "object") hechos = s.hechos;
+  if(s.planes && typeof s.planes === "object") aplicarPlanes(s.planes);
   persistir();
   render();
 }
@@ -671,6 +766,104 @@ function borrarVoto(){
 function guardarConfig(){
   persistir();
   empujar("config", config);
+}
+
+function aplicarPlanes(planes){
+  if(!planes || typeof planes !== "object") return;
+  if(planDirty) return;
+  OPCIONES.forEach((o, i) => {
+    const base = BASE_OPCIONES.find(x => x.id === o.id);
+    const ov = planes[o.id];
+    if(!base) return;
+    const merge = Object.assign({}, JSON.parse(JSON.stringify(base)), ov || {});
+    OPCIONES[i] = merge;
+  });
+}
+function planPayload(o){
+  return {
+    id: o.id, nombre: o.nombre, zona: o.zona, tipo: o.tipo, acceso: o.acceso, horas: o.horas,
+    total: o.total, cotizado: o.cotizado, detalleCosto: o.detalleCosto, comida: o.comida,
+    estado: o.estado, cabe: o.cabe, fuente: o.fuente, mapsq: o.mapsq, wa: o.wa || "",
+    si: o.si || [], no: o.no || [], extra: o.extra || []
+  };
+}
+function lineas(s){
+  return String(s || "").split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+}
+function extraDeTexto(s){
+  return lineas(s).map(ln => {
+    const m = ln.match(/^([^:|]+)[:|]\s*(.*)$/);
+    return m ? [m[1].trim(), m[2].trim()] : [ln, ""];
+  });
+}
+function mostrarAdminUI(){
+  document.body.classList.toggle("soy-admin", QUIERE_ADMIN);
+  document.getElementById("admin-login").hidden = adminOk;
+  document.getElementById("admin-editor").hidden = !adminOk;
+}
+function llenarFormPlan(id){
+  const o = OP(id) || OPCIONES[0];
+  if(!o) return;
+  document.getElementById("adm-id").value = o.id;
+  document.getElementById("adm-nombre").value = o.nombre || "";
+  document.getElementById("adm-tipo").value = o.tipo || "";
+  document.getElementById("adm-zona").value = o.zona || "";
+  document.getElementById("adm-acceso").value = o.acceso || "tierra";
+  document.getElementById("adm-horas").value = o.horas || "";
+  document.getElementById("adm-total").value = o.total != null ? o.total : "";
+  document.getElementById("adm-estado").value = o.estado || "viva";
+  document.getElementById("adm-cotizado").value = o.cotizado || "";
+  document.getElementById("adm-detalle").value = o.detalleCosto || "";
+  document.getElementById("adm-comida").value = o.comida || "";
+  document.getElementById("adm-cabe").value = o.cabe === true ? "1" : o.cabe === false ? "0" : "";
+  document.getElementById("adm-si").value = (o.si || []).join("\n");
+  document.getElementById("adm-no").value = (o.no || []).join("\n");
+  document.getElementById("adm-extra").value = (o.extra || []).map(p => p[0] + ": " + p[1]).join("\n");
+  document.getElementById("adm-fuente").value = o.fuente || "";
+  document.getElementById("adm-mapsq").value = o.mapsq || "";
+  document.getElementById("adm-wa").value = o.wa || "";
+  planDirty = false;
+}
+function leerFormPlan(){
+  const id = document.getElementById("adm-id").value;
+  const cabeRaw = document.getElementById("adm-cabe").value;
+  const total = +document.getElementById("adm-total").value;
+  return {
+    id,
+    nombre: document.getElementById("adm-nombre").value.trim(),
+    tipo: document.getElementById("adm-tipo").value.trim(),
+    zona: document.getElementById("adm-zona").value.trim(),
+    acceso: document.getElementById("adm-acceso").value,
+    horas: document.getElementById("adm-horas").value.trim(),
+    total: isFinite(total) && total >= 0 ? total : null,
+    estado: document.getElementById("adm-estado").value,
+    cotizado: document.getElementById("adm-cotizado").value.trim(),
+    detalleCosto: document.getElementById("adm-detalle").value.trim(),
+    comida: document.getElementById("adm-comida").value.trim(),
+    cabe: cabeRaw === "1" ? true : cabeRaw === "0" ? false : null,
+    si: lineas(document.getElementById("adm-si").value),
+    no: lineas(document.getElementById("adm-no").value),
+    extra: extraDeTexto(document.getElementById("adm-extra").value),
+    fuente: document.getElementById("adm-fuente").value.trim(),
+    mapsq: document.getElementById("adm-mapsq").value.trim(),
+    wa: document.getElementById("adm-wa").value.trim()
+  };
+}
+function pintarAdmin(){
+  mostrarAdminUI();
+  if(!QUIERE_ADMIN || !adminOk) return;
+  const sel = document.getElementById("adm-id");
+  const actual = sel.value;
+  if(!sel.options.length){
+    sel.innerHTML = OPCIONES.map(o => `<option value="${esc(o.id)}">${esc(o.nombre)}</option>`).join("");
+    if(actual && OP(actual)) sel.value = actual;
+    llenarFormPlan(sel.value);
+  }else if(!planDirty){
+    const keep = actual;
+    sel.innerHTML = OPCIONES.map(o => `<option value="${esc(o.id)}">${esc(o.nombre)}</option>`).join("");
+    if(keep && OP(keep)) sel.value = keep;
+    llenarFormPlan(sel.value);
+  }
 }
 
 /* ══════════════ DIAPOSITIVAS ══════════════ */
@@ -935,6 +1128,7 @@ function pintarVotafilas(){
 function render(){
   pintarSlide(); pintarPodio(); pintarTabla(); pintarScatter();
   pintarCuenta(); pintarPendientes(); pintarNombres(); pintarVotafilas();
+  pintarAdmin();
 }
 function irA(p){
   document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.p === p)));
@@ -1159,7 +1353,7 @@ document.getElementById("pistas").addEventListener("click", e => {
 });
 document.getElementById("btn-foco").addEventListener("click", () => foco(!document.body.classList.contains("foco")));
 document.addEventListener("keydown", e => {
-  if(/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+  if(/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
   if(document.getElementById("p-presentar").hidden) return;
   if(e.key === "ArrowRight" || e.key === "PageDown"){ irSlide(slide+1); e.preventDefault(); }
   if(e.key === "ArrowLeft"  || e.key === "PageUp"){ irSlide(slide-1); e.preventDefault(); }
@@ -1221,6 +1415,71 @@ document.getElementById("nuevo-nombre").addEventListener("keydown", e => { if(e.
 document.getElementById("salir").addEventListener("click", () => { yo = null; persistir(); render(); });
 document.getElementById("borrar-voto").addEventListener("click", borrarVoto);
 
+document.getElementById("admin-entrar").addEventListener("click", async () => {
+  const msg = document.getElementById("admin-login-msg");
+  const clave = document.getElementById("admin-clave").value.trim();
+  if(!clave){ msg.textContent = "Escribe la clave."; return; }
+  msg.textContent = "Comprobando…";
+  try{
+    const s = await jsonp("admin", null, {clave});
+    if(!s || s.ok === false || s.error === "clave"){
+      msg.textContent = "Clave incorrecta.";
+      return;
+    }
+    adminClave = clave;
+    adminOk = true;
+    sessionStorage.setItem("ffa-admin", clave);
+    aplicarRemoto(s);
+    irA("admin");
+    document.getElementById("admin-clave").value = "";
+    msg.textContent = "";
+  }catch(e){
+    msg.textContent = "No se pudo entrar. Revisa la conexión y que el script esté actualizado.";
+  }
+});
+document.getElementById("admin-clave").addEventListener("keydown", e => { if(e.key === "Enter") document.getElementById("admin-entrar").click(); });
+document.getElementById("admin-salir").addEventListener("click", () => {
+  adminOk = false; adminClave = ""; planDirty = false;
+  sessionStorage.removeItem("ffa-admin");
+  mostrarAdminUI();
+  irA("tablero");
+});
+document.getElementById("adm-id").addEventListener("change", e => llenarFormPlan(e.target.value));
+document.getElementById("p-admin").addEventListener("input", e => {
+  if(e.target.closest("#admin-editor")) planDirty = true;
+});
+document.getElementById("admin-guardar").addEventListener("click", async () => {
+  const msg = document.getElementById("admin-msg");
+  if(!adminOk || !adminClave){ msg.textContent = "Entra otra vez con la clave."; return; }
+  const data = leerFormPlan();
+  if(!data.id || !data.nombre){ msg.textContent = "Falta el nombre."; return; }
+  const i = OPCIONES.findIndex(o => o.id === data.id);
+  if(i >= 0){
+    const base = BASE_OPCIONES.find(x => x.id === data.id) || OPCIONES[i];
+    OPCIONES[i] = Object.assign({}, base, data, {lat: base.lat, lon: base.lon});
+  }
+  planDirty = false;
+  msg.textContent = "Guardando en la hoja…";
+  render();
+  if(!remoto){
+    LS.set("ffa-planes", OPCIONES.reduce((a,o) => { a[o.id] = planPayload(o); return a; }, {}));
+    msg.textContent = "Guardado en este celular (sin hoja conectada).";
+    return;
+  }
+  try{
+    const s = await jsonp("plan", planPayload(OPCIONES[i] || data), {clave: adminClave});
+    if(!s || s.ok === false){
+      msg.textContent = s && s.error === "clave" ? "Clave incorrecta. Entra de nuevo." : "No se pudo guardar en la hoja.";
+      return;
+    }
+    aplicarRemoto(s);
+    llenarFormPlan(data.id);
+    msg.textContent = "Guardado en la hoja Planes. La familia ya lo ve.";
+  }catch(e){
+    msg.textContent = "Falló el guardado. El texto de la ficha es muy largo o no hay red.";
+  }
+});
+
 /* ══════════════ ARRANQUE ══════════════ */
 (function local(){
   votos = LS.get("ffa-votos", {});
@@ -1239,6 +1498,11 @@ document.getElementById("borrar-voto").addEventListener("click", borrarVoto);
     if(inp) inp.value = config.presupuesto;
   }
   config.nombres = nombresVivos(config.nombres);
+  if(QUIERE_ADMIN){
+    document.body.classList.add("soy-admin");
+    const guardada = sessionStorage.getItem("ffa-admin") || "";
+    if(guardada){ adminClave = guardada; }
+  }
   persistir();
   render();
 })();
@@ -1259,6 +1523,12 @@ document.getElementById("borrar-voto").addEventListener("click", borrarVoto);
     dot.className = "dot live";
     txt.textContent = "Votación en vivo. Elige tu nombre en Mi voto y califica.";
     setInterval(() => { jsonp("leer").then(aplicarRemoto).catch(() => {}); }, 5000);
+    if(QUIERE_ADMIN && adminClave && !adminOk){
+      jsonp("admin", null, {clave: adminClave}).then(r => {
+        if(r && r.ok !== false && r.error !== "clave"){ adminOk = true; aplicarRemoto(r); }
+        else { adminClave = ""; sessionStorage.removeItem("ffa-admin"); mostrarAdminUI(); }
+      }).catch(() => {});
+    }
   }catch(e){
     remoto = false;
     dot.className = "dot local";
