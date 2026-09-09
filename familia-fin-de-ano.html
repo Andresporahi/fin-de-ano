@@ -449,8 +449,7 @@ textarea{width:100%; min-height:92px; resize:vertical; line-height:1.45}
           <label><b>Búsqueda en Maps</b><input type="text" id="adm-mapsq" maxlength="160"></label>
         </div>
         <label><b>WhatsApp (opcional)</b><input type="text" id="adm-wa" maxlength="200" placeholder="https://wa.me/..."></label>
-        <label><b>Web oficial</b><input type="text" id="adm-web" maxlength="250" placeholder="https://..."></label>
-        <label><b>Booking</b><input type="text" id="adm-booking" maxlength="250" placeholder="https://www.booking.com/..."></label>
+        <label><b>Web o Booking (Planes)</b><input type="text" id="adm-web" maxlength="250" placeholder="https://..."></label>
         <div class="inputrow">
           <button class="btn" id="admin-guardar">Guardar en la hoja</button>
           <span id="admin-msg"></span>
@@ -481,8 +480,7 @@ const OPCIONES = [
     no:["El nombre exacto del hotel está por confirmar (solo tenemos el catálogo de WhatsApp)","No se menciona desayuno incluido","Falta confirmar disponibilidad para el 29 de diciembre"],
     extra:[["Check-in / check-out","2:00 p. m. / 11:00 a. m."],["Tarifa alternativa","Habitación doble $250.000/noche en temporada alta"],["Contacto","WhatsApp +57 312 895 6656"]],
     mapsq:"Sector El Porvenir Coveñas Sucre Colombia", wa:"https://wa.me/p/35325021320445529/573128956656",
-    web:"",
-    booking:"https://www.booking.com/searchresults.es.html?ss=El+Porvenir+Cove%C3%B1as",
+    web:"https://www.booking.com/searchresults.es.html?ss=El+Porvenir+Cove%C3%B1as",
     fuente:"Catálogo de WhatsApp, sept 2026"
   },
   {
@@ -495,8 +493,7 @@ const OPCIONES = [
     no:["La cotización es de 4 noches (ingreso 29 o 30, salida 2 o 3); la quinta noche va prorrateada y hay que confirmarla","La suite se asigna al azar dentro de la categoría: las fotos son referenciales","No se pueden ingresar alimentos ni bebidas a las zonas húmedas","Cada solicitud de cambio o cancelación cuesta $80.000 aparte de la penalidad","Plan solo alojamiento: el resto de comidas se paga aparte"],
     extra:[["Mezcla usada para comparar","1 Golden Plus cuádruple $6.760.000 + 2 Golden triples $5.200.000 c/u = $17.160.000 / 4 noches"],["Otras tarifas 4 noches","Golden doble $4.640.000 · Golden triple $5.200.000 · Golden Plus cuádruple $6.760.000 · Premium cuádruple $7.840.000 · Premium quíntuple $9.200.000"],["Reserva","Abono del 30 %; la reserva se confirma solo con el pago. Canales oficiales"],["San Silvestre","Cena y fiesta del 31 incluidas: brindis de medianoche, cotillones y hora loca"],["Cancelación en temporada alta","24 dic – 20 ene: 30+ días antes, penalidad 10 %; entre 29 y 10 días, 50 %; menos de 10 días, sin devolución"],["No show","100 % del valor de la reserva"],["Extras","Jacuzzi privado $100.000 · reposición de llave $50.000 · fumar en la suite $1.000.000"],["Horarios","Check-in 3:00 p. m. · check-out 11:00 a. m. · piscina 9–21 h · restaurante 7–21 h"],["Políticas","Carpeta de Drive que envió Angelita"],["Correo de reservas","reservasecohotellagunabeach@gmail.com · Tel. 311 763 4809"]],
     mapsq:"Ecohotel Laguna Beach Playa El Frances Santiago de Tolu Sucre",
-    web:"https://ecohotellagunabeach.com/",
-    booking:"https://www.booking.com/searchresults.es.html?ss=Ecohotel+Laguna+Beach+Tol%C3%BA",
+    web:"https://www.booking.com/searchresults.es.html?ss=Ecohotel+Laguna+Beach+Tol%C3%BA",
     fuente:"WhatsApp Angelita, 8 sept 2026"
   },
   {
@@ -663,11 +660,6 @@ const copCorto = n => Math.abs(n) >= 1e6 ? "$"+(n/1e6).toFixed(1).replace(".",",
 const slug = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40) || "votante";
 const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 const hrefOk = u => { const s = String(u||"").trim(); return /^https?:\/\//i.test(s) ? s : ""; };
-const webOficialDe = o => {
-  const w = hrefOk(o.web);
-  return w && !/booking\.com/i.test(w) && !/google\.com\/maps/i.test(w) ? w : "";
-};
-const bookingDe = o => hrefOk(o.booking) || (/booking\.com/i.test(hrefOk(o.web)) ? hrefOk(o.web) : "");
 
 let remoto = false;
 let votos = {};
@@ -805,7 +797,7 @@ function planPayload(o){
   return {
     id: o.id, nombre: o.nombre, zona: o.zona, tipo: o.tipo, acceso: o.acceso, horas: o.horas,
     total: o.total, cotizado: o.cotizado, detalleCosto: o.detalleCosto, comida: o.comida,
-    estado: o.estado, cabe: o.cabe, fuente: o.fuente, mapsq: o.mapsq, wa: o.wa || "", web: o.web || "", booking: o.booking || "",
+    estado: o.estado, cabe: o.cabe, fuente: o.fuente, mapsq: o.mapsq, wa: o.wa || "", web: o.web || "",
     si: o.si || [], no: o.no || [], extra: o.extra || []
   };
 }
@@ -845,7 +837,6 @@ function llenarFormPlan(id){
   document.getElementById("adm-mapsq").value = o.mapsq || "";
   document.getElementById("adm-wa").value = o.wa || "";
   document.getElementById("adm-web").value = o.web || "";
-  document.getElementById("adm-booking").value = o.booking || "";
   planDirty = false;
 }
 function leerFormPlan(){
@@ -871,8 +862,7 @@ function leerFormPlan(){
     fuente: document.getElementById("adm-fuente").value.trim(),
     mapsq: document.getElementById("adm-mapsq").value.trim(),
     wa: document.getElementById("adm-wa").value.trim(),
-    web: document.getElementById("adm-web").value.trim(),
-    booking: document.getElementById("adm-booking").value.trim()
+    web: document.getElementById("adm-web").value.trim()
   };
 }
 function pintarAdmin(){
@@ -938,8 +928,7 @@ function slideOpcion(o){
       </div>
       <div class="mapas">
         <a class="mbtn" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.mapsq)}" target="_blank" rel="noopener"><span class="k">Ubicación</span>Ver en el mapa</a>
-        ${webOficialDe(o) ? `<a class="mbtn" href="${esc(webOficialDe(o))}" target="_blank" rel="noopener"><span class="k">Planes</span>Web oficial</a>` : ""}
-        ${bookingDe(o) ? `<a class="mbtn" href="${esc(bookingDe(o))}" target="_blank" rel="noopener"><span class="k">Planes</span>Booking</a>` : ""}
+        ${hrefOk(o.web) ? `<a class="mbtn" href="${esc(hrefOk(o.web))}" target="_blank" rel="noopener"><span class="k">Planes</span>Web o Booking</a>` : ""}
         ${o.wa ? `<a class="mbtn" href="${o.wa}" target="_blank" rel="noopener"><span class="k">Contacto</span>WhatsApp</a>` : ""}
       </div>
       <div class="votobox">

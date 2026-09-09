@@ -37,8 +37,8 @@ function libro_() {
 }
 
 const CATALOGO = [
-  {id:"porvenir", nombre:"Hotel El Porvenir", zona:"Coveñas · Sector El Porvenir", acceso:"tierra", total:4500000, estado:"viva", web:"https://www.google.com/maps/search/?api=1&query=Sector+El+Porvenir+Cove%C3%B1as+Sucre+Colombia"},
-  {id:"laguna", nombre:"Laguna Beach", zona:"Santiago de Tolú · Playa El Francés", acceso:"tierra", total:21450000, estado:"viva", web:"https://ecohotellagunabeach.com/"},
+  {id:"porvenir", nombre:"Hotel El Porvenir", zona:"Coveñas · Sector El Porvenir", acceso:"tierra", total:4500000, estado:"viva", web:"https://www.booking.com/searchresults.es.html?ss=El+Porvenir+Cove%C3%B1as"},
+  {id:"laguna", nombre:"Laguna Beach", zona:"Santiago de Tolú · Playa El Francés", acceso:"tierra", total:21450000, estado:"viva", web:"https://www.booking.com/searchresults.es.html?ss=Ecohotel+Laguna+Beach+Tol%C3%BA"},
   {id:"arena", nombre:"Hotel Arena Beach", zona:"Arroyo de Piedra · Km 22 vía al mar", acceso:"tierra", total:9562500, estado:"viva", web:"https://arenabeach.co/"},
   {id:"baluarte", nombre:"Baluarte Cartagena Boutique", zona:"Cartagena · Bocagrande", acceso:"tierra", total:11375000, estado:"secundaria", web:"https://www.booking.com/hotel/co/san-pietro.es.html"},
   {id:"rodadero", nombre:"Rodadero Suites", zona:"Santa Marta · El Rodadero", acceso:"tierra", total:6166667, estado:"secundaria", web:"https://www.google.com/maps/search/?api=1&query=SGH+Rodadero+Suites+Calle+7+El+Rodadero+Santa+Marta"},
