@@ -604,7 +604,12 @@ const PENDIENTES = [
   {id:"p12", prio:"media", t:"Reservar la parada de Montería para ida y regreso", d:"Solo cuando el destino esté decidido. Confirmar mascota también aquí.", q:"Angela"}
 ];
 
-const NOMBRES_SUGERIDOS = ["Jorge","Angela","Mamá","Papá","Hermano","Hermana","Cuñado","Cuñada","Tío","Tía"];
+const NOMBRES_SUGERIDOS = ["Jorge","Angela","Mamá","Papá","Willy","Sol","Daniel","Leidy","Tío","Tía"];
+const RENOMBRES = {Hermano:"Willy", Hermana:"Sol", Cuñado:"Daniel", Cuñada:"Leidy"};
+function nombresVivos(lista){
+  const src = Array.isArray(lista) && lista.length ? lista : NOMBRES_SUGERIDOS;
+  return src.map(n => RENOMBRES[n] || n);
+}
 
 /* ══════════════ BASE ══════════════ */
 const PAX = 10, NOCHES = 5;
@@ -683,7 +688,7 @@ function aplicarRemoto(s){
     config = {
       revelar: s.config.revelar !== false,
       presupuesto: typeof s.config.presupuesto === "number" ? s.config.presupuesto : config.presupuesto,
-      nombres: Array.isArray(s.config.nombres) && s.config.nombres.length ? s.config.nombres : config.nombres
+      nombres: nombresVivos(s.config.nombres)
     };
     const inp = document.getElementById("presu");
     if(inp) inp.value = config.presupuesto;
@@ -1317,7 +1322,7 @@ document.querySelectorAll(".js-csv").forEach(b => b.addEventListener("click", ()
     config = {
       revelar: c.revelar !== false,
       presupuesto: typeof c.presupuesto === "number" ? c.presupuesto : config.presupuesto,
-      nombres: Array.isArray(c.nombres) && c.nombres.length ? c.nombres : config.nombres
+      nombres: nombresVivos(c.nombres)
     };
     const inp = document.getElementById("presu");
     if(inp) inp.value = config.presupuesto;

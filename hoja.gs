@@ -49,7 +49,7 @@ const TAREAS = [
   {id:"p12", prio:"media", t:"Reservar la parada de Montería para ida y regreso", q:"Angela"}
 ];
 
-const NOMBRES_DEF = ["Jorge","Angela","Mamá","Papá","Hermano","Hermana","Cuñado","Cuñada","Tío","Tía"];
+const NOMBRES_DEF = ["Jorge","Angela","Mamá","Papá","Willy","Sol","Daniel","Leidy","Tío","Tía"];
 
 function slug_(s) {
   return String(s || "").toLowerCase()
