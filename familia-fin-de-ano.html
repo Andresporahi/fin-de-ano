@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#280120">
+<meta name="description" content="Tablero familiar para decidir el viaje de fin de año. 29 dic 2026 → 3 ene 2027 · 10 personas · Alma.">
+<meta property="og:title" content="Familia Fin de Año">
+<meta property="og:description" content="Doce planes, una decisión. 29 dic → 3 ene · 5 noches · 10 personas.">
+<title>Familia Fin de Año</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --paper:#280120; --paper-2:#3A0B45; --paper-3:#4A1257;
+  --surface:#330A3E; --surface-2:#3E0F4E; --noche:#1C0117;
+  --ink:#FFF1FB; --ink-soft:#C79BDE; --ink-faint:#8A6BA0; --line:#5A2077;
+  --mar:#03b2ed; --coral:#fd59ca; --mango:#FFAE3B; --uva:#9414d1;
+  --ok:#23E5C0; --warn:#FFAE3B; --crit:#FF3D6E;
+  --ok-bg:rgba(35,229,192,.13); --warn-bg:rgba(255,174,59,.14); --crit-bg:rgba(255,61,110,.15);
+  --shadow:0 0 0 1px rgba(148,20,209,.16), 0 20px 44px -26px #000;
+  --r:14px;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono","SFMono-Regular",Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--display); margin:0; text-wrap:balance; letter-spacing:-.02em}
+a{color:var(--mar)}
+button{font:inherit; color:inherit}
+:focus-visible{outline:3px solid var(--coral); outline-offset:2px; border-radius:6px}
+.wrap{max-width:1180px; margin:0 auto; padding:0 18px}
+.mono{font-family:var(--mono); font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft)}
+
+/* ── cabecera compacta ── */
+.top{
+  color:var(--ink); position:relative; overflow:hidden;
+  background:
+    radial-gradient(120% 130% at 78% 118%, rgba(3,178,237,.5) 0%, rgba(3,178,237,0) 46%),
+    radial-gradient(95% 125% at 32% 112%, rgba(253,89,202,.58) 0%, rgba(253,89,202,0) 52%),
+    linear-gradient(168deg,#450063 0%,#35003F 46%,#280120 100%);
+}
+.top::after{content:""; position:absolute; left:0; right:0; bottom:0; height:2px; background:linear-gradient(90deg,var(--uva),var(--coral),var(--mar))}
+.top .wrap{padding:14px 18px 13px; display:flex; align-items:center; gap:18px; flex-wrap:wrap; justify-content:space-between}
+.top h1{font-size:clamp(21px,2.8vw,29px); font-weight:800; color:#fff; text-shadow:0 0 22px rgba(253,89,202,.5)}
+.datos{display:flex; gap:14px; flex-wrap:wrap; font-family:var(--mono); font-size:12px; color:#E3C7F2}
+.datos b{color:#fff}
+
+/* ── pestañas ── */
+.tabbar{position:sticky; top:0; z-index:40; background:var(--paper); border-bottom:1px solid var(--line)}
+.tabs{display:flex; gap:7px; padding:9px 0; overflow-x:auto}
+.tab{border:1px solid var(--line); background:var(--paper-2); border-radius:999px; padding:8px 20px; cursor:pointer; white-space:nowrap; font-weight:500; font-size:14.5px}
+.tab:hover{border-color:var(--mar); color:#8AF0FF}
+.tab[aria-selected="true"]{background:linear-gradient(90deg,var(--uva),var(--coral)); color:#fff; border-color:transparent; box-shadow:0 0 18px -4px rgba(253,89,202,.7)}
+.tab .n{font-family:var(--mono); font-size:11px; opacity:.7; margin-left:6px}
+main{padding:22px 0 60px}
+.panel[hidden]{display:none !important}
+
+/* ══════════ MODO PRESENTAR ══════════ */
+.deck{display:flex; flex-direction:column; gap:12px}
+.escena{
+  position:relative; border:1px solid var(--line); border-radius:20px; overflow:hidden;
+  background:linear-gradient(165deg,var(--surface-2),var(--surface) 60%,var(--noche));
+  box-shadow:var(--shadow); min-height:clamp(430px,66vh,720px); display:flex; flex-direction:column;
+}
+.escena::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(90% 70% at 88% 106%, rgba(3,178,237,.20), transparent 60%),
+             radial-gradient(70% 60% at 12% 108%, rgba(253,89,202,.20), transparent 60%);
+}
+.escena>*{position:relative}
+.progreso{height:3px; background:var(--paper-3); flex:none}
+.progreso i{display:block; height:100%; background:linear-gradient(90deg,var(--mar),var(--uva),var(--coral)); transition:width .35s ease}
+.lienzo{flex:1; padding:clamp(20px,3.2vw,42px); display:flex; flex-direction:column; justify-content:center}
+
+/* portada y cierre */
+.portada{text-align:center; display:grid; gap:18px; justify-items:center}
+.portada h2{font-size:clamp(34px,6.4vw,74px); font-weight:800; line-height:.98; color:#fff; text-shadow:0 0 40px rgba(253,89,202,.45)}
+.portada .fechas{font-family:var(--mono); font-size:clamp(13px,1.7vw,18px); color:#8AF0FF; border:1px solid rgba(3,178,237,.55); background:rgba(3,178,237,.1); padding:6px 16px; border-radius:999px}
+.reglas{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; width:100%; max-width:900px; margin-top:6px}
+.regla{background:rgba(40,1,32,.5); border:1px solid var(--line); border-radius:14px; padding:16px}
+.regla .em{font-size:32px; display:block; margin-bottom:6px}
+.regla b{display:block; font-family:var(--display); font-size:17px; font-weight:800}
+.regla span{font-size:13.5px; color:var(--ink-soft)}
+
+/* diapositiva de opción */
+.op{display:grid; grid-template-columns:1.25fr .95fr; gap:clamp(20px,3vw,44px); align-items:center}
+.op .izq{min-width:0}
+.op h2{font-size:clamp(30px,5vw,60px); font-weight:800; line-height:.98; color:#fff; margin-top:6px}
+.op .zona{font-size:clamp(14px,1.7vw,19px); color:var(--ink-soft); margin-top:8px}
+.chips{display:flex; flex-wrap:wrap; gap:7px; margin-top:16px}
+.chip{font-size:12.5px; padding:5px 12px; border-radius:999px; border:1px solid transparent; font-weight:500}
+.c-ok{background:var(--ok-bg); color:var(--ok); border-color:rgba(35,229,192,.4)}
+.c-warn{background:var(--warn-bg); color:var(--warn); border-color:rgba(255,174,59,.42)}
+.c-crit{background:var(--crit-bg); color:var(--crit); border-color:rgba(255,61,110,.45)}
+.c-neu{background:var(--paper-2); color:var(--ink-soft); border-color:var(--line)}
+.puntos{display:grid; gap:16px; margin-top:22px}
+.puntos h4{font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); font-weight:500; margin-bottom:7px}
+.puntos ul{margin:0; padding:0; list-style:none; display:grid; gap:6px}
+.puntos li{font-size:clamp(14px,1.55vw,18px); line-height:1.35; padding-left:22px; position:relative}
+.puntos .si li::before{content:"▸"; position:absolute; left:2px; color:var(--ok)}
+.puntos .no li::before{content:"▸"; position:absolute; left:2px; color:var(--crit)}
+.vertodo{margin-top:14px}
+.vertodo summary{cursor:pointer; font-size:13px; color:var(--mar); list-style:none}
+.vertodo summary::-webkit-details-marker{display:none}
+.vertodo summary::before{content:"＋ "; font-family:var(--mono)}
+.vertodo[open] summary::before{content:"−  "; font-family:var(--mono)}
+.vertodo .cuerpo{display:grid; gap:7px; padding:11px 0 0; font-size:13.5px; color:var(--ink-soft); max-height:230px; overflow-y:auto}
+.vertodo .cuerpo b{color:var(--ink)}
+
+.op .der{display:grid; gap:14px; align-content:center}
+.tarifa{background:rgba(28,1,23,.6); border:1px solid var(--line); border-radius:16px; padding:18px 20px}
+.tarifa .val{font-family:var(--mono); font-size:clamp(28px,4.4vw,46px); font-weight:600; letter-spacing:-.03em; line-height:1; color:#fff}
+.tarifa .val.na{font-size:clamp(20px,2.6vw,28px); color:var(--warn)}
+.tarifa .cap{font-size:12.5px; color:var(--ink-soft); margin-top:7px}
+.tarifa .pppn{font-family:var(--mono); font-size:14px; margin-top:11px; padding-top:11px; border-top:1px dashed var(--line)}
+.tarifa .cot{font-size:12px; color:var(--ink-soft); margin-top:9px; padding-top:9px; border-top:1px dashed var(--line)}
+.mapas{display:flex; gap:9px; flex-wrap:wrap}
+.mbtn{flex:1 1 120px; text-align:center; text-decoration:none; font-size:13px; font-weight:500; border:1px solid var(--line); border-radius:11px; padding:10px 8px; color:var(--ink); background:rgba(28,1,23,.5)}
+.mbtn:hover{border-color:var(--mar); color:#8AF0FF}
+.mbtn .k{display:block; font-family:var(--mono); font-size:9.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--ink-soft)}
+
+.votobox{background:rgba(28,1,23,.6); border:1px solid var(--line); border-radius:16px; padding:15px 18px}
+.votobox .fila{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.stars{display:flex; gap:4px}
+.star{background:none; border:0; cursor:pointer; font-size:clamp(26px,3.4vw,36px); line-height:1; padding:0 1px; color:#5A2077; transition:transform .12s, color .12s}
+.star.on{color:var(--mango)}
+.star:hover{transform:scale(1.16)}
+.mini{display:flex; gap:7px}
+.mini button{background:transparent; border:1px solid var(--line); color:var(--ink-soft); border-radius:9px; padding:7px 13px; cursor:pointer; font-size:15px}
+.mini button:hover{border-color:var(--coral); color:var(--ink)}
+.mini button.on-joya{background:var(--mango); border-color:var(--mango); color:#3A2500}
+.mini button.on-veto{background:var(--crit); border-color:var(--crit); color:#fff}
+.barra{margin-top:13px}
+.barra .t{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); margin-bottom:5px}
+.track{height:8px; background:#40114E; border-radius:99px; overflow:hidden}
+.fill{height:100%; width:0; background:linear-gradient(90deg,var(--mar),var(--uva) 55%,var(--coral)); border-radius:99px; box-shadow:0 0 12px -2px rgba(253,89,202,.8); transition:width .5s cubic-bezier(.2,.7,.3,1)}
+
+/* controles del deck */
+.mando{display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:space-between}
+.mando .grupo{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.nav{background:var(--paper-2); border:1px solid var(--line); border-radius:11px; width:44px; height:40px; cursor:pointer; font-size:17px}
+.nav:hover{border-color:var(--coral)}
+.nav:disabled{opacity:.3; cursor:not-allowed}
+.cuenta-slide{font-family:var(--mono); font-size:13px; color:var(--ink-soft); min-width:66px; text-align:center}
+.pistas{display:flex; gap:5px; flex-wrap:wrap}
+.pista{width:11px; height:11px; border-radius:99px; border:1px solid var(--line); background:transparent; cursor:pointer; padding:0}
+.pista.tierra{border-color:rgba(3,178,237,.6)}
+.pista.isla{border-color:rgba(148,20,209,.75)}
+.pista.on{background:var(--coral); border-color:var(--coral); box-shadow:0 0 10px -1px var(--coral)}
+.pista.hito{border-radius:3px}
+
+/* modo foco (proyección) */
+body.foco .top,body.foco .tabbar,body.foco .pieaviso{display:none}
+body.foco main{padding:0}
+body.foco .wrap{max-width:none; padding:0}
+body.foco .escena{border-radius:0; border:0; min-height:calc(100vh - 62px)}
+body.foco .deck{gap:0}
+body.foco .mando{padding:10px 18px; background:var(--noche); border-top:1px solid var(--line)}
+
+/* ══════════ TABLERO ══════════ */
+.sechead{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin:26px 0 13px}
+.sechead:first-child{margin-top:0}
+.sechead h2{font-size:clamp(20px,2.5vw,27px); font-weight:800}
+.sechead p{margin:5px 0 0; color:var(--ink-soft); font-size:13.5px; max-width:64ch}
+.aviso{display:flex; gap:12px; align-items:flex-start; padding:13px 15px; border-radius:var(--r); font-size:14px; margin-bottom:14px}
+.aviso .ic{font-size:18px}
+.aviso.info{background:var(--paper-2); border:1px solid var(--line)}
+.aviso.alert{background:var(--warn-bg); border:1px solid rgba(255,174,59,.42)}
+.aviso.stop{background:var(--crit-bg); border:1px solid rgba(255,61,110,.45)}
+.aviso b{font-family:var(--display)}
+
+.podio{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-bottom:18px}
+.pcard{border-radius:var(--r); padding:17px; color:#fff; position:relative; overflow:hidden; min-height:150px; display:flex; flex-direction:column; justify-content:flex-end}
+.pcard .medal{position:absolute; top:11px; right:15px; font-size:38px; opacity:.92}
+.pcard .pos{font-family:var(--mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; opacity:.85; padding-right:46px}
+.pcard h3{font-size:21px; font-weight:800; margin-top:4px; padding-right:46px}
+.pcard .pts{font-family:var(--mono); font-size:30px; font-weight:600; margin-top:7px; line-height:1}
+.pcard .det{font-size:12px; opacity:.9; margin-top:4px}
+.p1{background:linear-gradient(150deg,#03b2ed,#0B3F8F); box-shadow:0 0 34px -14px #03b2ed}
+.p2{background:linear-gradient(150deg,#9414d1,#450063); box-shadow:0 0 34px -14px #9414d1}
+.p3{background:linear-gradient(150deg,#fd59ca,#8E1466); box-shadow:0 0 34px -14px #fd59ca}
+
+.tablabox{overflow-x:auto; border:1px solid var(--line); border-radius:var(--r); background:var(--surface); box-shadow:var(--shadow)}
+table{border-collapse:collapse; width:100%; min-width:940px; font-size:13.5px}
+th,td{padding:10px 12px; text-align:left; border-bottom:1px solid var(--paper-3)}
+th{background:var(--paper-2); font-family:var(--mono); font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-soft); font-weight:500; cursor:pointer; position:sticky; top:0; white-space:nowrap}
+th:hover{color:var(--ink)}
+th .ar{opacity:.4}
+td.num{font-family:var(--mono); font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--paper-2)}
+tr.desc td{opacity:.5}
+.pill{font-size:11px; padding:2px 7px; border-radius:999px; font-weight:500; white-space:nowrap}
+.chartbox{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:16px; box-shadow:var(--shadow)}
+.chartbox svg{width:100%; height:auto; display:block}
+.cuenta{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); box-shadow:var(--shadow); overflow:hidden}
+.cuenta table{min-width:620px}
+.cuenta tfoot td{font-weight:600; background:var(--paper-2); border-top:2px solid var(--mar); border-bottom:0}
+.cuenta caption{text-align:left; padding:14px 16px 0; font-family:var(--display); font-weight:800; font-size:17px; caption-side:top}
+
+details.bloque{border:1px solid var(--line); border-radius:var(--r); background:var(--surface); padding:14px 16px; margin-top:14px}
+details.bloque summary{cursor:pointer; font-family:var(--display); font-weight:800; font-size:16px; list-style:none}
+details.bloque summary::-webkit-details-marker{display:none}
+details.bloque summary::before{content:"＋ "; font-family:var(--mono); color:var(--mar)}
+details.bloque[open] summary::before{content:"−  "; font-family:var(--mono); color:var(--mar)}
+.checklist{display:grid; gap:8px; margin-top:13px}
+.check{display:grid; grid-template-columns:auto 1fr auto; gap:11px; align-items:flex-start; background:var(--paper-2); border:1px solid var(--line); border-radius:11px; padding:11px 13px}
+.check input{width:18px; height:18px; margin-top:2px; accent-color:var(--mar); cursor:pointer}
+.check.done .txt{text-decoration:line-through; color:var(--ink-faint)}
+.check .txt b{display:block; font-size:14px}
+.check .txt span{font-size:12.5px; color:var(--ink-soft)}
+.prio{font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; padding:3px 8px; border-radius:6px; white-space:nowrap}
+.prio.alta{background:var(--crit-bg); color:var(--crit)}
+.prio.media{background:var(--warn-bg); color:var(--warn)}
+.paso{display:grid; grid-template-columns:62px 1fr; gap:14px; padding:11px 0; border-bottom:1px solid var(--paper-3)}
+.paso:last-child{border-bottom:0}
+.paso .hora{font-family:var(--mono); font-size:12.5px; color:var(--coral); font-weight:600}
+.paso b{font-family:var(--display); font-size:15px}
+.paso p{margin:3px 0 0; font-size:13.5px; color:var(--ink-soft)}
+
+/* ══════════ VOTAR ══════════ */
+.caja{background:var(--surface); border:1px solid var(--line); border-radius:var(--r); padding:17px; box-shadow:var(--shadow); margin-bottom:18px}
+.nombres{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0}
+.nchip{border:1px solid var(--line); background:var(--paper-2); border-radius:999px; padding:8px 16px; cursor:pointer; font-size:14.5px}
+.nchip[aria-pressed="true"]{background:var(--coral); color:#2B0120; border-color:var(--coral); font-weight:600; box-shadow:0 0 16px -5px var(--coral)}
+.inputrow{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+input[type=text],input[type=number]{font:inherit; padding:9px 13px; border:1px solid var(--line); border-radius:9px; background:var(--paper); color:var(--ink); min-width:0}
+input[type=number]{font-family:var(--mono); width:170px}
+.btn{background:linear-gradient(90deg,var(--uva),#B93BE0); color:#fff; border:1px solid transparent; border-radius:10px; padding:10px 17px; cursor:pointer; font-weight:500}
+.btn:hover{opacity:.88}
+.btn.ghost{background:transparent; color:var(--ink); border-color:var(--line)}
+.btn.coral{background:var(--coral); border-color:var(--coral); color:#2B0120; font-weight:600}
+.votafila{display:grid; grid-template-columns:1fr auto; gap:9px 16px; align-items:center; padding:11px 0; border-bottom:1px solid var(--paper-3)}
+.votafila:last-child{border-bottom:0}
+.votafila .nom{font-weight:600; font-size:15px}
+.votafila .meta{font-size:12.5px; color:var(--ink-soft); font-family:var(--mono)}
+.votafila .ctrl{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.votafila .star{font-size:23px; color:var(--line)}
+.votafila .star.on{color:var(--mango)}
+.votantes{display:flex; gap:7px; flex-wrap:wrap; margin-top:7px}
+.vtag{font-family:var(--mono); font-size:11.5px; background:var(--paper-2); border:1px solid var(--line); border-radius:999px; padding:3px 10px}
+.vtag.espera{opacity:.42}
+.estado-linea{display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:10px 14px; background:var(--paper-2); border:1px solid var(--line); border-radius:11px; margin-bottom:16px; font-size:13.5px}
+.dot{width:9px; height:9px; border-radius:99px; background:var(--ink-faint); flex:none}
+.dot.live{background:var(--ok); box-shadow:0 0 0 4px rgba(35,229,192,.2)}
+.dot.local{background:var(--mango); box-shadow:0 0 0 4px rgba(255,174,59,.2)}
+.pieaviso{border-top:1px solid var(--line); margin-top:30px; padding-top:15px; font-size:12.5px; color:var(--ink-soft)}
+
+@media (max-width:820px){
+  .op{grid-template-columns:1fr; gap:20px}
+  .op .der{order:-1}
+  .escena{min-height:0}
+}
+@media (max-width:560px){
+  .votafila{grid-template-columns:1fr}
+  .top .wrap{gap:9px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <h1>Familia Fin de Año</h1>
+    <div class="datos">
+      <span><b>29 dic → 3 ene</b> · 5 noches</span>
+      <span><b>10</b> personas</span>
+      <span><b>1</b> niña de 4</span>
+      <span><b>Alma</b> · 14 kg</span>
+      <span><b id="d-votos">0</b> votos</span>
+    </div>
+  </div>
+</header>
+
+<div class="tabbar"><div class="wrap"><div class="tabs" role="tablist" aria-label="Modos">
+  <button class="tab" role="tab" data-p="presentar" aria-selected="true">Presentar</button>
+  <button class="tab" role="tab" data-p="tablero" aria-selected="false">Tablero</button>
+  <button class="tab" role="tab" data-p="votar" aria-selected="false">Mi voto</button>
+</div></div></div>
+
+<main class="wrap">
+
+<!-- ═══════ PRESENTAR ═══════ -->
+<section class="panel" id="p-presentar" role="tabpanel">
+  <div class="deck">
+    <div class="escena">
+      <div class="progreso"><i id="prog"></i></div>
+      <div class="lienzo" id="lienzo"></div>
+    </div>
+    <div class="mando">
+      <div class="grupo">
+        <button class="nav" id="ant" aria-label="Anterior">←</button>
+        <span class="cuenta-slide" id="cuenta-slide">1 / 14</span>
+        <button class="nav" id="sig" aria-label="Siguiente">→</button>
+        <div class="pistas" id="pistas"></div>
+      </div>
+      <div class="grupo">
+        <span class="eyebrow" id="hint">← → para avanzar</span>
+        <button class="btn ghost" id="btn-foco">Proyectar</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ TABLERO ═══════ -->
+<section class="panel" id="p-tablero" role="tabpanel" hidden>
+  <div class="estado-linea"><span class="dot local" id="dot"></span><span id="estado-txt">Conectando el Excel compartido…</span></div>
+  <div class="aviso alert" id="aviso-hoja" hidden>
+    <span class="ic">📎</span>
+    <div>
+      <b>Para que la familia vote en el mismo Excel,</b> sube <span class="mono">matriz_decision_viaje_fin_de_anio_1.xlsx</span> a Google Drive y ábrelo con Hojas de cálculo.
+      Extensiones → Apps Script → pega <span class="mono">hoja.gs</span> → Implementar como aplicación web (acceso: cualquiera).
+      Pega la URL <span class="mono">/exec</span> en <span class="mono">HOJA_API</span> al inicio de este HTML y vuelve a publicar.
+      Cada voto escribe desde la fila 5 de la hoja <b>Votos</b>; Resultados y Resumen decisión se recalculan solos.
+    </div>
+  </div>
+
+  <div class="sechead">
+    <div><h2>Quién va ganando</h2><p id="podio-sub">70 puntos por promedio de estrellas + 30 repartidos entre las joyas − 15 por cada veto.</p></div>
+    <button class="btn" id="btn-revelar">Ocultar el podio</button>
+  </div>
+  <div id="podio-oculto" class="aviso alert" hidden><span class="ic">🙈</span><div><b>Modo suspenso activo.</b> Nadie ve resultados hasta que el anfitrión pulse «Revelar el podio». Sigan votando.</div></div>
+  <div class="podio" id="podio"></div>
+  <div class="votantes" id="lista-votantes"></div>
+
+  <div class="sechead">
+    <div><h2>Las 12 opciones</h2><p>Alojamiento normalizado a 10 personas y 5 noches. Clic en una fila para verla en grande; clic en un encabezado para reordenar.</p></div>
+    <div class="inputrow"><label class="eyebrow" for="presu">Presupuesto</label><input type="number" id="presu" value="18000000" step="500000" min="0"></div>
+  </div>
+  <div class="tablabox"><table id="tabla">
+    <thead><tr>
+      <th data-s="nombre">Plan <span class="ar">↕</span></th>
+      <th data-s="zona">Zona <span class="ar">↕</span></th>
+      <th data-s="acceso">Acceso <span class="ar">↕</span></th>
+      <th data-s="total" style="text-align:right">Alojamiento 10p/5n <span class="ar">↕</span></th>
+      <th data-s="pppn" style="text-align:right">Por persona/noche <span class="ar">↕</span></th>
+      <th data-s="brecha" style="text-align:right">Vs. presupuesto <span class="ar">↕</span></th>
+      <th data-s="mascota">Alma <span class="ar">↕</span></th>
+      <th data-s="puntaje" style="text-align:right">Puntaje <span class="ar">↕</span></th>
+    </tr></thead><tbody id="tbody"></tbody>
+  </table></div>
+
+  <div class="sechead"><div><h2>Costo contra cariño</h2><p>Izquierda es barato, arriba es lo que la familia quiere. El cuadrante superior izquierdo es la decisión sensata.</p></div></div>
+  <div class="chartbox"><svg id="scatter" viewBox="0 0 780 420" role="img" aria-label="Costo contra puntaje de la familia"></svg></div>
+
+  <div class="sechead"><div><h2>La cuenta completa</h2><p>El alojamiento es la mitad. Esto suma carretera, comida y paradas sobre el plan que va ganando.</p></div></div>
+  <div class="cuenta"><table>
+    <caption id="cuenta-cap">Escenarios</caption>
+    <thead><tr><th>Rubro</th><th style="text-align:right">Ajustado</th><th style="text-align:right">Probable</th><th style="text-align:right">Holgado</th><th>Nota</th></tr></thead>
+    <tbody id="cuenta-body"></tbody>
+    <tfoot>
+      <tr><td>Total del viaje</td><td class="num" id="ct-b"></td><td class="num" id="ct-m"></td><td class="num" id="ct-a"></td><td>10 personas</td></tr>
+      <tr><td>Por persona</td><td class="num" id="cp-b"></td><td class="num" id="cp-m"></td><td class="num" id="cp-a"></td><td>Sobre 10</td></tr>
+    </tfoot>
+  </table></div>
+
+  <div class="caja" id="export-box" style="margin-top:22px">
+    <span class="eyebrow">Base de datos</span>
+    <h2 style="font-size:19px; margin-top:5px">Bajar todo el tablero a Excel</h2>
+    <p style="margin:6px 0 0; font-size:13.5px; color:var(--ink-soft); max-width:70ch">
+      Un libro con hojas en formato tabla: viaje, 12 opciones, a favor, alertas, letra menuda, votos, votantes, podio, cuenta y pendientes.
+      Ábrelo y filtra; no hay que pegar nada en otro archivo. Si votaron en varios celulares, unan las filas de la hoja <b>Votos</b>.
+    </p>
+    <div class="inputrow" style="margin-top:12px">
+      <button type="button" class="btn js-xlsx">Descargar Excel (.xlsx)</button>
+      <button type="button" class="btn ghost js-csv">Descargar CSV (.zip)</button>
+      <span class="mono exp-msg" style="font-size:12.5px; color:var(--ink-soft)"></span>
+    </div>
+  </div>
+
+  <details class="bloque" id="det-pend"><summary>Por confirmar antes de abonar <span class="mono" id="n-pend" style="color:var(--crit)"></span></summary>
+    <div class="aviso stop" style="margin:13px 0 0"><span class="ic">⏳</span><div><b>Reloj corriendo.</b> Múcura Club dice tener «la última disponibilidad» y la tarifa de La Playita vence en 24 horas. Ninguno de los dos tiene la mascota confirmada.</div></div>
+    <div class="checklist" id="checklist"></div>
+  </details>
+
+  <details class="bloque"><summary>Guion de la reunión y trucos para que no sea aburrida</summary>
+    <div style="margin-top:12px">
+      <div class="paso"><div class="hora">0:00</div><div><b>Las reglas y el presupuesto</b><p>10 personas, 5 noches, Alma de 14 kg, la niña de 4 años, y que la mamá no se sube a lancha. Decirlo antes de que alguien se enamore de una isla.</p></div></div>
+      <div class="paso"><div class="hora">0:10</div><div><b>Pasar las 12 diapositivas</b><p>Un minuto por opción, sin debate. Solo precio, qué incluye y la alerta grande.</p></div></div>
+      <div class="paso"><div class="hora">0:25</div><div><b>Ronda de estrellas en silencio</b><p>Todos califican al tiempo desde el celular, sin comentar. Cinco minutos de reloj, con el podio oculto.</p></div></div>
+      <div class="paso"><div class="hora">0:35</div><div><b>Primera revelación</b><p>Casi siempre el favorito de la conversación no es el favorito de las estrellas.</p></div></div>
+      <div class="paso"><div class="hora">0:45</div><div><b>Alegatos y vetos</b><p>Dos minutos por finalista. Aquí se usan los vetos y se explican en voz alta.</p></div></div>
+      <div class="paso"><div class="hora">1:05</div><div><b>Las joyas y el podio definitivo</b><p>Cada persona pone su 💎 y se revela el resultado final.</p></div></div>
+      <div class="paso"><div class="hora">1:20</div><div><b>Reparto de tareas y registro</b><p>Se asigna cada llamada con nombre y fecha, y se descargan los votos para pegarlos en la matriz de Excel.</p></div></div>
+      <div style="border-top:1px solid var(--paper-3); margin-top:14px; padding-top:13px; display:grid; gap:11px; font-size:13.5px; color:var(--ink-soft)">
+        <div><b style="color:var(--ink)">🎟️ Sobres cerrados.</b> Antes de abrir la página, cada quien escribe su destino soñado en un papel. Se abren al final y se comparan con el podio.</div>
+        <div><b style="color:var(--ink)">🐕 El voto de Alma y de la niña.</b> Tarjetas físicas de 5 estrellas: la niña califica «dónde hay más piscina» y alguien vota por Alma con criterio de sombra y arena. Es lo que desempata.</div>
+        <div><b style="color:var(--ink)">💰 La subasta del ahorro.</b> Muestra cuánto sobra con el plan barato y deja que decidan en qué se lo gastan. Deja de sentirse a pérdida.</div>
+        <div><b style="color:var(--ink)">🏁 Duelo a mano alzada.</b> Si el 1 y el 2 quedan a menos de 5 puntos, cierra votando entre esos dos. Nadie queda con la sensación de que decidió una hoja de cálculo.</div>
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ═══════ VOTAR ═══════ -->
+<section class="panel" id="p-votar" role="tabpanel" hidden>
+  <div class="caja">
+    <span class="eyebrow">Paso 1 · Identifícate</span>
+    <h2 style="font-size:21px; margin-top:5px">¿Quién está votando?</h2>
+    <div class="nombres" id="nombres"></div>
+    <div class="inputrow">
+      <input type="text" id="nuevo-nombre" placeholder="¿No estás en la lista? Escribe tu nombre" maxlength="24">
+      <button class="btn ghost" id="add-nombre">Agregar</button>
+      <button class="btn ghost" id="salir" hidden>Cambiar de votante</button>
+    </div>
+  </div>
+
+  <div id="zona-voto" hidden>
+    <div class="sechead" style="margin-top:0"><div><h2>Paso 2 · Califica</h2><p id="voto-sub"></p></div><button class="btn coral" id="borrar-voto">Borrar mi voto</button></div>
+    <div class="caja" style="padding:6px 17px" id="votafilas"></div>
+  </div>
+  <div class="aviso info" id="pide-nombre"><span class="ic">👆</span><div>Elige tu nombre para abrir tu tarjeta. Cada persona vota desde su celular con este mismo enlace.</div></div>
+
+  <div class="caja" style="margin-top:18px">
+    <span class="eyebrow">El registro oficial</span>
+    <h2 style="font-size:19px; margin-top:5px">La misma base de datos, desde aquí</h2>
+    <p style="margin:6px 0 0; font-size:13.5px; color:var(--ink-soft); max-width:66ch">
+      Descarga el libro completo: opciones, votos, podio, cuenta y pendientes. No hay que copiar filas a otro Excel.
+    </p>
+    <div class="inputrow" style="margin-top:12px">
+      <button type="button" class="btn js-xlsx">Descargar Excel (.xlsx)</button>
+      <button type="button" class="btn ghost js-csv">Descargar CSV (.zip)</button>
+      <span class="mono exp-msg" style="font-size:12.5px; color:var(--ink-soft)"></span>
+    </div>
+  </div>
+</section>
+
+<div class="pieaviso wrap" style="padding-left:0; padding-right:0">
+  Cotizaciones recibidas por WhatsApp, PDF y agencia entre agosto y septiembre de 2026. Los valores de «alojamiento 10 personas / 5 noches» son <b>estimados por regla de tres</b> sobre cada cotización original: sirven para comparar, no para reservar. Toda opción debe recotizarse formalmente para 10 personas, 5 noches y una perrita de 14 kg antes de abonar.
+</div>
+</main>
+
+<script>
+"use strict";
+
+/* Pega la URL /exec de Apps Script. Es el Excel compartido: todos los votos caen ahí.
+   Mientras esté vacía, cada celular guarda su voto aparte. */
+const HOJA_API = "";
+
+const OPCIONES = [
+  {
+    id:"porvenir", nombre:"Hotel El Porvenir", zona:"Coveñas · Sector El Porvenir", tipo:"Hotel de playa",
+    acceso:"tierra", lat:9.43, lon:-75.70, horas:"13–15 h por carretera",
+    total:4500000, cotizado:"$90.000 por persona/noche en habitación múltiple (3–4 pers.), temporada alta",
+    detalleCosto:"3 habitaciones múltiples × 10 personas × 5 noches",
+    mascota:"pendiente", cabe:true, comida:"No incluye desayuno (confirmar)", estado:"viva",
+    si:["El más barato de toda la mesa, por un margen enorme","Piscina, asoleadoras y restaurante propio","A dos cuadras de playa de mar tranquilo — ideal para la niña","A 8 minutos del centro de Coveñas: farmacia, mercado, plan B","Carretera hasta la puerta, sin lancha ni traslados"],
+    no:["El nombre exacto del hotel está por confirmar (solo tenemos el catálogo de WhatsApp)","No dice nada sobre mascotas: hay que preguntarlo primero","No se menciona desayuno incluido","Falta confirmar disponibilidad para el 29 de diciembre"],
+    extra:[["Check-in / check-out","2:00 p. m. / 11:00 a. m."],["Tarifa alternativa","Habitación doble $250.000/noche en temporada alta"],["Contacto","WhatsApp +57 312 895 6656"]],
+    mapsq:"Sector El Porvenir Coveñas Sucre Colombia", wa:"https://wa.me/p/35325021320445529/573128956656",
+    fuente:"Catálogo de WhatsApp, sept 2026"
+  },
+  {
+    id:"laguna", nombre:"Laguna Beach", zona:"Santiago de Tolú · Playa El Francés", tipo:"Condominio de suites",
+    acceso:"tierra", lat:9.47, lon:-75.61, horas:"13–14 h por carretera",
+    total:null, cotizado:"Sin cotización — solo tenemos el documento de políticas",
+    detalleCosto:"Pedir tarifa de temporada alta para 4–5 suites",
+    mascota:"critica", cabe:null, comida:"Solo internet incluido; desayuno buffet dominical $35.000", estado:"viva",
+    si:["Se llega por carretera, sin lancha","Playa El Francés es tranquila y de aguas mansas","Restaurante, bar y piscina dentro del condominio","Horario de silencio de 12:30 a. m. a 8:00 a. m. — bueno para la niña","Parqueadero asignado por suite"],
+    no:["Límite de mascota: 13 kg. Alma pesa 14. Sin permiso escrito, no hay reserva","Es un condominio de propietarios distintos: la suite se asigna por categoría y las fotos son referenciales","No se pueden ingresar alimentos ni bebidas a las zonas húmedas","Cada solicitud de cambio o cancelación cuesta $80.000 aparte de la penalidad","Aún no tenemos precio: es la gran incógnita de la mesa"],
+    extra:[["Reserva","Abono del 30 % del valor total; solo por canales oficiales"],["Cancelación en temporada alta","24 dic – 20 ene: 30+ días antes, penalidad 10 %; entre 29 y 10 días, 50 %; menos de 10 días, sin devolución"],["No show","100 % del valor de la reserva"],["Mascotas","Máximo 1 por suite, hasta 13 kg, cargo de $100.000 por estadía, con carné de vacunas"],["Extras","Jacuzzi privado $100.000 · reposición de llave $50.000 · fumar en la suite $1.000.000"],["Horarios","Check-in 3:00 p. m. · check-out 11:00 a. m. · piscina 9–21 h · restaurante 7–21 h"],["Correo de reservas","reservasecohotellagunabeach@gmail.com · Tel. 311 763 4809"]],
+    mapsq:"Ecohotel Laguna Beach Playa El Frances Santiago de Tolu Sucre",
+    fuente:"PDF de políticas v01, enero 2026"
+  },
+  {
+    id:"arena", nombre:"Hotel Arena Beach", zona:"Arroyo de Piedra · Km 22 vía al mar", tipo:"Hotel de playa",
+    acceso:"tierra", lat:10.65, lon:-75.62, horas:"17–18 h por carretera",
+    total:9842500, cotizado:"$7.650.000 para 10 personas, 4 noches (30 dic – 3 ene) + $280.000 de mascota",
+    detalleCosto:"Cotización real para 10 personas, extendida a la quinta noche + mascota",
+    mascota:"si", cabe:true, comida:"Desayuno + cena de San Silvestre", estado:"viva",
+    si:["Ya está cotizado para exactamente 10 personas: es la cifra más confiable de la tabla","Mascota aceptada y cobrada en la cotización, sin ambigüedades","Incluye la cena de San Silvestre del 31","Playa y club de playa fuera del ruido de Cartagena","Sin lancha, se llega en carro"],
+    no:["Prohíbe ingresar alimentos y bebidas: toda la comida se compra adentro y eso puede sumar millones","El abono del 50 % no es reembolsable","La cotización es por 4 noches; falta confirmar el 29 de diciembre","Está a 17 horas de Bogotá — el trayecto más largo junto con Santa Marta"],
+    extra:[["Saldo a favor","30 días de vigencia"],["Cargo de mascota","$280.000 por la estadía"]],
+    mapsq:"Hotel Arena Beach Arroyo de Piedra Bolivar Colombia",
+    fuente:"PDF de cotización Arena Beach"
+  },
+  {
+    id:"baluarte", nombre:"Baluarte Cartagena Boutique", zona:"Cartagena · Bocagrande", tipo:"Hotel urbano",
+    acceso:"tierra", lat:10.40, lon:-75.56, horas:"17–18 h por carretera",
+    total:11375000, cotizado:"$5.460.000 para 6 personas, 4 noches (30 dic – 3 ene)",
+    detalleCosto:"$227.500 por persona/noche × 10 personas × 5 noches",
+    mascota:"pendiente", cabe:null, comida:"Desayuno", estado:"secundaria",
+    si:["Bocagrande: todo a pie, restaurantes, farmacias, centros comerciales","Desayuno incluido y hotel boutique","Sin lancha, con la ciudad entera como plan B si llueve"],
+    no:["Bocagrande el 31 de diciembre es un hervidero: ruido, tráfico y playa llena","La información de mascotas es contradictoria entre la web y la agencia","Parqueadero sin confirmar, y venimos con carros desde Bogotá","No es una playa para que la niña juegue tranquila"],
+    extra:[["Cotizado por","Agencia OnTrip, por chat"]],
+    mapsq:"Hotel Baluarte Cartagena Boutique Bocagrande",
+    fuente:"Cotización OnTrip"
+  },
+  {
+    id:"rodadero", nombre:"Rodadero Suites", zona:"Santa Marta · El Rodadero", tipo:"Hotel urbano",
+    acceso:"tierra", lat:11.20, lon:-74.23, horas:"18–19 h por carretera",
+    total:6166667, cotizado:"$2.220.000 para 6 personas, 3 noches (3 al 6 de enero)",
+    detalleCosto:"$123.333 por persona/noche × 10 personas × 5 noches",
+    mascota:"pendiente", cabe:null, comida:"Desayuno", estado:"secundaria",
+    si:["El segundo más barato por persona y por noche","Desayuno y asistencia incluidos","Base urbana cómoda si el plan real es el Tayrona"],
+    no:["Las fechas cotizadas son del 3 al 6 de enero: no cubren nuestro viaje","La mascota aparece contradictoria en la información pública","Está lejos del Tayrona pese a lo que sugiere el nombre","El Rodadero en temporada alta es playa de multitud"],
+    extra:[["Cotizado por","Agencia OnTrip, por chat"]],
+    mapsq:"Rodadero Suites Santa Marta Magdalena",
+    fuente:"Cotización OnTrip"
+  },
+  {
+    id:"mucura", nombre:"Múcura Club Hotel", zona:"Isla Múcura · San Bernardo", tipo:"Hotel de isla",
+    acceso:"isla", lat:9.78, lon:-75.85, horas:"Carretera a Tolú + lancha",
+    total:15610000, cotizado:"$15.610.000 por 4 habitaciones (3+3+2+2), 5 noches, sin impuestos",
+    detalleCosto:"Cotización real para las 10 personas; la niña no paga alojamiento",
+    mascota:"pendiente", cabe:true, comida:"Desayuno incluido; paquete de alimentación aparte", estado:"secundaria",
+    si:["Cotización armada para el grupo completo, con las cuatro habitaciones nombradas","La niña no paga alojamiento (colecho con los papás)","Desayuno, bebida de bienvenida y un kayak sin costo","Isla Múcura tiene el agua más clara de toda la lista"],
+    no:["Lancha obligatoria: criterio excluyente para la mamá","Los $15.610.000 son SIN impuestos — la cifra real sube","La comida es aparte: $130.000 por persona por noche","La cena de San Silvestre se cobra aparte, $360.000 por persona, y ese precio es del año pasado: lo confirman en octubre o noviembre","La cotización dice «niña de 2 años» y la nuestra tiene 4: hay que rehacerla","No hay una palabra sobre mascotas"],
+    extra:[["Habitaciones cotizadas","$4.930.000 (3 pers.) + $4.355.000 (3 pers.) + $3.475.000 (2 pers.) + $2.850.000 (2 pers.)"],["Alimentación","Paquete $130.000 por persona/noche, o platos a la carta desde $30.000"],["Estimado de comida","≈ $10.100.000 para 10 personas incluyendo la fiesta del 31"],["Presión de venta","«Última disponibilidad, tengo un grupo pendiente»"]],
+    mapsq:"Mucura Club Hotel Isla Mucura San Bernardo Sucre",
+    fuente:"Cotización por WhatsApp, 8 sept 2026"
+  },
+  {
+    id:"playita", nombre:"La Playita", zona:"Isla Fuerte · Bolívar", tipo:"Cabañas de isla",
+    acceso:"isla", lat:9.38, lon:-76.18, horas:"Carretera a Cartagena/Paso Nuevo + lancha",
+    total:20618684, cotizado:"$13.861.300 + IVA por 4 cabañas (8 personas), 30 dic – 4 ene",
+    detalleCosto:"$412.374 por persona/noche × 10 personas × 5 noches. Las 4 cabañas de hoy solo alcanzan para 8",
+    mascota:"pendiente", cabe:false, comida:"Desayuno y café hasta las 10:30", estado:"secundaria",
+    si:["Cabañas privadas con baño, no habitaciones compartidas","Isla Fuerte es de las playas más limpias del Caribe colombiano","Desayuno, café, wifi y agua potable incluidos"],
+    no:["Solo hay 4 cabañas disponibles: caben 8 personas, faltan 2. La cifra de arriba asume dos cupos que hoy no existen","Hay bar y fiesta cerca de las habitaciones hasta la madrugada, sobre todo fines de semana — pésimo con una niña de 4 años","Los menores de 4 años no pagan, pero la nuestra ya tiene 4: paga completo","Los precios son sin IVA; el 19 % se paga al llegar","La tarifa vence en 24 horas","Lancha obligatoria"],
+    extra:[["Cabañas cotizadas","2 × Privada primer piso $3.405.600 · 1 × Privada segundo piso $3.505.600 · 1 × Superior $3.544.500 (todas +IVA)"],["Fechas","Entrada 30 dic 2026, salida 4 ene 2027"],["Regla de menores","Los niños solo pueden alojarse en habitaciones privadas"]],
+    mapsq:"La Playita Isla Fuerte Bolivar Colombia",
+    fuente:"Cotización por WhatsApp, 8 sept 2026"
+  },
+  {
+    id:"coral", nombre:"Hotel Coral de Fuego", zona:"Isla Fuerte · Playa San Diego", tipo:"Hotel de isla",
+    acceso:"isla", lat:9.40, lon:-76.16, horas:"Carretera + lancha",
+    total:27400000, cotizado:"$21.800.000 para 8 personas, 5 noches (30 dic – 4 ene) + $150.000 de mascota",
+    detalleCosto:"$545.000 por persona/noche × 10 personas × 5 noches + mascota",
+    mascota:"si", cabe:null, comida:"Desayuno y kayak", estado:"descartable",
+    si:["Pet friendly declarado, con tarifa específica para razas grandes","Playa San Diego es preciosa y muy tranquila","Kayak incluido"],
+    no:["El más caro de toda la mesa: casi $27 millones solo en alojamiento","Traslado marítimo casi seguro","Solo incluye desayuno: la comida en isla es cara y no hay alternativas cerca"],
+    extra:[["Cargo de mascota","$150.000 para razas grandes"]],
+    mapsq:"Hotel Coral de Fuego Isla Fuerte Playa San Diego",
+    fuente:"Cotización por chat"
+  },
+  {
+    id:"mulata", nombre:"Hotel Isla Mulata", zona:"Isla Grande · Islas del Rosario", tipo:"Hotel de isla",
+    acceso:"isla", lat:10.18, lon:-75.75, horas:"Carretera a Cartagena + lancha",
+    total:20381008, cotizado:"$19.565.768 para 8 personas, 6 noches (30 dic – 5 ene)",
+    detalleCosto:"$407.620 por persona/noche × 10 personas × 5 noches",
+    mascota:"pendiente", cabe:null, comida:"Desayuno", estado:"descartable",
+    si:["Islas del Rosario, con snorkel a un paso","Cotización formal de Aviatur, con respaldo de agencia"],
+    no:["Traslado marítimo obligatorio","Posible límite de peso para la mascota — el punto débil con Alma","Almuerzos y cenas no incluidos, en una isla donde no hay dónde más comer","El traslado a playa se cobra aparte"],
+    extra:[["Operado por","Aviatur"]],
+    mapsq:"Hotel Isla Mulata Isla Grande Islas del Rosario Cartagena",
+    fuente:"PDF Aviatur"
+  },
+  {
+    id:"marazao", nombre:"Marazao Beach", zona:"Ubicación por confirmar", tipo:"Bungalows de playa",
+    acceso:"isla", lat:10.17, lon:-75.68, horas:"Con transporte marítimo",
+    total:21239004, cotizado:"$16.919.203 para 8 personas, 5 noches + $90.000 de mascota",
+    detalleCosto:"$422.980 por persona/noche × 10 personas × 5 noches + mascota",
+    mascota:"si", cabe:null, comida:"Desayuno", estado:"descartable",
+    si:["Rubro pet friendly explícito y barato ($90.000)","Bungalows independientes"],
+    no:["No sabemos con certeza dónde queda: la cotización llegó como imagen, sin dirección","Penalización del 100 % por cancelación — el riesgo más alto de la lista","Transporte marítimo","Las fechas exactas no aparecen en la cotización"],
+    extra:[["Cargo de mascota","$90.000"],["Cancelación","Penalidad del 100 %"]],
+    mapsq:"Marazao Beach Colombia",
+    fuente:"Imagen de cotización por chat"
+  },
+  {
+    id:"tintipan", nombre:"Hotel Tintipán", zona:"Isla Tintipán · San Bernardo", tipo:"Isla todo incluido",
+    acceso:"isla", lat:9.80, lon:-75.86, horas:"Carretera + lancha",
+    total:23950000, cotizado:"$19.160.000 para 8 personas, 5 noches (30 dic – 4 ene)",
+    detalleCosto:"$479.000 por persona/noche × 10 personas × 5 noches",
+    mascota:"no", cabe:null, comida:"Alimentación completa + traslado náutico", estado:"descartada",
+    si:["Todo incluido de verdad: comidas y traslado náutico dentro del precio","Isla Tintipán y el Mar de las Siete Colores"],
+    no:["No acepta mascotas según sus políticas oficiales: Alma no entra","Lancha obligatoria","La cotización se contradice: habla de 5 noches y de 3 noches / 4 días"],
+    extra:[],
+    mapsq:"Hotel Tintipan Isla Tintipan San Bernardo Sucre",
+    fuente:"Cotización por chat + enlace"
+  },
+  {
+    id:"river", nombre:"Hotel River City", zona:"Montería · Córdoba", tipo:"Parada en ruta",
+    acceso:"ruta", lat:8.75, lon:-75.88, horas:"12–13 h desde Bogotá",
+    total:3250000, cotizado:"$130.000 por habitación/noche con 2 desayunos",
+    detalleCosto:"5 habitaciones × $130.000 × 5 noches (como destino sería absurdo; sirve como escala)",
+    mascota:"pendiente", cabe:true, comida:"2 desayunos por habitación", estado:"complemento",
+    si:["Resuelve la noche de la mitad del camino: 12 horas hasta aquí y el resto al día siguiente","Aire acondicionado, TV y parqueadero","Barato: 5 habitaciones por $650.000 la noche"],
+    no:["No es un destino, es una cama en la carretera","Falta confirmar si aceptan a Alma y con qué cargo"],
+    extra:[["Uso recomendado","Una noche a la ida y otra al regreso: ≈ $1.300.000 en total"]],
+    mapsq:"Hotel River City Monteria Cordoba",
+    fuente:"Cotización por chat"
+  }
+];
+
+const PENDIENTES = [
+  {id:"p1", prio:"alta", t:"Confirmar por escrito que aceptan a Alma (14 kg)", d:"En cada finalista, incluyendo condiciones en restaurante, piscina y playa. Sin correo escrito no se abona.", q:"Angela"},
+  {id:"p2", prio:"alta", t:"Laguna Beach: negociar el kilo de más", d:"La política dice 13 kg máximo. Preguntar si hay excepción documentada para 14 kg antes de pedir tarifas.", q:"Jorge"},
+  {id:"p3", prio:"alta", t:"Pedir tarifa de Laguna Beach para 5 suites, 29 dic – 3 ene", d:"Es el único plan sin precio y podría cambiar el podio entero.", q:"Angela"},
+  {id:"p4", prio:"alta", t:"Averiguar el nombre real del hotel de El Porvenir", d:"Solo tenemos el catálogo de WhatsApp. Pedir razón social, RNT y política de mascotas.", q:"Jorge"},
+  {id:"p5", prio:"alta", t:"Recotizar Arena Beach por 5 noches desde el 29", d:"La cotización actual es de 4 noches desde el 30. Confirmar disponibilidad del 29.", q:"Angela"},
+  {id:"p6", prio:"alta", t:"Confirmar si la lancha es realmente excluyente", d:"Múcura, La Playita, Coral, Mulata, Tintipán y Marazao dependen de esta respuesta. Preguntárselo a mamá antes de la reunión, no durante.", q:"Familia"},
+  {id:"p7", prio:"media", t:"Calcular la comida en Arena Beach", d:"No dejan ingresar alimentos ni bebidas. Pedir carta y precios para 10 personas × 5 días.", q:"Familia"},
+  {id:"p8", prio:"media", t:"Múcura: pedir la cotización con impuestos y con la niña de 4 años", d:"La actual dice «niña de 2 años» y es sin impuestos. Preguntar también por el precio real de San Silvestre.", q:"Angela"},
+  {id:"p9", prio:"media", t:"Definir distribución de camas y privacidad", d:"Cinco habitaciones para 10 personas: quién con quién, y dónde duerme la niña.", q:"Familia"},
+  {id:"p10", prio:"media", t:"Confirmar parqueadero y seguridad del vehículo", d:"Vamos por carretera desde Bogotá, probablemente en dos carros.", q:"Jorge"},
+  {id:"p11", prio:"media", t:"Pedir política de cancelación por escrito en cada finalista", d:"En temporada alta las penalidades llegan al 100 %. Marazao ya la tiene así.", q:"Angela"},
+  {id:"p12", prio:"media", t:"Reservar la parada de Montería para ida y regreso", d:"Solo cuando el destino esté decidido. Confirmar mascota también aquí.", q:"Angela"}
+];
+
+const NOMBRES_SUGERIDOS = ["Jorge","Angela","Mamá","Papá","Hermano","Hermana","Cuñado","Cuñada","Tío","Tía"];
+
+/* ══════════════ BASE ══════════════ */
+const PAX = 10, NOCHES = 5;
+const ORDEN = ["porvenir","laguna","arena","baluarte","rodadero","mucura","playita","coral","mulata","marazao","tintipan","river"];
+const cop = n => "$" + new Intl.NumberFormat("es-CO",{maximumFractionDigits:0}).format(Math.round(n));
+const copCorto = n => Math.abs(n) >= 1e6 ? "$"+(n/1e6).toFixed(1).replace(".",",")+" M" : cop(n);
+const slug = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40) || "votante";
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+let remoto = false;
+let votos = {};
+let config = {revelar:true, presupuesto:18000000, nombres:[...NOMBRES_SUGERIDOS]};
+let hechos = {};
+let yo = null;
+let slide = 0;
+let orden = {campo:"puntaje", dir:-1};
+const TOTAL_SLIDES = ORDEN.length + 2;
+const API = (new URLSearchParams(location.search).get("api") || HOJA_API || "").trim();
+
+const LS = {
+  get(k,d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+const OP = id => OPCIONES.find(o => o.id === id);
+const votoReal = v => {
+  if(!v) return false;
+  const estrellas = Object.values(v.estrellas||{}).some(n => typeof n === "number" && n > 0);
+  return !!(estrellas || v.joya || v.veto);
+};
+function persistir(){
+  LS.set("ffa-votos", votos);
+  LS.set("ffa-yo", yo);
+  LS.set("ffa-hechos", hechos);
+  LS.set("ffa-config", {revelar:config.revelar, presupuesto:config.presupuesto, nombres:config.nombres});
+}
+
+/* ══════════════ PUNTAJES ══════════════ */
+function calcular(){
+  const lista = Object.values(votos).filter(votoReal), nv = lista.length, res = {};
+  for(const o of OPCIONES){
+    const notas = lista.map(v => v.estrellas && v.estrellas[o.id]).filter(n => typeof n === "number" && n > 0);
+    const prom = notas.length ? notas.reduce((a,b)=>a+b,0)/notas.length : 0;
+    const joyas = lista.filter(v => v.joya === o.id).length;
+    const vetos = lista.filter(v => v.veto === o.id).length;
+    const base = notas.length ? (prom/5)*70 : 0;
+    const bonus = nv ? (joyas/nv)*30 : 0;
+    res[o.id] = {prom, notas:notas.length, joyas, vetos, puntaje: Math.max(0, base + bonus - vetos*15)};
+  }
+  return {res, nv};
+}
+const ordenados = () => {
+  const {res} = calcular();
+  return OPCIONES.map(o => ({...o, ...res[o.id]}))
+    .sort((a,b) => b.puntaje - a.puntaje || (a.total||9e15) - (b.total||9e15));
+};
+
+/* ══════════════ HOJA COMPARTIDA (el Excel único) ══════════════ */
+function jsonp(op, data, extra){
+  return new Promise((resolve, reject) => {
+    const cb = "ffaCB" + Date.now() + Math.floor(Math.random()*1e6);
+    const s = document.createElement("script");
+    const t = setTimeout(() => { cleanup(); reject(new Error("timeout")); }, 18000);
+    function cleanup(){ clearTimeout(t); try{ delete window[cb]; }catch(e){} if(s.parentNode) s.remove(); }
+    window[cb] = payload => { cleanup(); resolve(payload); };
+    const q = new URLSearchParams({op, callback:cb, ...(extra||{})});
+    if(data != null) q.set("data", JSON.stringify(data));
+    s.src = API + (API.includes("?") ? "&" : "?") + q.toString();
+    s.onerror = () => { cleanup(); reject(new Error("red")); };
+    document.body.appendChild(s);
+  });
+}
+function aplicarRemoto(s){
+  if(!s || typeof s !== "object") return;
+  if(s.votos && typeof s.votos === "object") votos = s.votos;
+  if(s.config){
+    config = {
+      revelar: s.config.revelar !== false,
+      presupuesto: typeof s.config.presupuesto === "number" ? s.config.presupuesto : config.presupuesto,
+      nombres: Array.isArray(s.config.nombres) && s.config.nombres.length ? s.config.nombres : config.nombres
+    };
+    const inp = document.getElementById("presu");
+    if(inp) inp.value = config.presupuesto;
+  }
+  if(s.hechos && typeof s.hechos === "object") hechos = s.hechos;
+  persistir();
+  render();
+}
+async function empujar(op, data, extra){
+  if(!remoto) return;
+  try{
+    const s = await jsonp(op, data, extra);
+    if(s && s.ok !== false) aplicarRemoto(s);
+  }catch(e){
+    const t = document.getElementById("estado-txt");
+    if(t) t.innerHTML = "<b>No se pudo escribir en el Excel.</b> Revisa que la aplicación web de Apps Script esté publicada. Tu voto sigue en este celular.";
+  }
+}
+
+/* ══════════════ VOTO ══════════════ */
+const miVoto = () => yo ? (votos[yo] || {nombre:"", estrellas:{}, joya:null, veto:null}) : null;
+function exigeNombre(){
+  if(yo) return true;
+  irA("votar");
+  const i = document.getElementById("nuevo-nombre");
+  i.focus(); i.placeholder = "Primero dinos tu nombre para guardar tu voto";
+  return false;
+}
+function setEstrella(id, n){ if(!exigeNombre()) return; const v = miVoto(); const e = {...(v.estrellas||{})}; e[id] = (e[id] === n) ? 0 : n; guardar({...v, estrellas:e}); }
+function setJoya(id){ if(!exigeNombre()) return; const v = miVoto(); guardar({...v, joya: v.joya === id ? null : id}); }
+function setVeto(id){ if(!exigeNombre()) return; const v = miVoto(); guardar({...v, veto: v.veto === id ? null : id}); }
+function guardar(v){
+  v.nombre = v.nombre || config.nombres.find(n => slug(n) === yo) || yo;
+  v.ts = Date.now();
+  votos[yo] = v;
+  persistir();
+  render();
+  empujar("voto", v);
+}
+function borrarVoto(){
+  if(!yo) return;
+  delete votos[yo];
+  persistir();
+  render();
+  empujar("borrar", null, {id: yo});
+}
+function guardarConfig(){
+  persistir();
+  empujar("config", config);
+}
+
+/* ══════════════ DIAPOSITIVAS ══════════════ */
+const MASC = {si:["c-ok","🐕 Alma sí entra"], pendiente:["c-warn","🐕 Alma sin confirmar"], no:["c-crit","🐕 No acepta mascotas"], critica:["c-crit","🐕 Límite 13 kg · Alma pesa 14"]};
+const ACC  = {tierra:["c-ok","🚗 Sin lancha"], isla:["c-crit","⛴️ Requiere lancha"], ruta:["c-neu","🛣️ Parada en ruta"]};
+
+function slideOpcion(o){
+  const {res, nv} = calcular();
+  const r = res[o.id], v = miVoto() || {estrellas:{}};
+  const mine = (v.estrellas||{})[o.id] || 0;
+  const m = MASC[o.mascota], a = ACC[o.acceso];
+  const cap = o.cabe === true ? '<span class="chip c-ok">👨‍👩‍👧 Caben los 10</span>'
+            : o.cabe === false ? '<span class="chip c-crit">👨‍👩‍👧 Solo caben 8</span>'
+            : '<span class="chip c-warn">👨‍👩‍👧 Capacidad por confirmar</span>';
+  const pppn = o.total ? o.total/(PAX*NOCHES) : null;
+  const oculto = !config.revelar;
+  const extras = o.extra.map(e => `<div><b>${esc(e[0])}:</b> ${esc(e[1])}</div>`).join("");
+  const resto = [
+    o.si.length > 3 ? `<div><b>También a favor:</b> ${o.si.slice(3).map(esc).join(" · ")}</div>` : "",
+    o.no.length > 2 ? `<div><b>Otras alertas:</b> ${o.no.slice(2).map(esc).join(" · ")}</div>` : "",
+    extras,
+    `<div style="opacity:.7">Fuente: ${esc(o.fuente)}</div>`
+  ].join("");
+  return `<div class="op">
+    <div class="izq">
+      <span class="eyebrow">${esc(o.tipo)}</span>
+      <h2>${esc(o.nombre)}</h2>
+      <div class="zona">${esc(o.zona)} · ${esc(o.horas)}</div>
+      <div class="chips">
+        <span class="chip ${a[0]}">${a[1]}</span>
+        <span class="chip ${m[0]}">${m[1]}</span>
+        ${cap}
+        <span class="chip c-neu">🍽️ ${esc(o.comida)}</span>
+      </div>
+      <div class="puntos">
+        <div class="si"><h4>A favor</h4><ul>${o.si.slice(0,3).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+        <div class="no"><h4>Ojo con esto</h4><ul>${o.no.slice(0,2).map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+      </div>
+      <details class="vertodo"><summary>Ver la letra menuda</summary><div class="cuerpo">${resto}</div></details>
+    </div>
+    <div class="der">
+      <div class="tarifa">
+        ${o.total
+          ? `<div class="val">${cop(o.total)}</div><div class="cap">Alojamiento estimado · 10 personas · 5 noches</div>
+             <div class="pppn">${cop(pppn)} por persona por noche</div>`
+          : `<div class="val na">Sin cotizar</div><div class="cap">${esc(o.detalleCosto)}</div>`}
+        <div class="cot"><b>Cotizado:</b> ${esc(o.cotizado)}</div>
+      </div>
+      <div class="mapas">
+        <a class="mbtn" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.mapsq)}" target="_blank" rel="noopener"><span class="k">Ubicación</span>Ver en el mapa</a>
+        <a class="mbtn" href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent("Bogotá, Colombia")}&destination=${encodeURIComponent(o.mapsq)}&travelmode=driving" target="_blank" rel="noopener"><span class="k">Ruta</span>Desde Bogotá</a>
+        ${o.wa ? `<a class="mbtn" href="${o.wa}" target="_blank" rel="noopener"><span class="k">Contacto</span>WhatsApp</a>` : ""}
+      </div>
+      <div class="votobox">
+        <div class="fila">
+          <div class="stars" data-op="${o.id}" role="group" aria-label="Calificar ${esc(o.nombre)}">
+            ${[1,2,3,4,5].map(n=>`<button class="star ${n<=mine?"on":""}" data-n="${n}" aria-label="${n} estrellas">★</button>`).join("")}
+          </div>
+          <div class="mini">
+            <button class="${v.joya===o.id?"on-joya":""}" data-joya="${o.id}" title="Mi favorito">💎</button>
+            <button class="${v.veto===o.id?"on-veto":""}" data-veto="${o.id}" title="Vetar">✋</button>
+          </div>
+        </div>
+        <div class="barra">
+          <div class="t"><span>${oculto ? "Resultados ocultos" : (r.notas ? `${r.notas} voto${r.notas===1?"":"s"} · ${r.prom.toFixed(1)}★${r.joyas?` · ${r.joyas}💎`:""}${r.vetos?` · ${r.vetos}✋`:""}` : "Sin votos todavía")}</span>
+            <span>${oculto ? "🙈" : (r.notas ? r.puntaje.toFixed(1) : "—")}</span></div>
+          <div class="track"><div class="fill" style="width:${oculto?0:r.puntaje}%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function slidePortada(){
+  const {nv} = calcular();
+  return `<div class="portada">
+    <span class="eyebrow">Consejo familiar · Caribe colombiano</span>
+    <h2>Doce planes,<br>una decisión</h2>
+    <span class="fechas">29 dic 2026 → 3 ene 2027 · 5 noches · 10 personas · Alma</span>
+    <div class="reglas">
+      <div class="regla"><span class="em">⭐</span><b>Califica del 1 al 5</b><span>Todos los planes, sin pensarlo mucho. 70 de los 100 puntos salen de aquí.</span></div>
+      <div class="regla"><span class="em">💎</span><b>Una joya por cabeza</b><span>El que de verdad quieres. Vale los otros 30 puntos.</span></div>
+      <div class="regla"><span class="em">✋</span><b>Un veto, si hace falta</b><span>«Con este yo no voy». Cuesta 15 puntos y hay que explicarlo en voz alta.</span></div>
+    </div>
+    <p style="color:var(--ink-soft); font-size:14.5px; margin:4px 0 0">
+      ${nv ? `${nv} persona${nv===1?"":"s"} ${nv===1?"ha":"han"} votado. ` : ""}Cada quien vota desde su celular con este mismo enlace.
+    </p>
+  </div>`;
+}
+
+function slidePodio(){
+  const {nv} = calcular();
+  const top = ordenados().filter(o => o.acceso !== "ruta").slice(0,3);
+  if(!config.revelar) return `<div class="portada"><span class="em" style="font-size:64px">🙈</span><h2>Modo suspenso</h2><p style="color:var(--ink-soft); max-width:52ch">Los resultados están ocultos para todos. El anfitrión los revela desde el Tablero cuando la votación se cierre.</p></div>`;
+  if(!nv) return `<div class="portada"><span style="font-size:64px">🗳️</span><h2>Todavía no vota nadie</h2><p style="color:var(--ink-soft); max-width:52ch">El podio aparece con el primer voto. Abre «Mi voto», elige tu nombre y califica.</p></div>`;
+  const med = ["🥇","🥈","🥉"], cl = ["p1","p2","p3"], ps = ["Primer lugar","Segundo lugar","Tercer lugar"];
+  return `<div class="portada" style="gap:22px">
+    <span class="eyebrow">Resultado en vivo · ${nv} votante${nv===1?"":"s"}</span>
+    <h2 style="font-size:clamp(28px,4.6vw,52px)">El podio</h2>
+    <div class="podio" style="width:100%; max-width:980px; margin:0">
+      ${top.map((o,i)=>`<div class="pcard ${cl[i]}"><span class="medal">${med[i]}</span>
+        <span class="pos">${ps[i]}</span><h3>${esc(o.nombre)}</h3><div class="pts">${o.puntaje.toFixed(1)}</div>
+        <div class="det">${o.total?cop(o.total):"sin cotizar"} · ${o.prom?o.prom.toFixed(1)+"★":"sin estrellas"}${o.joyas?` · ${o.joyas} 💎`:""}${o.vetos?` · ${o.vetos} ✋`:""}</div></div>`).join("")}
+    </div>
+  </div>`;
+}
+
+function pintarSlide(){
+  slide = Math.max(0, Math.min(TOTAL_SLIDES-1, slide));
+  const l = document.getElementById("lienzo");
+  l.innerHTML = slide === 0 ? slidePortada()
+              : slide === TOTAL_SLIDES-1 ? slidePodio()
+              : slideOpcion(OP(ORDEN[slide-1]));
+  document.getElementById("prog").style.width = ((slide+1)/TOTAL_SLIDES*100) + "%";
+  document.getElementById("cuenta-slide").textContent = `${slide+1} / ${TOTAL_SLIDES}`;
+  document.getElementById("ant").disabled = slide === 0;
+  document.getElementById("sig").disabled = slide === TOTAL_SLIDES-1;
+  document.getElementById("pistas").innerHTML = Array.from({length:TOTAL_SLIDES}, (_,i) => {
+    const o = (i>0 && i<TOTAL_SLIDES-1) ? OP(ORDEN[i-1]) : null;
+    const cls = o ? (o.acceso === "isla" ? "isla" : "tierra") : "hito";
+    const t = o ? o.nombre : (i===0 ? "Portada" : "Podio");
+    return `<button class="pista ${cls} ${i===slide?"on":""}" data-i="${i}" title="${esc(t)}" aria-label="${esc(t)}"></button>`;
+  }).join("");
+}
+function irSlide(n){ slide = n; pintarSlide(); }
+
+/* ══════════════ TABLERO ══════════════ */
+function pintarPodio(){
+  const {nv} = calcular();
+  const oculto = !config.revelar;
+  document.getElementById("d-votos").textContent = nv;
+  document.getElementById("podio-oculto").hidden = !oculto;
+  document.getElementById("btn-revelar").textContent = oculto ? "Revelar el podio" : "Ocultar el podio";
+  const cont = document.getElementById("podio");
+  cont.hidden = oculto;
+  document.getElementById("lista-votantes").innerHTML = nv
+    ? Object.values(votos).filter(votoReal).map(v => `<span class="vtag">${esc(v.nombre || "—")}</span>`).join("")
+      + config.nombres.filter(n => !votoReal(votos[slug(n)])).map(n => `<span class="vtag espera">${esc(n)}</span>`).join("")
+    : `<span class="vtag espera">Todavía no vota nadie</span>`;
+  if(oculto) return;
+  const lista = ordenados().filter(o => o.acceso !== "ruta");
+  const med = ["🥇","🥈","🥉"], cl = ["p1","p2","p3"], ps = ["Primer lugar","Segundo lugar","Tercer lugar"];
+  cont.innerHTML = !nv
+    ? `<div class="aviso info" style="grid-column:1/-1; margin:0"><span class="ic">🗳️</span><div>El podio aparece con el primer voto. Abre <b>Mi voto</b>, elige tu nombre y califica.</div></div>`
+    : lista.slice(0,3).map((o,i)=>`<div class="pcard ${cl[i]}"><span class="medal">${med[i]}</span>
+        <span class="pos">${ps[i]}</span><h3>${esc(o.nombre)}</h3><div class="pts">${o.puntaje.toFixed(1)}</div>
+        <div class="det">${o.total?cop(o.total):"sin cotizar"} · ${o.prom?o.prom.toFixed(1)+"★":"sin estrellas"}${o.joyas?` · ${o.joyas} 💎`:""}${o.vetos?` · ${o.vetos} ✋`:""}</div></div>`).join("");
+}
+
+function pintarTabla(){
+  const {res} = calcular(), presu = config.presupuesto;
+  let filas = OPCIONES.map(o => ({...o, ...res[o.id], pppn: o.total ? o.total/(PAX*NOCHES) : null, brecha: o.total ? presu - o.total : null}));
+  filas.sort((a,b)=>{
+    let x = a[orden.campo], y = b[orden.campo];
+    if(x == null) x = orden.dir > 0 ? Infinity : -Infinity;
+    if(y == null) y = orden.dir > 0 ? Infinity : -Infinity;
+    return typeof x === "string" ? orden.dir * x.localeCompare(y,"es") : orden.dir * (x - y);
+  });
+  const mp = {si:'<span class="pill c-ok">Sí</span>', pendiente:'<span class="pill c-warn">Pendiente</span>', no:'<span class="pill c-crit">No</span>', critica:'<span class="pill c-crit">13 kg máx.</span>'};
+  document.getElementById("tbody").innerHTML = filas.map(f => `
+    <tr class="${f.estado==="descartada"?"desc":""}" data-id="${f.id}" title="Ver ${esc(f.nombre)} en grande">
+      <td><b>${esc(f.nombre)}</b>${f.vetos?` <span class="pill c-crit">✋ ${f.vetos}</span>`:""}${f.joyas?` <span class="pill c-warn">💎 ${f.joyas}</span>`:""}</td>
+      <td>${esc(f.zona)}</td>
+      <td>${f.acceso==="isla"?'<span class="pill c-crit">Lancha</span>':(f.acceso==="ruta"?'<span class="pill c-neu">Ruta</span>':'<span class="pill c-ok">Carretera</span>')}</td>
+      <td class="num">${f.total?cop(f.total):"—"}</td>
+      <td class="num">${f.pppn?cop(f.pppn):"—"}</td>
+      <td class="num" style="color:${f.brecha===null?"var(--ink-faint)":(f.brecha>=0?"var(--ok)":"var(--crit)")}">${f.brecha===null?"—":(f.brecha>=0?"+":"")+copCorto(f.brecha)}</td>
+      <td>${mp[f.mascota]}</td>
+      <td class="num"><b>${config.revelar ? (f.puntaje?f.puntaje.toFixed(1):"—") : "🙈"}</b></td>
+    </tr>`).join("");
+}
+
+function pintarScatter(){
+  if(!config.revelar){
+    document.getElementById("scatter").innerHTML = `<rect width="780" height="420" fill="#330A3E"/><text x="390" y="210" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-size="22" fill="#FFF1FB">Modo suspenso · el gráfico se revela con el podio</text>`;
+    return;
+  }
+  const {res} = calcular();
+  const pts = OPCIONES.filter(o => o.total && o.acceso !== "ruta").map(o => ({...o, ...res[o.id]}));
+  const W=780,H=420,L=62,R=22,T=26,B=52, maxX=29000000, maxY=100;
+  const px = v => L + (v/maxX)*(W-L-R), py = v => H-B - (v/maxY)*(H-T-B);
+  let s = `<rect x="${L}" y="${T}" width="${px(12000000)-L}" height="${py(50)-T}" fill="#03b2ed" opacity=".10"></rect>`;
+  s += `<text x="${L+10}" y="${T+18}" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#03b2ed" letter-spacing="1.2">BARATO Y QUERIDO</text>`;
+  for(let i=0;i<=5;i++){ const v=i*(maxX/5), x=px(v);
+    s += `<line x1="${x}" y1="${T}" x2="${x}" y2="${H-B}" stroke="#4A1257" stroke-width="1"></line>`;
+    s += `<text x="${x}" y="${H-B+18}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#C79BDE">${v?"$"+(v/1e6)+"M":"0"}</text>`; }
+  for(let i=0;i<=4;i++){ const v=i*25, y=py(v);
+    s += `<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" stroke="#4A1257" stroke-width="1"></line>`;
+    s += `<text x="${L-9}" y="${y+4}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="#C79BDE">${v}</text>`; }
+  s += `<text x="${L}" y="${H-10}" font-family="IBM Plex Mono, monospace" font-size="10" fill="#FFF1FB" letter-spacing="1.1">COSTO DE ALOJAMIENTO · 10 PERSONAS · 5 NOCHES</text>`;
+  s += `<text x="14" y="${T+6}" font-family="IBM Plex Mono, monospace" font-size="10" fill="#FFF1FB" letter-spacing="1.1" transform="rotate(-90 14 ${T+6})" text-anchor="end">PUNTAJE DE LA FAMILIA</text>`;
+  const LGX = W-R-168, LGY = T+2;
+  const cajas = [[LGX-10, LGY-6, W-R, LGY+44]];
+  const libre = (x1,y1,x2,y2) => !cajas.some(c => x1 < c[2] && x2 > c[0] && y1 < c[3] && y2 > c[1]);
+  const col = {tierra:"#03b2ed", isla:"#9414d1"};
+  pts.sort((a,b)=> b.puntaje - a.puntaje || a.total - b.total);
+  for(const p of pts){
+    const oculto = !config.revelar;
+    const pu = oculto ? 0 : p.puntaje;
+    const x = px(Math.min(p.total,maxX)), y = py(Math.min(pu,maxY)), r = pu > 0 ? 9 : 6;
+    s += `<circle cx="${x}" cy="${y}" r="${r}" fill="${col[p.acceso]}" fill-opacity="${pu>0?".9":".4"}" stroke="#280120" stroke-width="2"></circle>`;
+    const w = p.nombre.length * 5.9 + 8, der = x + r + 10 + w < W - R;
+    let lx = x + (der ? r+7 : -(r+7)), ly = y + 4, ok = false;
+    for(const dy of [4,-12,20,-28,36,-44,52,-60,68,-76,86]){
+      const ty = y + dy; if(ty < T+10 || ty > H-B-4) continue;
+      const x1 = der ? lx : lx-w, x2 = der ? lx+w : lx;
+      if(libre(x1,ty-9,x2,ty+3)){ ly = ty; ok = true; cajas.push([x1,ty-9,x2,ty+3]); break; }
+    }
+    if(!ok) continue;
+    if(Math.abs(ly-(y+4)) > 6) s += `<line x1="${x+(der?r+2:-(r+2))}" y1="${y}" x2="${lx-(der?2:-2)}" y2="${ly-3}" stroke="${col[p.acceso]}" stroke-width="1" opacity=".45"></line>`;
+    s += `<text x="${lx}" y="${ly}" text-anchor="${der?"start":"end"}" font-family="Instrument Sans, sans-serif" font-size="11" fill="#FFF1FB" opacity="${pu>0?"1":".72"}">${esc(p.nombre)}</text>`;
+  }
+  s += `<g transform="translate(${LGX},${LGY})"><circle cx="7" cy="7" r="6" fill="#03b2ed"></circle><text x="20" y="11" font-family="Instrument Sans, sans-serif" font-size="11" fill="#FFF1FB">Se llega en carro</text><circle cx="7" cy="27" r="6" fill="#9414d1"></circle><text x="20" y="31" font-family="Instrument Sans, sans-serif" font-size="11" fill="#FFF1FB">Requiere lancha</text></g>`;
+  document.getElementById("scatter").innerHTML = s;
+}
+
+function rubrosCuenta(){
+  const lider = ordenados().find(o => o.estado !== "descartada" && o.total) || OPCIONES[0];
+  const rub = [
+    ["Alojamiento del destino", lider.total||0, lider.total||0, lider.total||0, lider.detalleCosto],
+    ["Paradas en ruta (Montería)", 650000, 1300000, 1950000, "Una noche a la ida y otra al regreso · 5 habitaciones"],
+    ["Gasolina y peajes", 3600000, 5000000, 6600000, "Estimado para 2 vehículos, ida y regreso desde Bogotá"],
+    ["Alimentación no incluida", 5000000, 7500000, 11700000, "Sube fuerte si el hotel prohíbe ingresar comida"],
+    ["Planes, entradas e imprevistos", 1700000, 3000000, 5000000, "Paseos, parqueaderos, compras, emergencias"]
+  ];
+  const tot = [1,2,3].map(i => rub.reduce((a,r)=>a+(r[i]||0),0));
+  return {lider, rub, tot};
+}
+function pintarCuenta(){
+  const {lider, rub, tot} = rubrosCuenta();
+  document.getElementById("cuenta-cap").textContent = `Escenarios sobre el plan líder: ${lider.nombre}`;
+  document.getElementById("cuenta-body").innerHTML = rub.map(r =>
+    `<tr><td>${esc(r[0])}</td><td class="num">${cop(r[1])}</td><td class="num">${cop(r[2])}</td><td class="num">${cop(r[3])}</td><td style="font-size:12.5px; color:var(--ink-soft)">${esc(r[4])}</td></tr>`).join("");
+  ["ct-b","ct-m","ct-a"].forEach((id,i)=> document.getElementById(id).textContent = cop(tot[i]));
+  ["cp-b","cp-m","cp-a"].forEach((id,i)=> document.getElementById(id).textContent = cop(tot[i]/PAX));
+}
+
+function pintarPendientes(){
+  const faltan = PENDIENTES.filter(p => !hechos[p.id]).length;
+  document.getElementById("n-pend").textContent = faltan ? `· ${faltan} sin resolver` : "· todo listo";
+  document.getElementById("checklist").innerHTML = PENDIENTES.map(p => `
+    <label class="check ${hechos[p.id]?"done":""}">
+      <input type="checkbox" data-p="${p.id}" ${hechos[p.id]?"checked":""}>
+      <div class="txt"><b>${esc(p.t)}</b><span>${esc(p.d)} · <b style="color:var(--mar)">${esc(p.q)}</b></span></div>
+      <span class="prio ${p.prio}">${p.prio}</span>
+    </label>`).join("");
+}
+
+/* ══════════════ VOTAR ══════════════ */
+function pintarNombres(){
+  document.getElementById("nombres").innerHTML = config.nombres.map(n => {
+    const s = slug(n);
+    return `<button class="nchip" data-n="${esc(n)}" aria-pressed="${yo===s}">${esc(n)}${votoReal(votos[s])?" ✓":""}</button>`;
+  }).join("");
+}
+function pintarVotafilas(){
+  document.getElementById("zona-voto").hidden = !yo;
+  document.getElementById("pide-nombre").hidden = !!yo;
+  document.getElementById("salir").hidden = !yo;
+  if(!yo) return;
+  const v = miVoto();
+  const puestas = Object.values(v.estrellas||{}).filter(n=>n>0).length;
+  document.getElementById("voto-sub").textContent =
+    `${v.nombre || yo}: ${puestas} de ${OPCIONES.length} planes calificados · joya ${v.joya?"puesta":"sin usar"} · veto ${v.veto?"usado":"sin usar"}.`;
+  document.getElementById("votafilas").innerHTML = ORDEN.map(id => {
+    const o = OP(id), n = (v.estrellas||{})[id] || 0;
+    return `<div class="votafila">
+      <div><div class="nom">${esc(o.nombre)}</div><div class="meta">${o.total?cop(o.total):"sin cotizar"} · ${esc(o.zona)}</div></div>
+      <div class="ctrl">
+        <div class="stars" data-op="${id}">${[1,2,3,4,5].map(k=>`<button class="star ${k<=n?"on":""}" data-n="${k}" aria-label="${k} estrellas">★</button>`).join("")}</div>
+        <div class="mini">
+          <button class="${v.joya===id?"on-joya":""}" data-joya="${id}">💎</button>
+          <button class="${v.veto===id?"on-veto":""}" data-veto="${id}">✋</button>
+        </div>
+      </div></div>`;
+  }).join("");
+}
+
+/* ══════════════ RENDER ══════════════ */
+function render(){
+  pintarSlide(); pintarPodio(); pintarTabla(); pintarScatter();
+  pintarCuenta(); pintarPendientes(); pintarNombres(); pintarVotafilas();
+}
+function irA(p){
+  document.querySelectorAll(".tab").forEach(t => t.setAttribute("aria-selected", String(t.dataset.p === p)));
+  document.querySelectorAll(".panel").forEach(s => s.hidden = (s.id !== "p-" + p));
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function foco(on){
+  document.body.classList.toggle("foco", on);
+  document.getElementById("btn-foco").textContent = on ? "Salir" : "Proyectar";
+  if(on){ try{ document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }catch(e){} }
+  else { try{ document.fullscreenElement && document.exitFullscreen(); }catch(e){} }
+}
+
+/* ══════════════ EXPORTAR A EXCEL ══════════════ */
+/* Escribe un .xlsx a mano (ZIP sin compresion + OOXML) para no depender de ninguna libreria externa. */
+const CRC_T = (() => { const t = new Uint32Array(256);
+  for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++) c = c&1 ? 0xEDB88320 ^ (c>>>1) : c>>>1; t[n]=c>>>0; }
+  return t; })();
+function crc32(b){ let c = 0xFFFFFFFF; for(let i=0;i<b.length;i++) c = CRC_T[(c ^ b[i]) & 0xFF] ^ (c>>>8); return (c ^ 0xFFFFFFFF)>>>0; }
+function zipBlob(files, mime){
+  const enc = new TextEncoder(), locales = [], centrales = [];
+  let off = 0;
+  for(const f of files){
+    const nb = enc.encode(f.name), crc = crc32(f.data), n = f.data.length;
+    const lh = new Uint8Array(30 + nb.length), dv = new DataView(lh.buffer);
+    dv.setUint32(0,0x04034b50,true); dv.setUint16(4,20,true); dv.setUint16(8,0,true);
+    dv.setUint32(14,crc,true); dv.setUint32(18,n,true); dv.setUint32(22,n,true);
+    dv.setUint16(26,nb.length,true); lh.set(nb,30);
+    locales.push(lh, f.data);
+    const ch = new Uint8Array(46 + nb.length), cv = new DataView(ch.buffer);
+    cv.setUint32(0,0x02014b50,true); cv.setUint16(4,20,true); cv.setUint16(6,20,true);
+    cv.setUint32(16,crc,true); cv.setUint32(20,n,true); cv.setUint32(24,n,true);
+    cv.setUint16(28,nb.length,true); cv.setUint32(42,off,true); ch.set(nb,46);
+    centrales.push(ch);
+    off += lh.length + n;
+  }
+  const cdN = centrales.reduce((a,c)=>a+c.length,0);
+  const eo = new Uint8Array(22), ev = new DataView(eo.buffer);
+  ev.setUint32(0,0x06054b50,true); ev.setUint16(8,files.length,true); ev.setUint16(10,files.length,true);
+  ev.setUint32(12,cdN,true); ev.setUint32(16,off,true);
+  return new Blob([...locales, ...centrales, eo], {type: mime || "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+}
+function descargarBlob(filename, blob){
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.rel = "noopener";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+}
+const xesc = v => String(v).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g,"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function colLetra(i){
+  let n = i + 1, s = "";
+  while(n){ const m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = Math.floor((n - 1) / 26); }
+  return s;
+}
+function anchosDe(filas){
+  const cols = Math.max(1, ...filas.map(f => f.length));
+  const w = Array(cols).fill(12);
+  for(const f of filas) f.forEach((v,i) => { w[i] = Math.min(42, Math.max(w[i], String(v ?? "").length + 2)); });
+  return w;
+}
+function hojaXML(filas, headerRow){
+  const hr = headerRow || 1;
+  let xml = "";
+  filas.forEach((fila, fi) => {
+    const r = fi + 1;
+    let celdas = "";
+    fila.forEach((v, ci) => {
+      if(v === null || v === undefined || v === "") return;
+      const ref = colLetra(ci) + r;
+      celdas += (typeof v === "number")
+        ? `<c r="${ref}"><v>${v}</v></c>`
+        : `<c r="${ref}" t="inlineStr"${r===hr?' s="1"':""}><is><t xml:space="preserve">${xesc(v)}</t></is></c>`;
+    });
+    if(celdas) xml += `<row r="${r}">${celdas}</row>`;
+  });
+  const anchos = anchosDe(filas).map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("");
+  const lastCol = colLetra(Math.max(0, (filas[0]||[]).length - 1));
+  const filtro = filas.length > 1 ? `<autoFilter ref="A1:${lastCol}${filas.length}"/>` : "";
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><cols>${anchos}</cols><sheetData>${xml}</sheetData>${filtro}</worksheet>`;
+}
+function tsTexto(ms){
+  const d = new Date(ms || Date.now());
+  const f2 = n => String(n).padStart(2,"0");
+  return `${d.getFullYear()}-${f2(d.getMonth()+1)}-${f2(d.getDate())} ${f2(d.getHours())}:${f2(d.getMinutes())}`;
+}
+function baseDatos(){
+  const {res, nv} = calcular();
+  const presu = config.presupuesto;
+  const {lider, rub, tot} = rubrosCuenta();
+  const reales = Object.values(votos).filter(votoReal);
+  const viaje = [
+    ["clave","valor"],
+    ["exportado", tsTexto()],
+    ["viaje","Familia Fin de Año"],
+    ["entrada","2026-12-29"],
+    ["salida","2027-01-03"],
+    ["noches", NOCHES],
+    ["personas", PAX],
+    ["nina_anios", 4],
+    ["mascota","Alma"],
+    ["mascota_kg", 14],
+    ["presupuesto_alojamiento", presu],
+    ["votantes", nv],
+    ["regla_puntaje","70 por promedio de estrellas + 30 por joyas − 15 por veto"]
+  ];
+  const opciones = [["id","nombre","tipo","zona","acceso","lat","lon","horas_trayecto","total_10p_5n","por_persona_noche","cotizado_original","detalle_costo","mascota","caben_10","comida","estado","fuente","maps_query","whatsapp"]];
+  for(const o of OPCIONES){
+    opciones.push([o.id, o.nombre, o.tipo, o.zona, o.acceso, o.lat, o.lon, o.horas, o.total, o.total ? Math.round(o.total/(PAX*NOCHES)) : null, o.cotizado, o.detalleCosto, o.mascota, o.cabe === true ? 1 : o.cabe === false ? 0 : null, o.comida, o.estado, o.fuente, o.mapsq, o.wa || null]);
+  }
+  const aFavor = [["id_opcion","orden","texto"]], alertas = [["id_opcion","orden","texto"]], detalle = [["id_opcion","clave","valor"]];
+  for(const o of OPCIONES){
+    o.si.forEach((t,i) => aFavor.push([o.id, i+1, t]));
+    o.no.forEach((t,i) => alertas.push([o.id, i+1, t]));
+    o.extra.forEach(([k,v]) => detalle.push([o.id, k, v]));
+  }
+  const votosFilas = [["fecha_hora","id_votante","votante","id_opcion","opcion","estrellas","joya","veto"]];
+  for(const v of reales){
+    const ts = tsTexto(v.ts);
+    const idv = slug(v.nombre || "");
+    for(const o of OPCIONES){
+      votosFilas.push([ts, idv, v.nombre || "—", o.id, o.nombre, (v.estrellas||{})[o.id] || 0, v.joya === o.id ? 1 : 0, v.veto === o.id ? 1 : 0]);
+    }
+  }
+  const votantes = [["id_votante","nombre","fecha_hora","planes_calificados","id_joya","id_veto"]];
+  for(const v of reales){
+    votantes.push([slug(v.nombre||""), v.nombre || "—", tsTexto(v.ts), Object.values(v.estrellas||{}).filter(n => n > 0).length, v.joya || null, v.veto || null]);
+  }
+  const resultados = [["puesto","id","nombre","zona","acceso","estado","total_10p_5n","por_persona_noche","brecha_vs_presupuesto","promedio_estrellas","n_calificaciones","n_joyas","n_vetos","puntaje"]];
+  ordenados().forEach((o,i) => {
+    const r = res[o.id];
+    resultados.push([i+1, o.id, o.nombre, o.zona, o.acceso, o.estado, o.total, o.total ? Math.round(o.total/(PAX*NOCHES)) : null, o.total != null ? presu - o.total : null, r.notas ? Math.round(r.prom*100)/100 : null, r.notas, r.joyas, r.vetos, Math.round(r.puntaje*100)/100]);
+  });
+  const cuenta = [["id_plan_lider","plan_lider","rubro","ajustado","probable","holgado","nota"]];
+  for(const r of rub) cuenta.push([lider.id, lider.nombre, r[0], r[1], r[2], r[3], r[4]]);
+  cuenta.push([lider.id, lider.nombre, "TOTAL viaje", tot[0], tot[1], tot[2], "10 personas"]);
+  cuenta.push([lider.id, lider.nombre, "Por persona", Math.round(tot[0]/PAX), Math.round(tot[1]/PAX), Math.round(tot[2]/PAX), "Sobre 10"]);
+  const pendientes = [["id","prioridad","tarea","detalle","responsable","hecho"]];
+  for(const p of PENDIENTES) pendientes.push([p.id, p.prio, p.t, p.d, p.q, hechos[p.id] ? 1 : 0]);
+  const leeme = [
+    ["Familia Fin de Año — copia descargada del tablero"],
+    ["La base viva es la hoja de Google. Este archivo es una foto de ese momento."],
+    [],
+    ["Hoja","Qué contiene"],
+    ["Viaje","Datos fijos del viaje"],
+    ["Opciones","Los 12 planes"],
+    ["A_favor","Puntos a favor, uno por fila"],
+    ["Alertas","Alertas, uno por fila"],
+    ["Detalle","Letra menuda"],
+    ["Votos","Una fila por persona y plan"],
+    ["Votantes","Quién votó"],
+    ["Resultados","Podio al exportar"],
+    ["Cuenta","Carretera, comida e imprevistos"],
+    ["Pendientes","Checklist antes de abonar"]
+  ];
+  return [
+    {name:"Leeme", filas: leeme, headerRow: 4},
+    {name:"Viaje", filas: viaje},
+    {name:"Opciones", filas: opciones},
+    {name:"A_favor", filas: aFavor},
+    {name:"Alertas", filas: alertas},
+    {name:"Detalle", filas: detalle},
+    {name:"Votos", filas: votosFilas},
+    {name:"Votantes", filas: votantes},
+    {name:"Resultados", filas: resultados},
+    {name:"Cuenta", filas: cuenta},
+    {name:"Pendientes", filas: pendientes}
+  ];
+}
+function libroXLSX(hojas){
+  const enc = new TextEncoder(), F = (name, txt) => ({name, data: enc.encode(txt)});
+  const NS = 'xmlns="http://schemas.openxmlformats.org/package/2006/relationships"';
+  const overrides = hojas.map((_,i) => `<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join("");
+  const sheets = hojas.map((h,i) => `<sheet name="${xesc(h.name).slice(0,31)}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join("");
+  const rels = hojas.map((_,i) => `<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join("")
+    + `<Relationship Id="rId${hojas.length+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>`;
+  const files = [
+    F("[Content_Types].xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>${overrides}<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>`),
+    F("_rels/.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships ${NS}><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`),
+    F("xl/workbook.xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets}</sheets></workbook>`),
+    F("xl/_rels/workbook.xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships ${NS}>${rels}</Relationships>`),
+    F("xl/styles.xml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Arial"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Arial"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF450063"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border/></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/></cellXfs></styleSheet>')
+  ];
+  hojas.forEach((h,i) => files.push(F(`xl/worksheets/sheet${i+1}.xml`, hojaXML(h.filas, h.headerRow || 1))));
+  return zipBlob(files);
+}
+function libroCSV(filas){
+  const q = v => (v===null||v===undefined) ? "" : (/[";\n]/.test(String(v)) ? '"'+String(v).replace(/"/g,'""')+'"' : String(v));
+  return "\uFEFF" + filas.map(f => f.map(q).join(";")).join("\r\n");
+}
+function exportar(tipo){
+  const msgs = document.querySelectorAll(".exp-msg");
+  const setMsg = t => msgs.forEach(m => { m.textContent = t; });
+  const hojas = baseDatos();
+  const nv = calcular().nv;
+  setMsg("Preparando…");
+  try{
+    if(tipo === "xlsx"){
+      descargarBlob("familia-fin-de-ano.xlsx", libroXLSX(hojas));
+      setMsg(`Listo: ${nv} votante${nv===1?"":"s"} · 11 hojas.`);
+    } else {
+      const enc = new TextEncoder();
+      const files = hojas.map(h => ({name: h.name + ".csv", data: enc.encode(libroCSV(h.filas))}));
+      descargarBlob("familia-fin-de-ano-csv.zip", zipBlob(files, "application/zip"));
+      setMsg(`Listo: ${nv} votante${nv===1?"":"s"} · CSV en zip.`);
+    }
+  }catch(e){
+    setMsg(tipo === "xlsx" ? "No se pudo generar el Excel. Prueba el CSV." : "No se pudo descargar el archivo.");
+  }
+}
+
+
+/* ══════════════ EVENTOS ══════════════ */
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => irA(t.dataset.p)));
+
+document.getElementById("ant").addEventListener("click", () => irSlide(slide-1));
+document.getElementById("sig").addEventListener("click", () => irSlide(slide+1));
+document.getElementById("pistas").addEventListener("click", e => {
+  const b = e.target.closest(".pista"); if(b) irSlide(+b.dataset.i);
+});
+document.getElementById("btn-foco").addEventListener("click", () => foco(!document.body.classList.contains("foco")));
+document.addEventListener("keydown", e => {
+  if(/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+  if(document.getElementById("p-presentar").hidden) return;
+  if(e.key === "ArrowRight" || e.key === "PageDown"){ irSlide(slide+1); e.preventDefault(); }
+  if(e.key === "ArrowLeft"  || e.key === "PageUp"){ irSlide(slide-1); e.preventDefault(); }
+  if(e.key === "Escape" && document.body.classList.contains("foco")) foco(false);
+});
+
+function gestos(cont){
+  cont.addEventListener("click", e => {
+    const st = e.target.closest(".star");
+    if(st){ setEstrella(st.parentElement.dataset.op, +st.dataset.n); return; }
+    const j = e.target.closest("[data-joya]"); if(j){ setJoya(j.dataset.joya); return; }
+    const v = e.target.closest("[data-veto]"); if(v){ setVeto(v.dataset.veto); return; }
+  });
+}
+gestos(document.getElementById("lienzo"));
+gestos(document.getElementById("votafilas"));
+
+document.getElementById("tabla").querySelectorAll("th").forEach(th => th.addEventListener("click", () => {
+  const c = th.dataset.s;
+  orden = {campo:c, dir: orden.campo === c ? -orden.dir : (["nombre","zona","acceso","mascota"].includes(c) ? 1 : -1)};
+  pintarTabla();
+}));
+document.getElementById("tbody").addEventListener("click", e => {
+  const tr = e.target.closest("tr[data-id]"); if(!tr) return;
+  const i = ORDEN.indexOf(tr.dataset.id);
+  if(i >= 0){ irA("presentar"); irSlide(i+1); }
+});
+
+document.getElementById("presu").addEventListener("change", e => {
+  config.presupuesto = +e.target.value || 0;
+  pintarTabla(); guardarConfig();
+});
+document.getElementById("btn-revelar").addEventListener("click", () => {
+  config.revelar = !config.revelar; render(); guardarConfig();
+});
+document.getElementById("checklist").addEventListener("change", e => {
+  const cb = e.target.closest("input[data-p]"); if(!cb) return;
+  hechos[cb.dataset.p] = cb.checked;
+  persistir();
+  pintarPendientes();
+  empujar("hechos", hechos);
+});
+
+document.getElementById("nombres").addEventListener("click", e => {
+  const b = e.target.closest(".nchip"); if(!b) return;
+  const s = slug(b.dataset.n);
+  yo = (yo === s) ? null : s;
+  persistir();
+  render();
+});
+function agregarNombre(){
+  const inp = document.getElementById("nuevo-nombre");
+  const n = inp.value.trim(); if(!n) return;
+  if(!config.nombres.some(x => slug(x) === slug(n))) config.nombres.push(n);
+  inp.value = ""; yo = slug(n);
+  persistir();
+  render(); guardarConfig();
+}
+document.getElementById("add-nombre").addEventListener("click", agregarNombre);
+document.getElementById("nuevo-nombre").addEventListener("keydown", e => { if(e.key === "Enter") agregarNombre(); });
+document.getElementById("salir").addEventListener("click", () => { yo = null; persistir(); render(); });
+document.getElementById("borrar-voto").addEventListener("click", borrarVoto);
+document.querySelectorAll(".js-xlsx").forEach(b => b.addEventListener("click", () => exportar("xlsx")));
+document.querySelectorAll(".js-csv").forEach(b => b.addEventListener("click", () => exportar("csv")));
+
+/* ══════════════ ARRANQUE ══════════════ */
+(function local(){
+  votos = LS.get("ffa-votos", {});
+  const viejo = LS.get("ffa-voto", null);
+  if(viejo && viejo.yo && viejo.v && !votos[viejo.yo]) votos[viejo.yo] = viejo.v;
+  yo = LS.get("ffa-yo", yo);
+  hechos = LS.get("ffa-hechos", {});
+  const c = LS.get("ffa-config", null);
+  if(c){
+    config = {
+      revelar: c.revelar !== false,
+      presupuesto: typeof c.presupuesto === "number" ? c.presupuesto : config.presupuesto,
+      nombres: Array.isArray(c.nombres) && c.nombres.length ? c.nombres : config.nombres
+    };
+    const inp = document.getElementById("presu");
+    if(inp) inp.value = config.presupuesto;
+  }
+  render();
+})();
+
+(async function conectar(){
+  const dot = document.getElementById("dot"), txt = document.getElementById("estado-txt");
+  const aviso = document.getElementById("aviso-hoja");
+  if(!API){
+    remoto = false;
+    dot.className = "dot local";
+    aviso.hidden = false;
+    txt.innerHTML = "<b>Falta el Excel compartido.</b> Cada celular guarda su voto aparte. Conecta la hoja de Google (aviso naranja) para que toda la familia vote en el mismo archivo.";
+    return;
+  }
+  aviso.hidden = true;
+  txt.innerHTML = "Conectando el Excel compartido…";
+  try{
+    const s = await jsonp("leer");
+    remoto = true;
+    aplicarRemoto(s);
+    dot.className = "dot live";
+    txt.innerHTML = "<b>Excel compartido activo.</b> El voto de cada celular cae en la misma hoja de Google. Ábrela y verás las pestañas Votos y Resultados actualizarse.";
+    setInterval(() => { jsonp("leer").then(aplicarRemoto).catch(() => {}); }, 5000);
+  }catch(e){
+    remoto = false;
+    dot.className = "dot local";
+    aviso.hidden = false;
+    txt.innerHTML = "<b>No se alcanzó la hoja.</b> Revisa que Apps Script esté publicado como aplicación web (acceso: cualquiera). Mientras, los votos quedan en este celular.";
+  }
+})();
+
+</script>
+</body>
+</html>
