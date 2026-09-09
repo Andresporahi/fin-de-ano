@@ -1,16 +1,14 @@
 /**
  * Familia Fin de Año — Excel compartido
  *
- * 1. En esta carpeta de Drive (Fin de año 2026):
- *    https://drive.google.com/drive/folders/1wgOOxWkCOuSqlNMx9tI1TH0qXUf1T9fQ
- *    sube matriz_decision_viaje_fin_de_anio_1.xlsx y ábrelo con Google Sheets.
- * 2. Extensiones → Apps Script. Borra el código de ejemplo y pega este archivo.
- * 3. Guardar (Ctrl+S).
- * 4. Implementar → Nueva implementación → tipo «Aplicación web»:
- *    - Ejecutar como: Yo
- *    - Quién tiene acceso: Cualquiera
- * 5. Copiar la URL (termina en /exec) y pegarla en HOJA_API del HTML.
- * 6. Publicar de nuevo el HTML en GitHub Pages. El link de la familia no cambia.
+ * NO uses Extensiones dentro de la hoja (en tu cuenta eso abre un error de Drive).
+ *
+ * 1. Cierra Chrome, ábrelo en incógnito, entra con UNA sola cuenta (la de la carpeta).
+ * 2. Abre la hoja (icono verde, sin .xlsx) y copia la URL.
+ *    Es algo como: https://docs.google.com/spreadsheets/d/PEGAR_ID_AQUI/edit
+ * 3. Ve a https://script.google.com  (no pases por Extensiones).
+ * 4. Nuevo proyecto → pega este archivo → pon el ID en SPREADSHEET_ID abajo.
+ * 5. Guardar → Implementar → Aplicación web → Yo / Cualquiera → copia la URL /exec.
  *
  * Cada voto reescribe desde la fila 5 de la hoja Votos (mismas columnas del libro).
  * No toca Resultados ni Resumen decisión: esas hojas siguen calculando solas.
@@ -19,6 +17,14 @@
 const PAX = 10;
 const NOCHES = 5;
 const PRESU_DEF = 18000000;
+const SPREADSHEET_ID = "";
+
+function libro_() {
+  if (SPREADSHEET_ID) return SpreadsheetApp.openById(SPREADSHEET_ID);
+  const activo = SpreadsheetApp.getActiveSpreadsheet();
+  if (activo) return activo;
+  throw new Error("Pega el ID de la hoja en SPREADSHEET_ID (está en la URL, entre /d/ y /edit).");
+}
 
 const CATALOGO = [
   {id:"porvenir", nombre:"Hotel El Porvenir", zona:"Coveñas · Sector El Porvenir", acceso:"tierra", total:4500000, estado:"viva"},
@@ -133,7 +139,7 @@ function puntajes_(s) {
 }
 
 function escribirHojas_(s) {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = libro_();
   const sh = hoja_(ss, "Votos");
   const reales = Object.keys(s.votos).map(function (id) {
     return { id: id, v: s.votos[id] };
