@@ -1,8 +1,9 @@
 /**
  * Familia Fin de Año — Excel compartido
  *
- * 1. Sube matriz_decision_viaje_fin_de_anio_1.xlsx a Google Drive
- *    y ábrelo con Google Sheets (Archivo → Guardar como Hojas de cálculo).
+ * 1. En esta carpeta de Drive (Fin de año 2026):
+ *    https://drive.google.com/drive/folders/1wgOOxWkCOuSqlNMx9tI1TH0qXUf1T9fQ
+ *    sube matriz_decision_viaje_fin_de_anio_1.xlsx y ábrelo con Google Sheets.
  * 2. Extensiones → Apps Script. Borra el código de ejemplo y pega este archivo.
  * 3. Guardar (Ctrl+S).
  * 4. Implementar → Nueva implementación → tipo «Aplicación web»:

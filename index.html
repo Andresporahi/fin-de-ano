@@ -309,16 +309,7 @@ input[type=number]{font-family:var(--mono); width:170px}
 
 <!-- ═══════ TABLERO ═══════ -->
 <section class="panel" id="p-tablero" role="tabpanel" hidden>
-  <div class="estado-linea"><span class="dot local" id="dot"></span><span id="estado-txt">Conectando el Excel compartido…</span></div>
-  <div class="aviso alert" id="aviso-hoja" hidden>
-    <span class="ic">📎</span>
-    <div>
-      <b>Para que la familia vote en el mismo Excel,</b> sube <span class="mono">matriz_decision_viaje_fin_de_anio_1.xlsx</span> a Google Drive y ábrelo con Hojas de cálculo.
-      Extensiones → Apps Script → pega <span class="mono">hoja.gs</span> → Implementar como aplicación web (acceso: cualquiera).
-      Pega la URL <span class="mono">/exec</span> en <span class="mono">HOJA_API</span> al inicio de este HTML y vuelve a publicar.
-      Cada voto escribe desde la fila 5 de la hoja <b>Votos</b>; Resultados y Resumen decisión se recalculan solos.
-    </div>
-  </div>
+  <div class="estado-linea"><span class="dot local" id="dot"></span><span id="estado-txt">Abriendo la votación…</span></div>
 
   <div class="sechead">
     <div><h2>Quién va ganando</h2><p id="podio-sub">70 puntos por promedio de estrellas + 30 repartidos entre las joyas − 15 por cada veto.</p></div>
@@ -359,20 +350,6 @@ input[type=number]{font-family:var(--mono); width:170px}
     </tfoot>
   </table></div>
 
-  <div class="caja" id="export-box" style="margin-top:22px">
-    <span class="eyebrow">Base de datos</span>
-    <h2 style="font-size:19px; margin-top:5px">Bajar todo el tablero a Excel</h2>
-    <p style="margin:6px 0 0; font-size:13.5px; color:var(--ink-soft); max-width:70ch">
-      Un libro con hojas en formato tabla: viaje, 12 opciones, a favor, alertas, letra menuda, votos, votantes, podio, cuenta y pendientes.
-      Ábrelo y filtra; no hay que pegar nada en otro archivo. Si votaron en varios celulares, unan las filas de la hoja <b>Votos</b>.
-    </p>
-    <div class="inputrow" style="margin-top:12px">
-      <button type="button" class="btn js-xlsx">Descargar Excel (.xlsx)</button>
-      <button type="button" class="btn ghost js-csv">Descargar CSV (.zip)</button>
-      <span class="mono exp-msg" style="font-size:12.5px; color:var(--ink-soft)"></span>
-    </div>
-  </div>
-
   <details class="bloque" id="det-pend"><summary>Por confirmar antes de abonar <span class="mono" id="n-pend" style="color:var(--crit)"></span></summary>
     <div class="aviso stop" style="margin:13px 0 0"><span class="ic">⏳</span><div><b>Reloj corriendo.</b> Múcura Club dice tener «la última disponibilidad» y la tarifa de La Playita vence en 24 horas. Ninguno de los dos tiene la mascota confirmada.</div></div>
     <div class="checklist" id="checklist"></div>
@@ -386,7 +363,7 @@ input[type=number]{font-family:var(--mono); width:170px}
       <div class="paso"><div class="hora">0:35</div><div><b>Primera revelación</b><p>Casi siempre el favorito de la conversación no es el favorito de las estrellas.</p></div></div>
       <div class="paso"><div class="hora">0:45</div><div><b>Alegatos y vetos</b><p>Dos minutos por finalista. Aquí se usan los vetos y se explican en voz alta.</p></div></div>
       <div class="paso"><div class="hora">1:05</div><div><b>Las joyas y el podio definitivo</b><p>Cada persona pone su 💎 y se revela el resultado final.</p></div></div>
-      <div class="paso"><div class="hora">1:20</div><div><b>Reparto de tareas y registro</b><p>Se asigna cada llamada con nombre y fecha, y se descargan los votos para pegarlos en la matriz de Excel.</p></div></div>
+      <div class="paso"><div class="hora">1:20</div><div><b>Reparto de tareas</b><p>Se asigna cada llamada con nombre y fecha. El podio del tablero queda como registro.</p></div></div>
       <div style="border-top:1px solid var(--paper-3); margin-top:14px; padding-top:13px; display:grid; gap:11px; font-size:13.5px; color:var(--ink-soft)">
         <div><b style="color:var(--ink)">🎟️ Sobres cerrados.</b> Antes de abrir la página, cada quien escribe su destino soñado en un papel. Se abren al final y se comparan con el podio.</div>
         <div><b style="color:var(--ink)">🐕 El voto de Alma y de la niña.</b> Tarjetas físicas de 5 estrellas: la niña califica «dónde hay más piscina» y alguien vota por Alma con criterio de sombra y arena. Es lo que desempata.</div>
@@ -414,20 +391,7 @@ input[type=number]{font-family:var(--mono); width:170px}
     <div class="sechead" style="margin-top:0"><div><h2>Paso 2 · Califica</h2><p id="voto-sub"></p></div><button class="btn coral" id="borrar-voto">Borrar mi voto</button></div>
     <div class="caja" style="padding:6px 17px" id="votafilas"></div>
   </div>
-  <div class="aviso info" id="pide-nombre"><span class="ic">👆</span><div>Elige tu nombre para abrir tu tarjeta. Cada persona vota desde su celular con este mismo enlace.</div></div>
-
-  <div class="caja" style="margin-top:18px">
-    <span class="eyebrow">El registro oficial</span>
-    <h2 style="font-size:19px; margin-top:5px">La misma base de datos, desde aquí</h2>
-    <p style="margin:6px 0 0; font-size:13.5px; color:var(--ink-soft); max-width:66ch">
-      Descarga el libro completo: opciones, votos, podio, cuenta y pendientes. No hay que copiar filas a otro Excel.
-    </p>
-    <div class="inputrow" style="margin-top:12px">
-      <button type="button" class="btn js-xlsx">Descargar Excel (.xlsx)</button>
-      <button type="button" class="btn ghost js-csv">Descargar CSV (.zip)</button>
-      <span class="mono exp-msg" style="font-size:12.5px; color:var(--ink-soft)"></span>
-    </div>
-  </div>
+  <div class="aviso info" id="pide-nombre"><span class="ic">👆</span><div>Elige tu nombre y califica. Nada más.</div></div>
 </section>
 
 <div class="pieaviso wrap" style="padding-left:0; padding-right:0">
@@ -438,8 +402,6 @@ input[type=number]{font-family:var(--mono); width:170px}
 <script>
 "use strict";
 
-/* Pega la URL /exec de Apps Script. Es el Excel compartido: todos los votos caen ahí.
-   Mientras esté vacía, cada celular guarda su voto aparte. */
 const HOJA_API = "";
 
 const OPCIONES = [
@@ -706,7 +668,7 @@ async function empujar(op, data, extra){
     if(s && s.ok !== false) aplicarRemoto(s);
   }catch(e){
     const t = document.getElementById("estado-txt");
-    if(t) t.innerHTML = "<b>No se pudo escribir en el Excel.</b> Revisa que la aplicación web de Apps Script esté publicada. Tu voto sigue en este celular.";
+    if(t) t.textContent = "No se pudo guardar el voto. Revisa la conexión e inténtalo de nuevo.";
   }
 }
 
@@ -1309,8 +1271,6 @@ document.getElementById("add-nombre").addEventListener("click", agregarNombre);
 document.getElementById("nuevo-nombre").addEventListener("keydown", e => { if(e.key === "Enter") agregarNombre(); });
 document.getElementById("salir").addEventListener("click", () => { yo = null; persistir(); render(); });
 document.getElementById("borrar-voto").addEventListener("click", borrarVoto);
-document.querySelectorAll(".js-xlsx").forEach(b => b.addEventListener("click", () => exportar("xlsx")));
-document.querySelectorAll(".js-csv").forEach(b => b.addEventListener("click", () => exportar("csv")));
 
 /* ══════════════ ARRANQUE ══════════════ */
 (function local(){
@@ -1336,28 +1296,24 @@ document.querySelectorAll(".js-csv").forEach(b => b.addEventListener("click", ()
 
 (async function conectar(){
   const dot = document.getElementById("dot"), txt = document.getElementById("estado-txt");
-  const aviso = document.getElementById("aviso-hoja");
   if(!API){
     remoto = false;
     dot.className = "dot local";
-    aviso.hidden = false;
-    txt.innerHTML = "<b>Falta el Excel compartido.</b> Cada celular guarda su voto aparte. Conecta la hoja de Google (aviso naranja) para que toda la familia vote en el mismo archivo.";
+    txt.textContent = "Los votos se guardan en este celular hasta conectar la hoja compartida.";
     return;
   }
-  aviso.hidden = true;
-  txt.innerHTML = "Conectando el Excel compartido…";
+  txt.textContent = "Abriendo la votación…";
   try{
     const s = await jsonp("leer");
     remoto = true;
     aplicarRemoto(s);
     dot.className = "dot live";
-    txt.innerHTML = "<b>Excel compartido activo.</b> El voto de cada celular cae en la misma hoja de Google. Ábrela y verás las pestañas Votos y Resultados actualizarse.";
+    txt.textContent = "Votación en vivo. Elige tu nombre en Mi voto y califica.";
     setInterval(() => { jsonp("leer").then(aplicarRemoto).catch(() => {}); }, 5000);
   }catch(e){
     remoto = false;
     dot.className = "dot local";
-    aviso.hidden = false;
-    txt.innerHTML = "<b>No se alcanzó la hoja.</b> Revisa que Apps Script esté publicado como aplicación web (acceso: cualquiera). Mientras, los votos quedan en este celular.";
+    txt.textContent = "Sin conexión a la votación compartida. Revisa la red e recarga.";
   }
 })();
 
