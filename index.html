@@ -668,8 +668,6 @@ let hechos = {};
 let yo = null;
 let slide = 0;
 let slidePintado = -1;
-let letraMenudaAbierta = false;
-let letraMenudaScroll = 0;
 let orden = {campo:"prom", dir:-1};
 let adminClave = "";
 let adminOk = false;
@@ -979,30 +977,7 @@ function slidePodio(){
   </div>`;
 }
 
-function pintarSlide(){
-  slide = Math.max(0, Math.min(TOTAL_SLIDES-1, slide));
-  const l = document.getElementById("lienzo");
-  if(slidePintado === slide){
-    const det = l.querySelector("details.vertodo");
-    if(det){
-      letraMenudaAbierta = det.open;
-      const cuerpo = det.querySelector(".cuerpo");
-      letraMenudaScroll = cuerpo ? cuerpo.scrollTop : 0;
-    }
-  }else{
-    letraMenudaAbierta = false;
-    letraMenudaScroll = 0;
-  }
-  l.innerHTML = slide === 0 ? slidePortada()
-              : slide === TOTAL_SLIDES-1 ? slidePodio()
-              : slideOpcion(OP(ORDEN[slide-1]));
-  slidePintado = slide;
-  const abierto = l.querySelector("details.vertodo");
-  if(abierto && letraMenudaAbierta){
-    abierto.open = true;
-    const cuerpo = abierto.querySelector(".cuerpo");
-    if(cuerpo) cuerpo.scrollTop = letraMenudaScroll;
-  }
+function chromeSlide(){
   document.getElementById("prog").style.width = ((slide+1)/TOTAL_SLIDES*100) + "%";
   document.getElementById("cuenta-slide").textContent = `${slide+1} / ${TOTAL_SLIDES}`;
   document.getElementById("ant").disabled = slide === 0;
@@ -1013,6 +988,36 @@ function pintarSlide(){
     const t = o ? o.nombre : (i===0 ? "Portada" : "Podio");
     return `<button class="pista ${cls} ${i===slide?"on":""}" data-i="${i}" title="${esc(t)}" aria-label="${esc(t)}"></button>`;
   }).join("");
+}
+function refrescarVotoSlide(){
+  const id = (slide > 0 && slide < TOTAL_SLIDES-1) ? ORDEN[slide-1] : null;
+  const o = OP(id);
+  const box = document.querySelector("#lienzo .votobox");
+  if(!o || !box) return false;
+  const {res} = calcular();
+  const r = res[o.id], mine = ((miVoto() || {estrellas:{}}).estrellas || {})[o.id] || 0;
+  const oculto = !config.revelar;
+  box.querySelectorAll(".star").forEach((btn, i) => btn.classList.toggle("on", i+1 <= mine));
+  const t = box.querySelector(".barra .t");
+  if(t) t.innerHTML = `<span>${oculto ? "Resultados ocultos" : (r.notas ? `${r.notas} voto${r.notas===1?"":"s"} · ${r.prom.toFixed(1)}★` : "Sin votos todavía")}</span>
+            <span>${oculto ? "🙈" : (r.notas ? r.prom.toFixed(1)+"★" : "—")}</span>`;
+  const fill = box.querySelector(".fill");
+  if(fill) fill.style.width = (oculto ? 0 : r.puntaje) + "%";
+  return true;
+}
+function pintarSlide(){
+  slide = Math.max(0, Math.min(TOTAL_SLIDES-1, slide));
+  const l = document.getElementById("lienzo");
+  const enHotel = slide > 0 && slide < TOTAL_SLIDES-1;
+  if(slidePintado === slide && enHotel && l.querySelector("details.vertodo") && refrescarVotoSlide()){
+    chromeSlide();
+    return;
+  }
+  l.innerHTML = slide === 0 ? slidePortada()
+              : slide === TOTAL_SLIDES-1 ? slidePodio()
+              : slideOpcion(OP(ORDEN[slide-1]));
+  slidePintado = slide;
+  chromeSlide();
 }
 function irSlide(n){ slide = n; pintarSlide(); }
 
