@@ -667,6 +667,9 @@ let config = {revelar:true, presupuesto:18000000, nombres:[...NOMBRES_SUGERIDOS]
 let hechos = {};
 let yo = null;
 let slide = 0;
+let slidePintado = -1;
+let letraMenudaAbierta = false;
+let letraMenudaScroll = 0;
 let orden = {campo:"prom", dir:-1};
 let adminClave = "";
 let adminOk = false;
@@ -979,9 +982,27 @@ function slidePodio(){
 function pintarSlide(){
   slide = Math.max(0, Math.min(TOTAL_SLIDES-1, slide));
   const l = document.getElementById("lienzo");
+  if(slidePintado === slide){
+    const det = l.querySelector("details.vertodo");
+    if(det){
+      letraMenudaAbierta = det.open;
+      const cuerpo = det.querySelector(".cuerpo");
+      letraMenudaScroll = cuerpo ? cuerpo.scrollTop : 0;
+    }
+  }else{
+    letraMenudaAbierta = false;
+    letraMenudaScroll = 0;
+  }
   l.innerHTML = slide === 0 ? slidePortada()
               : slide === TOTAL_SLIDES-1 ? slidePodio()
               : slideOpcion(OP(ORDEN[slide-1]));
+  slidePintado = slide;
+  const abierto = l.querySelector("details.vertodo");
+  if(abierto && letraMenudaAbierta){
+    abierto.open = true;
+    const cuerpo = abierto.querySelector(".cuerpo");
+    if(cuerpo) cuerpo.scrollTop = letraMenudaScroll;
+  }
   document.getElementById("prog").style.width = ((slide+1)/TOTAL_SLIDES*100) + "%";
   document.getElementById("cuenta-slide").textContent = `${slide+1} / ${TOTAL_SLIDES}`;
   document.getElementById("ant").disabled = slide === 0;
