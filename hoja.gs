@@ -37,18 +37,18 @@ function libro_() {
 }
 
 const CATALOGO = [
-  {id:"porvenir", nombre:"Hotel El Porvenir", zona:"Coveñas · Sector El Porvenir", acceso:"tierra", total:4500000, estado:"viva", web:"https://www.booking.com/searchresults.es.html?ss=Hotel+El+Porvenir+Cove%C3%B1as"},
+  {id:"porvenir", nombre:"Hotel El Porvenir", zona:"Coveñas · Sector El Porvenir", acceso:"tierra", total:4500000, estado:"viva", web:"https://www.google.com/maps/search/?api=1&query=Sector+El+Porvenir+Cove%C3%B1as+Sucre+Colombia"},
   {id:"laguna", nombre:"Laguna Beach", zona:"Santiago de Tolú · Playa El Francés", acceso:"tierra", total:21450000, estado:"viva", web:"https://ecohotellagunabeach.com/"},
   {id:"arena", nombre:"Hotel Arena Beach", zona:"Arroyo de Piedra · Km 22 vía al mar", acceso:"tierra", total:9562500, estado:"viva", web:"https://arenabeach.co/"},
-  {id:"baluarte", nombre:"Baluarte Cartagena Boutique", zona:"Cartagena · Bocagrande", acceso:"tierra", total:11375000, estado:"secundaria", web:"https://baluartecartagena.com/"},
-  {id:"rodadero", nombre:"Rodadero Suites", zona:"Santa Marta · El Rodadero", acceso:"tierra", total:6166667, estado:"secundaria", web:"https://www.booking.com/searchresults.es.html?ss=SGH+Rodadero+Suites+Santa+Marta"},
+  {id:"baluarte", nombre:"Baluarte Cartagena Boutique", zona:"Cartagena · Bocagrande", acceso:"tierra", total:11375000, estado:"secundaria", web:"https://www.booking.com/hotel/co/san-pietro.es.html"},
+  {id:"rodadero", nombre:"Rodadero Suites", zona:"Santa Marta · El Rodadero", acceso:"tierra", total:6166667, estado:"secundaria", web:"https://www.google.com/maps/search/?api=1&query=SGH+Rodadero+Suites+Calle+7+El+Rodadero+Santa+Marta"},
   {id:"mucura", nombre:"Múcura Club Hotel", zona:"Isla Múcura · San Bernardo", acceso:"isla", total:15610000, estado:"secundaria", web:"https://www.mucuraclubhotel.com/"},
   {id:"playita", nombre:"La Playita", zona:"Isla Fuerte · Bolívar", acceso:"isla", total:20618684, estado:"secundaria", web:"https://www.booking.com/hotel/co/la-playita-isla-fuerte.es.html"},
   {id:"coral", nombre:"Hotel Coral de Fuego", zona:"Isla Fuerte · Playa San Diego", acceso:"isla", total:27250000, estado:"descartable", web:"https://www.booking.com/hotel/co/coral-de-fuego.es.html"},
-  {id:"mulata", nombre:"Hotel Isla Mulata", zona:"Isla Grande · Islas del Rosario", acceso:"isla", total:20381008, estado:"descartable", web:"https://www.booking.com/searchresults.es.html?ss=Hotel+Isla+Mulata+Islas+del+Rosario"},
-  {id:"marazao", nombre:"Marazao Beach", zona:"Ubicación por confirmar", acceso:"isla", total:21149004, estado:"descartable", web:"https://www.booking.com/searchresults.es.html?ss=Marazao+Beach"},
-  {id:"tintipan", nombre:"Hotel Tintipán", zona:"Isla Tintipán · San Bernardo", acceso:"isla", total:23950000, estado:"descartable", web:"https://www.booking.com/searchresults.es.html?ss=Hotel+Tintipan+Isla+San+Bernardo"},
-  {id:"river", nombre:"Hotel River City", zona:"Montería · Córdoba", acceso:"ruta", total:3250000, estado:"complemento", web:"https://www.booking.com/searchresults.es.html?ss=Hotel+River+City+Monteria"}
+  {id:"mulata", nombre:"Hotel Isla Mulata", zona:"Isla Grande · Islas del Rosario", acceso:"isla", total:20381008, estado:"descartable", web:"https://www.booking.com/hotel/co/isla-grande-islas-del-rosario.html"},
+  {id:"marazao", nombre:"Marazao Beach", zona:"Ubicación por confirmar", acceso:"isla", total:21149004, estado:"descartable", web:""},
+  {id:"tintipan", nombre:"Hotel Tintipán", zona:"Isla Tintipán · San Bernardo", acceso:"isla", total:23950000, estado:"descartable", web:"https://hoteltintipan.com/"},
+  {id:"river", nombre:"Hotel River City", zona:"Montería · Córdoba", acceso:"ruta", total:3250000, estado:"complemento", web:"https://www.google.com/maps/search/?api=1&query=Hotel+River+City+Carrera+5+34-68+Monteria"}
 ];
 
 const TAREAS = [
