@@ -17,10 +17,18 @@
 const PAX = 10;
 const NOCHES = 5;
 const PRESU_DEF = 18000000;
-const SPREADSHEET_ID = "";
+const SPREADSHEET_ID = "1hbTsqNexVURU59Mv1M85MeLXMJSkFhXcr6t4ouimy98";
+
+function idHoja_(raw) {
+  const s = String(raw || "").trim();
+  const m = s.match(/\/d\/([a-zA-Z0-9-_]+)/);
+  if (m) return m[1];
+  return s.split("/")[0].split("?")[0].split("#")[0];
+}
 
 function libro_() {
-  if (SPREADSHEET_ID) return SpreadsheetApp.openById(SPREADSHEET_ID);
+  const id = idHoja_(SPREADSHEET_ID);
+  if (id) return SpreadsheetApp.openById(id);
   const activo = SpreadsheetApp.getActiveSpreadsheet();
   if (activo) return activo;
   throw new Error("Pega el ID de la hoja en SPREADSHEET_ID (está en la URL, entre /d/ y /edit).");
