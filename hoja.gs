@@ -37,18 +37,18 @@ function libro_() {
 }
 
 const CATALOGO = [
-  {id:"porvenir", nombre:"Hotel El Porvenir", zona:"Coveñas · Sector El Porvenir", acceso:"tierra", total:4500000, estado:"viva"},
-  {id:"laguna", nombre:"Laguna Beach", zona:"Santiago de Tolú · Playa El Francés", acceso:"tierra", total:21450000, estado:"viva"},
-  {id:"arena", nombre:"Hotel Arena Beach", zona:"Arroyo de Piedra · Km 22 vía al mar", acceso:"tierra", total:9562500, estado:"viva"},
-  {id:"baluarte", nombre:"Baluarte Cartagena Boutique", zona:"Cartagena · Bocagrande", acceso:"tierra", total:11375000, estado:"secundaria"},
-  {id:"rodadero", nombre:"Rodadero Suites", zona:"Santa Marta · El Rodadero", acceso:"tierra", total:6166667, estado:"secundaria"},
-  {id:"mucura", nombre:"Múcura Club Hotel", zona:"Isla Múcura · San Bernardo", acceso:"isla", total:15610000, estado:"secundaria"},
-  {id:"playita", nombre:"La Playita", zona:"Isla Fuerte · Bolívar", acceso:"isla", total:20618684, estado:"secundaria"},
-  {id:"coral", nombre:"Hotel Coral de Fuego", zona:"Isla Fuerte · Playa San Diego", acceso:"isla", total:27250000, estado:"descartable"},
-  {id:"mulata", nombre:"Hotel Isla Mulata", zona:"Isla Grande · Islas del Rosario", acceso:"isla", total:20381008, estado:"descartable"},
-  {id:"marazao", nombre:"Marazao Beach", zona:"Ubicación por confirmar", acceso:"isla", total:21149004, estado:"descartable"},
-  {id:"tintipan", nombre:"Hotel Tintipán", zona:"Isla Tintipán · San Bernardo", acceso:"isla", total:23950000, estado:"descartable"},
-  {id:"river", nombre:"Hotel River City", zona:"Montería · Córdoba", acceso:"ruta", total:3250000, estado:"complemento"}
+  {id:"porvenir", nombre:"Hotel El Porvenir", zona:"Coveñas · Sector El Porvenir", acceso:"tierra", total:4500000, estado:"viva", web:"https://www.booking.com/searchresults.es.html?ss=Hotel+El+Porvenir+Cove%C3%B1as"},
+  {id:"laguna", nombre:"Laguna Beach", zona:"Santiago de Tolú · Playa El Francés", acceso:"tierra", total:21450000, estado:"viva", web:"https://ecohotellagunabeach.com/"},
+  {id:"arena", nombre:"Hotel Arena Beach", zona:"Arroyo de Piedra · Km 22 vía al mar", acceso:"tierra", total:9562500, estado:"viva", web:"https://arenabeach.co/"},
+  {id:"baluarte", nombre:"Baluarte Cartagena Boutique", zona:"Cartagena · Bocagrande", acceso:"tierra", total:11375000, estado:"secundaria", web:"https://baluartecartagena.com/"},
+  {id:"rodadero", nombre:"Rodadero Suites", zona:"Santa Marta · El Rodadero", acceso:"tierra", total:6166667, estado:"secundaria", web:"https://www.booking.com/searchresults.es.html?ss=SGH+Rodadero+Suites+Santa+Marta"},
+  {id:"mucura", nombre:"Múcura Club Hotel", zona:"Isla Múcura · San Bernardo", acceso:"isla", total:15610000, estado:"secundaria", web:"https://www.mucuraclubhotel.com/"},
+  {id:"playita", nombre:"La Playita", zona:"Isla Fuerte · Bolívar", acceso:"isla", total:20618684, estado:"secundaria", web:"https://www.booking.com/hotel/co/la-playita-isla-fuerte.es.html"},
+  {id:"coral", nombre:"Hotel Coral de Fuego", zona:"Isla Fuerte · Playa San Diego", acceso:"isla", total:27250000, estado:"descartable", web:"https://www.booking.com/hotel/co/coral-de-fuego.es.html"},
+  {id:"mulata", nombre:"Hotel Isla Mulata", zona:"Isla Grande · Islas del Rosario", acceso:"isla", total:20381008, estado:"descartable", web:"https://www.booking.com/searchresults.es.html?ss=Hotel+Isla+Mulata+Islas+del+Rosario"},
+  {id:"marazao", nombre:"Marazao Beach", zona:"Ubicación por confirmar", acceso:"isla", total:21149004, estado:"descartable", web:"https://www.booking.com/searchresults.es.html?ss=Marazao+Beach"},
+  {id:"tintipan", nombre:"Hotel Tintipán", zona:"Isla Tintipán · San Bernardo", acceso:"isla", total:23950000, estado:"descartable", web:"https://www.booking.com/searchresults.es.html?ss=Hotel+Tintipan+Isla+San+Bernardo"},
+  {id:"river", nombre:"Hotel River City", zona:"Montería · Córdoba", acceso:"ruta", total:3250000, estado:"complemento", web:"https://www.booking.com/searchresults.es.html?ss=Hotel+River+City+Monteria"}
 ];
 
 const TAREAS = [
@@ -144,6 +144,12 @@ function textoCorto_(x, n) {
   return String(x == null ? "" : x).substring(0, n || 500);
 }
 
+function webOk_(u) {
+  const s = String(u == null ? "" : u).trim();
+  if (!/^https?:\/\//i.test(s)) return "";
+  return s.substring(0, 250);
+}
+
 function limpiarPlan_(data) {
   const si = Array.isArray(data.si) ? data.si.slice(0, 12).map(function (x) {
     return textoCorto_(x, 400);
@@ -176,6 +182,7 @@ function limpiarPlan_(data) {
     fuente: textoCorto_(data.fuente, 120),
     mapsq: textoCorto_(data.mapsq, 160),
     wa: textoCorto_(data.wa, 200),
+    web: webOk_(data.web),
     si: si,
     no: no,
     extra: extra
@@ -185,7 +192,7 @@ function limpiarPlan_(data) {
 function escribirPlanes_(planes) {
   const ss = libro_();
   const sh = hoja_(ss, "Planes");
-  const headers = ["id", "nombre", "zona", "tipo", "acceso", "horas", "total", "cotizado", "detalle_costo", "comida", "estado", "caben_10", "fuente", "maps", "whatsapp", "a_favor", "alertas", "letra_menuda"];
+  const headers = ["id", "nombre", "zona", "tipo", "acceso", "horas", "total", "cotizado", "detalle_costo", "comida", "estado", "caben_10", "fuente", "maps", "whatsapp", "web", "a_favor", "alertas", "letra_menuda"];
   const filas = [headers];
   CATALOGO.forEach(function (cat) {
     const o = planes[cat.id] || {};
@@ -213,6 +220,7 @@ function escribirPlanes_(planes) {
       o.fuente || "",
       o.mapsq || "",
       o.wa || "",
+      o.web || cat.web || "",
       si,
       no,
       extra

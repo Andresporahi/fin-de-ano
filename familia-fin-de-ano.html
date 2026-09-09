@@ -449,6 +449,7 @@ body.soy-admin #tab-admin{display:inline-flex}
           <label><b>Búsqueda en Maps</b><input type="text" id="adm-mapsq" maxlength="160"></label>
         </div>
         <label><b>WhatsApp (opcional)</b><input type="text" id="adm-wa" maxlength="200" placeholder="https://wa.me/..."></label>
+        <label><b>Web o Booking (Planes)</b><input type="text" id="adm-web" maxlength="250" placeholder="https://..."></label>
         <div class="inputrow">
           <button class="btn" id="admin-guardar">Guardar en la hoja</button>
           <span id="admin-msg"></span>
@@ -479,6 +480,7 @@ const OPCIONES = [
     no:["El nombre exacto del hotel está por confirmar (solo tenemos el catálogo de WhatsApp)","No se menciona desayuno incluido","Falta confirmar disponibilidad para el 29 de diciembre"],
     extra:[["Check-in / check-out","2:00 p. m. / 11:00 a. m."],["Tarifa alternativa","Habitación doble $250.000/noche en temporada alta"],["Contacto","WhatsApp +57 312 895 6656"]],
     mapsq:"Sector El Porvenir Coveñas Sucre Colombia", wa:"https://wa.me/p/35325021320445529/573128956656",
+    web:"https://www.booking.com/searchresults.es.html?ss=Hotel+El+Porvenir+Cove%C3%B1as",
     fuente:"Catálogo de WhatsApp, sept 2026"
   },
   {
@@ -491,6 +493,7 @@ const OPCIONES = [
     no:["La cotización es de 4 noches (ingreso 29 o 30, salida 2 o 3); la quinta noche va prorrateada y hay que confirmarla","La suite se asigna al azar dentro de la categoría: las fotos son referenciales","No se pueden ingresar alimentos ni bebidas a las zonas húmedas","Cada solicitud de cambio o cancelación cuesta $80.000 aparte de la penalidad","Plan solo alojamiento: el resto de comidas se paga aparte"],
     extra:[["Mezcla usada para comparar","1 Golden Plus cuádruple $6.760.000 + 2 Golden triples $5.200.000 c/u = $17.160.000 / 4 noches"],["Otras tarifas 4 noches","Golden doble $4.640.000 · Golden triple $5.200.000 · Golden Plus cuádruple $6.760.000 · Premium cuádruple $7.840.000 · Premium quíntuple $9.200.000"],["Reserva","Abono del 30 %; la reserva se confirma solo con el pago. Canales oficiales"],["San Silvestre","Cena y fiesta del 31 incluidas: brindis de medianoche, cotillones y hora loca"],["Cancelación en temporada alta","24 dic – 20 ene: 30+ días antes, penalidad 10 %; entre 29 y 10 días, 50 %; menos de 10 días, sin devolución"],["No show","100 % del valor de la reserva"],["Extras","Jacuzzi privado $100.000 · reposición de llave $50.000 · fumar en la suite $1.000.000"],["Horarios","Check-in 3:00 p. m. · check-out 11:00 a. m. · piscina 9–21 h · restaurante 7–21 h"],["Políticas","Carpeta de Drive que envió Angelita"],["Correo de reservas","reservasecohotellagunabeach@gmail.com · Tel. 311 763 4809"]],
     mapsq:"Ecohotel Laguna Beach Playa El Frances Santiago de Tolu Sucre",
+    web:"https://ecohotellagunabeach.com/",
     fuente:"WhatsApp Angelita, 8 sept 2026"
   },
   {
@@ -503,6 +506,7 @@ const OPCIONES = [
     no:["Prohíbe ingresar alimentos y bebidas: toda la comida se compra adentro y eso puede sumar millones","El abono del 50 % no es reembolsable","La cotización es por 4 noches; falta confirmar el 29 de diciembre","Está a 17 horas de Bogotá — el trayecto más largo junto con Santa Marta"],
     extra:[["Saldo a favor","30 días de vigencia"]],
     mapsq:"Hotel Arena Beach Arroyo de Piedra Bolivar Colombia",
+    web:"https://arenabeach.co/",
     fuente:"PDF de cotización Arena Beach"
   },
   {
@@ -515,6 +519,7 @@ cabe:null, comida:"Desayuno", estado:"secundaria",
     no:["Bocagrande el 31 de diciembre es un hervidero: ruido, tráfico y playa llena","Parqueadero sin confirmar, y venimos con carros desde Bogotá","No es una playa para que la niña juegue tranquila"],
     extra:[["Cotizado por","Agencia OnTrip, por chat"]],
     mapsq:"Hotel Baluarte Cartagena Boutique Bocagrande",
+    web:"https://baluartecartagena.com/",
     fuente:"Cotización OnTrip"
   },
   {
@@ -527,6 +532,7 @@ cabe:null, comida:"Desayuno", estado:"secundaria",
     no:["Las fechas cotizadas son del 3 al 6 de enero: no cubren nuestro viaje","Está lejos del Tayrona pese a lo que sugiere el nombre","El Rodadero en temporada alta es playa de multitud"],
     extra:[["Cotizado por","Agencia OnTrip, por chat"]],
     mapsq:"Rodadero Suites Santa Marta Magdalena",
+    web:"https://www.booking.com/searchresults.es.html?ss=SGH+Rodadero+Suites+Santa+Marta",
     fuente:"Cotización OnTrip"
   },
   {
@@ -539,6 +545,7 @@ cabe:true, comida:"Desayuno incluido; paquete de alimentación aparte", estado:"
     no:["Lancha obligatoria: criterio excluyente para la mamá","Los $15.610.000 son SIN impuestos — la cifra real sube","La comida es aparte: $130.000 por persona por noche","La cena de San Silvestre se cobra aparte, $360.000 por persona, y ese precio es del año pasado: lo confirman en octubre o noviembre","La cotización dice «niña de 2 años» y la nuestra tiene 4: hay que rehacerla"],
     extra:[["Habitaciones cotizadas","$4.930.000 (3 pers.) + $4.355.000 (3 pers.) + $3.475.000 (2 pers.) + $2.850.000 (2 pers.)"],["Alimentación","Paquete $130.000 por persona/noche, o platos a la carta desde $30.000"],["Estimado de comida","≈ $10.100.000 para 10 personas incluyendo la fiesta del 31"],["Presión de venta","«Última disponibilidad, tengo un grupo pendiente»"]],
     mapsq:"Mucura Club Hotel Isla Mucura San Bernardo Sucre",
+    web:"https://www.mucuraclubhotel.com/",
     fuente:"Cotización por WhatsApp, 8 sept 2026"
   },
   {
@@ -551,6 +558,7 @@ cabe:false, comida:"Desayuno y café hasta las 10:30", estado:"secundaria",
     no:["Solo hay 4 cabañas disponibles: caben 8 personas, faltan 2. La cifra de arriba asume dos cupos que hoy no existen","Hay bar y fiesta cerca de las habitaciones hasta la madrugada, sobre todo fines de semana — pésimo con una niña de 4 años","Los menores de 4 años no pagan, pero la nuestra ya tiene 4: paga completo","Los precios son sin IVA; el 19 % se paga al llegar","La tarifa vence en 24 horas","Lancha obligatoria"],
     extra:[["Cabañas cotizadas","2 × Privada primer piso $3.405.600 · 1 × Privada segundo piso $3.505.600 · 1 × Superior $3.544.500 (todas +IVA)"],["Fechas","Entrada 30 dic 2026, salida 4 ene 2027"],["Regla de menores","Los niños solo pueden alojarse en habitaciones privadas"]],
     mapsq:"La Playita Isla Fuerte Bolivar Colombia",
+    web:"https://www.booking.com/hotel/co/la-playita-isla-fuerte.es.html",
     fuente:"Cotización por WhatsApp, 8 sept 2026"
   },
   {
@@ -563,6 +571,7 @@ cabe:false, comida:"Desayuno y café hasta las 10:30", estado:"secundaria",
     no:["El más caro de toda la mesa: casi $27 millones solo en alojamiento","Traslado marítimo casi seguro","Solo incluye desayuno: la comida en isla es cara y no hay alternativas cerca"],
     extra:[],
     mapsq:"Hotel Coral de Fuego Isla Fuerte Playa San Diego",
+    web:"https://www.booking.com/hotel/co/coral-de-fuego.es.html",
     fuente:"Cotización por chat"
   },
   {
@@ -575,6 +584,7 @@ cabe:null, comida:"Desayuno", estado:"descartable",
     no:["Traslado marítimo obligatorio","Almuerzos y cenas no incluidos, en una isla donde no hay dónde más comer","El traslado a playa se cobra aparte"],
     extra:[["Operado por","Aviatur"]],
     mapsq:"Hotel Isla Mulata Isla Grande Islas del Rosario Cartagena",
+    web:"https://www.booking.com/searchresults.es.html?ss=Hotel+Isla+Mulata+Islas+del+Rosario",
     fuente:"PDF Aviatur"
   },
   {
@@ -587,6 +597,7 @@ cabe:null, comida:"Desayuno", estado:"descartable",
     no:["No sabemos con certeza dónde queda: la cotización llegó como imagen, sin dirección","Penalización del 100 % por cancelación — el riesgo más alto de la lista","Transporte marítimo","Las fechas exactas no aparecen en la cotización"],
     extra:[["Cancelación","Penalidad del 100 %"]],
     mapsq:"Marazao Beach Colombia",
+    web:"https://www.booking.com/searchresults.es.html?ss=Marazao+Beach",
     fuente:"Imagen de cotización por chat"
   },
   {
@@ -599,6 +610,7 @@ cabe:null, comida:"Alimentación completa + traslado náutico", estado:"descarta
     no:["Lancha obligatoria: criterio excluyente para la mamá","La cotización se contradice: habla de 5 noches y de 3 noches / 4 días"],
     extra:[],
     mapsq:"Hotel Tintipan Isla Tintipan San Bernardo Sucre",
+    web:"https://www.booking.com/searchresults.es.html?ss=Hotel+Tintipan+Isla+San+Bernardo",
     fuente:"Cotización por chat + enlace"
   },
   {
@@ -611,6 +623,7 @@ cabe:true, comida:"2 desayunos por habitación", estado:"complemento",
     no:["No es un destino, es una cama en la carretera"],
     extra:[["Uso recomendado","Una noche a la ida y otra al regreso: ≈ $1.300.000 en total"]],
     mapsq:"Hotel River City Monteria Cordoba",
+    web:"https://www.booking.com/searchresults.es.html?ss=Hotel+River+City+Monteria",
     fuente:"Cotización por chat"
   }
 ];
@@ -645,7 +658,8 @@ const ORDEN = ["porvenir","laguna","arena","baluarte","rodadero","mucura","playi
 const cop = n => "$" + new Intl.NumberFormat("es-CO",{maximumFractionDigits:0}).format(Math.round(n));
 const copCorto = n => Math.abs(n) >= 1e6 ? "$"+(n/1e6).toFixed(1).replace(".",",")+" M" : cop(n);
 const slug = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40) || "votante";
-const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const hrefOk = u => { const s = String(u||"").trim(); return /^https?:\/\//i.test(s) ? s : ""; };
 
 let remoto = false;
 let votos = {};
@@ -783,7 +797,7 @@ function planPayload(o){
   return {
     id: o.id, nombre: o.nombre, zona: o.zona, tipo: o.tipo, acceso: o.acceso, horas: o.horas,
     total: o.total, cotizado: o.cotizado, detalleCosto: o.detalleCosto, comida: o.comida,
-    estado: o.estado, cabe: o.cabe, fuente: o.fuente, mapsq: o.mapsq, wa: o.wa || "",
+    estado: o.estado, cabe: o.cabe, fuente: o.fuente, mapsq: o.mapsq, wa: o.wa || "", web: o.web || "",
     si: o.si || [], no: o.no || [], extra: o.extra || []
   };
 }
@@ -822,6 +836,7 @@ function llenarFormPlan(id){
   document.getElementById("adm-fuente").value = o.fuente || "";
   document.getElementById("adm-mapsq").value = o.mapsq || "";
   document.getElementById("adm-wa").value = o.wa || "";
+  document.getElementById("adm-web").value = o.web || "";
   planDirty = false;
 }
 function leerFormPlan(){
@@ -846,7 +861,8 @@ function leerFormPlan(){
     extra: extraDeTexto(document.getElementById("adm-extra").value),
     fuente: document.getElementById("adm-fuente").value.trim(),
     mapsq: document.getElementById("adm-mapsq").value.trim(),
-    wa: document.getElementById("adm-wa").value.trim()
+    wa: document.getElementById("adm-wa").value.trim(),
+    web: document.getElementById("adm-web").value.trim()
   };
 }
 function pintarAdmin(){
@@ -912,7 +928,7 @@ function slideOpcion(o){
       </div>
       <div class="mapas">
         <a class="mbtn" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.mapsq)}" target="_blank" rel="noopener"><span class="k">Ubicación</span>Ver en el mapa</a>
-        <a class="mbtn" href="https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent("Bogotá, Colombia")}&destination=${encodeURIComponent(o.mapsq)}&travelmode=driving" target="_blank" rel="noopener"><span class="k">Ruta</span>Desde Bogotá</a>
+        ${hrefOk(o.web) ? `<a class="mbtn" href="${esc(hrefOk(o.web))}" target="_blank" rel="noopener"><span class="k">Planes</span>Web o Booking</a>` : ""}
         ${o.wa ? `<a class="mbtn" href="${o.wa}" target="_blank" rel="noopener"><span class="k">Contacto</span>WhatsApp</a>` : ""}
       </div>
       <div class="votobox">
@@ -1235,9 +1251,9 @@ function baseDatos(){
     ["votantes", nv],
     ["regla_puntaje","Gana el promedio de estrellas (1 a 5)"]
   ];
-  const opciones = [["id","nombre","tipo","zona","acceso","lat","lon","horas_trayecto","total_10p_5n","por_persona_noche","cotizado_original","detalle_costo","caben_10","comida","estado","fuente","maps_query","whatsapp"]];
+  const opciones = [["id","nombre","tipo","zona","acceso","lat","lon","horas_trayecto","total_10p_5n","por_persona_noche","cotizado_original","detalle_costo","caben_10","comida","estado","fuente","maps_query","whatsapp","web"]];
   for(const o of OPCIONES){
-    opciones.push([o.id, o.nombre, o.tipo, o.zona, o.acceso, o.lat, o.lon, o.horas, o.total, o.total ? Math.round(o.total/(PAX*NOCHES)) : null, o.cotizado, o.detalleCosto, o.cabe === true ? 1 : o.cabe === false ? 0 : null, o.comida, o.estado, o.fuente, o.mapsq, o.wa || null]);
+    opciones.push([o.id, o.nombre, o.tipo, o.zona, o.acceso, o.lat, o.lon, o.horas, o.total, o.total ? Math.round(o.total/(PAX*NOCHES)) : null, o.cotizado, o.detalleCosto, o.cabe === true ? 1 : o.cabe === false ? 0 : null, o.comida, o.estado, o.fuente, o.mapsq, o.wa || null, o.web || null]);
   }
   const aFavor = [["id_opcion","orden","texto"]], alertas = [["id_opcion","orden","texto"]], detalle = [["id_opcion","clave","valor"]];
   for(const o of OPCIONES){
