@@ -130,11 +130,6 @@ main{padding:22px 0 60px}
 .star{background:none; border:0; cursor:pointer; font-size:clamp(26px,3.4vw,36px); line-height:1; padding:0 1px; color:#5A2077; transition:transform .12s, color .12s}
 .star.on{color:var(--mango)}
 .star:hover{transform:scale(1.16)}
-.mini{display:flex; gap:7px}
-.mini button{background:transparent; border:1px solid var(--line); color:var(--ink-soft); border-radius:9px; padding:7px 13px; cursor:pointer; font-size:15px}
-.mini button:hover{border-color:var(--coral); color:var(--ink)}
-.mini button.on-joya{background:var(--mango); border-color:var(--mango); color:#3A2500}
-.mini button.on-veto{background:var(--crit); border-color:var(--crit); color:#fff}
 .barra{margin-top:13px}
 .barra .t{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); margin-bottom:5px}
 .track{height:8px; background:#40114E; border-radius:99px; overflow:hidden}
@@ -311,7 +306,7 @@ input[type=number]{font-family:var(--mono); width:170px}
   <div class="estado-linea"><span class="dot local" id="dot"></span><span id="estado-txt">Abriendo la votación…</span></div>
 
   <div class="sechead">
-    <div><h2>Quién va ganando</h2><p id="podio-sub">70 puntos por promedio de estrellas + 30 repartidos entre las joyas − 15 por cada veto.</p></div>
+    <div><h2>Quién va ganando</h2><p id="podio-sub">Gana el plan con más estrellas: promedio de las calificaciones de 1 a 5.</p></div>
     <button class="btn" id="btn-revelar">Ocultar el podio</button>
   </div>
   <div class="podio" id="podio"></div>
@@ -329,12 +324,12 @@ input[type=number]{font-family:var(--mono); width:170px}
       <th data-s="total" style="text-align:right">Alojamiento 10p/5n <span class="ar">↕</span></th>
       <th data-s="pppn" style="text-align:right">Por persona/noche <span class="ar">↕</span></th>
       <th data-s="brecha" style="text-align:right">Vs. presupuesto <span class="ar">↕</span></th>
-      <th data-s="puntaje" style="text-align:right">Puntaje <span class="ar">↕</span></th>
+      <th data-s="prom" style="text-align:right">Estrellas <span class="ar">↕</span></th>
     </tr></thead><tbody id="tbody"></tbody>
   </table></div>
 
   <div class="sechead"><div><h2>Costo contra cariño</h2><p>Izquierda es barato, arriba es lo que la familia quiere. El cuadrante superior izquierdo es la decisión sensata.</p></div></div>
-  <div class="chartbox"><svg id="scatter" viewBox="0 0 780 420" role="img" aria-label="Costo contra puntaje de la familia"></svg></div>
+  <div class="chartbox"><svg id="scatter" viewBox="0 0 780 420" role="img" aria-label="Costo contra estrellas de la familia"></svg></div>
 
   <div class="sechead"><div><h2>La cuenta completa</h2><p>El alojamiento es la mitad. Esto suma carretera, comida y paradas sobre el plan que va ganando.</p></div></div>
   <div class="cuenta"><table>
@@ -568,7 +563,7 @@ let config = {revelar:true, presupuesto:18000000, nombres:[...NOMBRES_SUGERIDOS]
 let hechos = {};
 let yo = null;
 let slide = 0;
-let orden = {campo:"puntaje", dir:-1};
+let orden = {campo:"prom", dir:-1};
 const TOTAL_SLIDES = ORDEN.length + 2;
 const API = (new URLSearchParams(location.search).get("api") || HOJA_API || "").trim();
 
@@ -579,8 +574,7 @@ const LS = {
 const OP = id => OPCIONES.find(o => o.id === id);
 const votoReal = v => {
   if(!v) return false;
-  const estrellas = Object.values(v.estrellas||{}).some(n => typeof n === "number" && n > 0);
-  return !!(estrellas || v.joya || v.veto);
+  return Object.values(v.estrellas||{}).some(n => typeof n === "number" && n > 0);
 };
 function persistir(){
   LS.set("ffa-votos", votos);
@@ -595,18 +589,14 @@ function calcular(){
   for(const o of OPCIONES){
     const notas = lista.map(v => v.estrellas && v.estrellas[o.id]).filter(n => typeof n === "number" && n > 0);
     const prom = notas.length ? notas.reduce((a,b)=>a+b,0)/notas.length : 0;
-    const joyas = lista.filter(v => v.joya === o.id).length;
-    const vetos = lista.filter(v => v.veto === o.id).length;
-    const base = notas.length ? (prom/5)*70 : 0;
-    const bonus = nv ? (joyas/nv)*30 : 0;
-    res[o.id] = {prom, notas:notas.length, joyas, vetos, puntaje: Math.max(0, base + bonus - vetos*15)};
+    res[o.id] = {prom, notas:notas.length, puntaje: notas.length ? (prom/5)*100 : 0};
   }
   return {res, nv};
 }
 const ordenados = () => {
   const {res} = calcular();
   return OPCIONES.map(o => ({...o, ...res[o.id]}))
-    .sort((a,b) => b.puntaje - a.puntaje || (a.total||9e15) - (b.total||9e15));
+    .sort((a,b) => b.prom - a.prom || (a.total||9e15) - (b.total||9e15));
 };
 
 /* ══════════════ HOJA COMPARTIDA (el Excel único) ══════════════ */
@@ -652,7 +642,7 @@ async function empujar(op, data, extra){
 }
 
 /* ══════════════ VOTO ══════════════ */
-const miVoto = () => yo ? (votos[yo] || {nombre:"", estrellas:{}, joya:null, veto:null}) : null;
+const miVoto = () => yo ? (votos[yo] || {nombre:"", estrellas:{}}) : null;
 function exigeNombre(){
   if(yo) return true;
   irA("votar");
@@ -660,12 +650,12 @@ function exigeNombre(){
   i.focus(); i.placeholder = "Primero dinos tu nombre para guardar tu voto";
   return false;
 }
-function setEstrella(id, n){ if(!exigeNombre()) return; const v = miVoto(); const e = {...(v.estrellas||{})}; e[id] = (e[id] === n) ? 0 : n; guardar({...v, estrellas:e}); }
-function setJoya(id){ if(!exigeNombre()) return; const v = miVoto(); guardar({...v, joya: v.joya === id ? null : id}); }
-function setVeto(id){ if(!exigeNombre()) return; const v = miVoto(); guardar({...v, veto: v.veto === id ? null : id}); }
+function setEstrella(id, n){ if(!exigeNombre()) return; const v = miVoto(); const e = {...(v.estrellas||{})}; e[id] = (e[id] === n) ? 0 : n; guardar({nombre:v.nombre, estrellas:e, ts:v.ts}); }
 function guardar(v){
   v.nombre = v.nombre || config.nombres.find(n => slug(n) === yo) || yo;
   v.ts = Date.now();
+  delete v.joya;
+  delete v.veto;
   votos[yo] = v;
   persistir();
   render();
@@ -737,14 +727,10 @@ function slideOpcion(o){
           <div class="stars" data-op="${o.id}" role="group" aria-label="Calificar ${esc(o.nombre)}">
             ${[1,2,3,4,5].map(n=>`<button class="star ${n<=mine?"on":""}" data-n="${n}" aria-label="${n} estrellas">★</button>`).join("")}
           </div>
-          <div class="mini">
-            <button class="${v.joya===o.id?"on-joya":""}" data-joya="${o.id}" title="Mi favorito">💎</button>
-            <button class="${v.veto===o.id?"on-veto":""}" data-veto="${o.id}" title="Vetar">✋</button>
-          </div>
         </div>
         <div class="barra">
-          <div class="t"><span>${oculto ? "Resultados ocultos" : (r.notas ? `${r.notas} voto${r.notas===1?"":"s"} · ${r.prom.toFixed(1)}★${r.joyas?` · ${r.joyas}💎`:""}${r.vetos?` · ${r.vetos}✋`:""}` : "Sin votos todavía")}</span>
-            <span>${oculto ? "🙈" : (r.notas ? r.puntaje.toFixed(1) : "—")}</span></div>
+          <div class="t"><span>${oculto ? "Resultados ocultos" : (r.notas ? `${r.notas} voto${r.notas===1?"":"s"} · ${r.prom.toFixed(1)}★` : "Sin votos todavía")}</span>
+            <span>${oculto ? "🙈" : (r.notas ? r.prom.toFixed(1)+"★" : "—")}</span></div>
           <div class="track"><div class="fill" style="width:${oculto?0:r.puntaje}%"></div></div>
         </div>
       </div>
@@ -759,9 +745,7 @@ function slidePortada(){
     <h2>Doce planes,<br>una decisión</h2>
     <span class="fechas">29 dic 2026 → 3 ene 2027 · 5 noches · 10 personas</span>
     <div class="reglas">
-      <div class="regla"><span class="em">⭐</span><b>Califica del 1 al 5</b><span>Todos los planes, sin pensarlo mucho. 70 de los 100 puntos salen de aquí.</span></div>
-      <div class="regla"><span class="em">💎</span><b>Una joya por cabeza</b><span>El que de verdad quieres. Vale los otros 30 puntos.</span></div>
-      <div class="regla"><span class="em">✋</span><b>Un veto, si hace falta</b><span>«Con este yo no voy». Cuesta 15 puntos y hay que explicarlo en voz alta.</span></div>
+      <div class="regla"><span class="em">⭐</span><b>Califica del 1 al 5</b><span>Todos los planes. El que saque más estrellas gana.</span></div>
     </div>
     <p style="color:var(--ink-soft); font-size:14.5px; margin:4px 0 0">
       ${nv ? `${nv} persona${nv===1?"":"s"} ${nv===1?"ha":"han"} votado. ` : ""}Cada quien vota desde su celular con este mismo enlace.
@@ -780,8 +764,8 @@ function slidePodio(){
     <h2 style="font-size:clamp(28px,4.6vw,52px)">El podio</h2>
     <div class="podio" style="width:100%; max-width:980px; margin:0">
       ${top.map((o,i)=>`<div class="pcard ${cl[i]}"><span class="medal">${med[i]}</span>
-        <span class="pos">${ps[i]}</span><h3>${esc(o.nombre)}</h3><div class="pts">${o.puntaje.toFixed(1)}</div>
-        <div class="det">${o.total?cop(o.total):"sin cotizar"} · ${o.prom?o.prom.toFixed(1)+"★":"sin estrellas"}${o.joyas?` · ${o.joyas} 💎`:""}${o.vetos?` · ${o.vetos} ✋`:""}</div></div>`).join("")}
+        <span class="pos">${ps[i]}</span><h3>${esc(o.nombre)}</h3><div class="pts">${o.prom.toFixed(1)}★</div>
+        <div class="det">${o.total?cop(o.total):"sin cotizar"} · ${o.notas?o.notas+" voto"+(o.notas===1?"":"s"):"sin estrellas"}</div></div>`).join("")}
     </div>
   </div>`;
 }
@@ -823,8 +807,8 @@ function pintarPodio(){
   cont.innerHTML = !nv
     ? ""
     : lista.slice(0,3).map((o,i)=>`<div class="pcard ${cl[i]}"><span class="medal">${med[i]}</span>
-        <span class="pos">${ps[i]}</span><h3>${esc(o.nombre)}</h3><div class="pts">${o.puntaje.toFixed(1)}</div>
-        <div class="det">${o.total?cop(o.total):"sin cotizar"} · ${o.prom?o.prom.toFixed(1)+"★":"sin estrellas"}${o.joyas?` · ${o.joyas} 💎`:""}${o.vetos?` · ${o.vetos} ✋`:""}</div></div>`).join("");
+        <span class="pos">${ps[i]}</span><h3>${esc(o.nombre)}</h3><div class="pts">${o.prom.toFixed(1)}★</div>
+        <div class="det">${o.total?cop(o.total):"sin cotizar"} · ${o.notas?o.notas+" voto"+(o.notas===1?"":"s"):"sin estrellas"}</div></div>`).join("");
 }
 
 function pintarTabla(){
@@ -838,13 +822,13 @@ function pintarTabla(){
   });
   document.getElementById("tbody").innerHTML = filas.map(f => `
     <tr class="${f.estado==="descartada"?"desc":""}" data-id="${f.id}" title="Ver ${esc(f.nombre)} en grande">
-      <td><b>${esc(f.nombre)}</b>${f.vetos?` <span class="pill c-crit">✋ ${f.vetos}</span>`:""}${f.joyas?` <span class="pill c-warn">💎 ${f.joyas}</span>`:""}</td>
+      <td><b>${esc(f.nombre)}</b></td>
       <td>${esc(f.zona)}</td>
       <td>${f.acceso==="isla"?'<span class="pill c-crit">Lancha</span>':(f.acceso==="ruta"?'<span class="pill c-neu">Ruta</span>':'<span class="pill c-ok">Carretera</span>')}</td>
       <td class="num">${f.total?cop(f.total):"—"}</td>
       <td class="num">${f.pppn?cop(f.pppn):"—"}</td>
       <td class="num" style="color:${f.brecha===null?"var(--ink-faint)":(f.brecha>=0?"var(--ok)":"var(--crit)")}">${f.brecha===null?"—":(f.brecha>=0?"+":"")+copCorto(f.brecha)}</td>
-      <td class="num"><b>${config.revelar ? (f.puntaje?f.puntaje.toFixed(1):"—") : "🙈"}</b></td>
+      <td class="num"><b>${config.revelar ? (f.notas?f.prom.toFixed(1)+"★":"—") : "🙈"}</b></td>
     </tr>`).join("");
 }
 
@@ -855,26 +839,26 @@ function pintarScatter(){
   }
   const {res} = calcular();
   const pts = OPCIONES.filter(o => o.total && o.acceso !== "ruta").map(o => ({...o, ...res[o.id]}));
-  const W=780,H=420,L=62,R=22,T=26,B=52, maxX=29000000, maxY=100;
+  const W=780,H=420,L=62,R=22,T=26,B=52, maxX=29000000, maxY=5;
   const px = v => L + (v/maxX)*(W-L-R), py = v => H-B - (v/maxY)*(H-T-B);
-  let s = `<rect x="${L}" y="${T}" width="${px(12000000)-L}" height="${py(50)-T}" fill="#03b2ed" opacity=".10"></rect>`;
+  let s = `<rect x="${L}" y="${T}" width="${px(12000000)-L}" height="${py(2.5)-T}" fill="#03b2ed" opacity=".10"></rect>`;
   s += `<text x="${L+10}" y="${T+18}" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#03b2ed" letter-spacing="1.2">BARATO Y QUERIDO</text>`;
   for(let i=0;i<=5;i++){ const v=i*(maxX/5), x=px(v);
     s += `<line x1="${x}" y1="${T}" x2="${x}" y2="${H-B}" stroke="#4A1257" stroke-width="1"></line>`;
     s += `<text x="${x}" y="${H-B+18}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#C79BDE">${v?"$"+(v/1e6)+"M":"0"}</text>`; }
-  for(let i=0;i<=4;i++){ const v=i*25, y=py(v);
+  for(let i=0;i<=5;i++){ const v=i, y=py(v);
     s += `<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" stroke="#4A1257" stroke-width="1"></line>`;
     s += `<text x="${L-9}" y="${y+4}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="#C79BDE">${v}</text>`; }
   s += `<text x="${L}" y="${H-10}" font-family="IBM Plex Mono, monospace" font-size="10" fill="#FFF1FB" letter-spacing="1.1">COSTO DE ALOJAMIENTO · 10 PERSONAS · 5 NOCHES</text>`;
-  s += `<text x="14" y="${T+6}" font-family="IBM Plex Mono, monospace" font-size="10" fill="#FFF1FB" letter-spacing="1.1" transform="rotate(-90 14 ${T+6})" text-anchor="end">PUNTAJE DE LA FAMILIA</text>`;
+  s += `<text x="14" y="${T+6}" font-family="IBM Plex Mono, monospace" font-size="10" fill="#FFF1FB" letter-spacing="1.1" transform="rotate(-90 14 ${T+6})" text-anchor="end">ESTRELLAS DE LA FAMILIA</text>`;
   const LGX = W-R-168, LGY = T+2;
   const cajas = [[LGX-10, LGY-6, W-R, LGY+44]];
   const libre = (x1,y1,x2,y2) => !cajas.some(c => x1 < c[2] && x2 > c[0] && y1 < c[3] && y2 > c[1]);
   const col = {tierra:"#03b2ed", isla:"#9414d1"};
-  pts.sort((a,b)=> b.puntaje - a.puntaje || a.total - b.total);
+  pts.sort((a,b)=> b.prom - a.prom || a.total - b.total);
   for(const p of pts){
     const oculto = !config.revelar;
-    const pu = oculto ? 0 : p.puntaje;
+    const pu = oculto ? 0 : p.prom;
     const x = px(Math.min(p.total,maxX)), y = py(Math.min(pu,maxY)), r = pu > 0 ? 9 : 6;
     s += `<circle cx="${x}" cy="${y}" r="${r}" fill="${col[p.acceso]}" fill-opacity="${pu>0?".9":".4"}" stroke="#280120" stroke-width="2"></circle>`;
     const w = p.nombre.length * 5.9 + 8, der = x + r + 10 + w < W - R;
@@ -939,17 +923,13 @@ function pintarVotafilas(){
   const v = miVoto();
   const puestas = Object.values(v.estrellas||{}).filter(n=>n>0).length;
   document.getElementById("voto-sub").textContent =
-    `${v.nombre || yo}: ${puestas} de ${OPCIONES.length} planes calificados · joya ${v.joya?"puesta":"sin usar"} · veto ${v.veto?"usado":"sin usar"}.`;
+    `${v.nombre || yo}: ${puestas} de ${OPCIONES.length} planes calificados.`;
   document.getElementById("votafilas").innerHTML = ORDEN.map(id => {
     const o = OP(id), n = (v.estrellas||{})[id] || 0;
     return `<div class="votafila">
       <div><div class="nom">${esc(o.nombre)}</div><div class="meta">${o.total?cop(o.total):"sin cotizar"} · ${esc(o.zona)}</div></div>
       <div class="ctrl">
         <div class="stars" data-op="${id}">${[1,2,3,4,5].map(k=>`<button class="star ${k<=n?"on":""}" data-n="${k}" aria-label="${k} estrellas">★</button>`).join("")}</div>
-        <div class="mini">
-          <button class="${v.joya===id?"on-joya":""}" data-joya="${id}">💎</button>
-          <button class="${v.veto===id?"on-veto":""}" data-veto="${id}">✋</button>
-        </div>
       </div></div>`;
   }).join("");
 }
@@ -1062,7 +1042,7 @@ function baseDatos(){
     ["nina_anios", 4],
     ["presupuesto_alojamiento", presu],
     ["votantes", nv],
-    ["regla_puntaje","70 por promedio de estrellas + 30 por joyas − 15 por veto"]
+    ["regla_puntaje","Gana el promedio de estrellas (1 a 5)"]
   ];
   const opciones = [["id","nombre","tipo","zona","acceso","lat","lon","horas_trayecto","total_10p_5n","por_persona_noche","cotizado_original","detalle_costo","caben_10","comida","estado","fuente","maps_query","whatsapp"]];
   for(const o of OPCIONES){
@@ -1074,22 +1054,24 @@ function baseDatos(){
     o.no.forEach((t,i) => alertas.push([o.id, i+1, t]));
     o.extra.forEach(([k,v]) => detalle.push([o.id, k, v]));
   }
-  const votosFilas = [["fecha_hora","id_votante","votante","id_opcion","opcion","estrellas","joya","veto"]];
+  const votosFilas = [["fecha_hora","id_votante","votante","id_opcion","opcion","estrellas"]];
   for(const v of reales){
     const ts = tsTexto(v.ts);
     const idv = slug(v.nombre || "");
     for(const o of OPCIONES){
-      votosFilas.push([ts, idv, v.nombre || "—", o.id, o.nombre, (v.estrellas||{})[o.id] || 0, v.joya === o.id ? 1 : 0, v.veto === o.id ? 1 : 0]);
+      const e = (v.estrellas||{})[o.id] || 0;
+      if(!e) continue;
+      votosFilas.push([ts, idv, v.nombre || "—", o.id, o.nombre, e]);
     }
   }
-  const votantes = [["id_votante","nombre","fecha_hora","planes_calificados","id_joya","id_veto"]];
+  const votantes = [["id_votante","nombre","fecha_hora","planes_calificados"]];
   for(const v of reales){
-    votantes.push([slug(v.nombre||""), v.nombre || "—", tsTexto(v.ts), Object.values(v.estrellas||{}).filter(n => n > 0).length, v.joya || null, v.veto || null]);
+    votantes.push([slug(v.nombre||""), v.nombre || "—", tsTexto(v.ts), Object.values(v.estrellas||{}).filter(n => n > 0).length]);
   }
-  const resultados = [["puesto","id","nombre","zona","acceso","estado","total_10p_5n","por_persona_noche","brecha_vs_presupuesto","promedio_estrellas","n_calificaciones","n_joyas","n_vetos","puntaje"]];
+  const resultados = [["puesto","id","nombre","zona","acceso","estado","total_10p_5n","por_persona_noche","brecha_vs_presupuesto","promedio_estrellas","n_calificaciones"]];
   ordenados().forEach((o,i) => {
     const r = res[o.id];
-    resultados.push([i+1, o.id, o.nombre, o.zona, o.acceso, o.estado, o.total, o.total ? Math.round(o.total/(PAX*NOCHES)) : null, o.total != null ? presu - o.total : null, r.notas ? Math.round(r.prom*100)/100 : null, r.notas, r.joyas, r.vetos, Math.round(r.puntaje*100)/100]);
+    resultados.push([i+1, o.id, o.nombre, o.zona, o.acceso, o.estado, o.total, o.total ? Math.round(o.total/(PAX*NOCHES)) : null, o.total != null ? presu - o.total : null, r.notas ? Math.round(r.prom*100)/100 : null, r.notas]);
   });
   const cuenta = [["id_plan_lider","plan_lider","rubro","ajustado","probable","holgado","nota"]];
   for(const r of rub) cuenta.push([lider.id, lider.nombre, r[0], r[1], r[2], r[3], r[4]]);
@@ -1191,8 +1173,6 @@ function gestos(cont){
   cont.addEventListener("click", e => {
     const st = e.target.closest(".star");
     if(st){ setEstrella(st.parentElement.dataset.op, +st.dataset.n); return; }
-    const j = e.target.closest("[data-joya]"); if(j){ setJoya(j.dataset.joya); return; }
-    const v = e.target.closest("[data-veto]"); if(v){ setVeto(v.dataset.veto); return; }
   });
 }
 gestos(document.getElementById("lienzo"));

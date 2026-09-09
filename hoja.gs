@@ -75,11 +75,10 @@ function slug_(s) {
 
 function votoReal_(v) {
   if (!v) return false;
-  const estrellas = Object.keys(v.estrellas || {}).some(function (k) {
+  return Object.keys(v.estrellas || {}).some(function (k) {
     const n = v.estrellas[k];
     return typeof n === "number" && n > 0;
   });
-  return !!(estrellas || v.joya || v.veto);
 }
 
 function estado_() {
@@ -133,13 +132,9 @@ function puntajes_(s) {
       return typeof n === "number" && n > 0;
     });
     const prom = notas.length ? notas.reduce(function (a, b) { return a + b; }, 0) / notas.length : 0;
-    const joyas = lista.filter(function (v) { return v.joya === o.id; }).length;
-    const vetos = lista.filter(function (v) { return v.veto === o.id; }).length;
-    const base = notas.length ? (prom / 5) * 70 : 0;
-    const bonus = nv ? (joyas / nv) * 30 : 0;
     res[o.id] = {
-      prom: prom, notas: notas.length, joyas: joyas, vetos: vetos,
-      puntaje: Math.max(0, base + bonus - vetos * 15)
+      prom: prom, notas: notas.length,
+      puntaje: notas.length ? (prom / 5) * 100 : 0
     };
   });
   return { res: res, nv: nv };
@@ -168,10 +163,8 @@ function escribirHojas_(s) {
     const t = ts_(v.ts);
     CATALOGO.forEach(function (o) {
       const e = (v.estrellas && v.estrellas[o.id]) || 0;
-      const j = v.joya === o.id ? 1 : 0;
-      const k = v.veto === o.id ? 1 : 0;
-      if (!e && !j && !k) return;
-      filas.push([t, v.nombre || x.id, o.id, o.nombre, e, j, k]);
+      if (!e) return;
+      filas.push([t, v.nombre || x.id, o.id, o.nombre, e, 0, 0]);
     });
   });
   if (filas.length) sh.getRange(5, 1, filas.length, 7).setValues(filas);
