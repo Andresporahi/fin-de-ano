@@ -10,8 +10,8 @@
  * 4. Nuevo proyecto → pega este archivo → pon el ID en SPREADSHEET_ID abajo.
  * 5. Guardar → Implementar → Aplicación web → Yo / Cualquiera → copia la URL /exec.
  *
- * Cada voto reescribe desde la fila 5 de la hoja Votos (mismas columnas del libro).
- * No toca Resultados ni Resumen decisión: esas hojas siguen calculando solas.
+ * Cada voto reescribe la hoja Votos: detalle por persona/plan y sumatoria de estrellas.
+ * Sin columnas de joya ni veto. No toca Resultados ni Resumen decisión.
  * La ficha de cada hotel se guarda en la hoja Planes (solo con la clave ADMIN_CLAVE).
  * Después de pegar este archivo: Guardar → Implementar → Nueva implementación (o nueva versión).
  */
@@ -266,15 +266,17 @@ function escribirHojas_(s) {
     return { id: id, v: s.votos[id] };
   }).filter(function (x) { return votoReal_(x.v); });
 
-  if (sh.getLastRow() < 4) {
-    sh.getRange(1, 1).setValue("VOTOS — base de datos de la votación familiar");
-    sh.getRange(2, 1).setValue("Una fila por votante y por opción. El tablero escribe desde la fila 5. No borre las filas 1 a 4.");
-    sh.getRange(4, 1, 1, 7).setValues([["Fecha y hora", "Votante", "ID opción", "Opción", "Estrellas (1-5)", "Joya (1/0)", "Veto (1/0)"]]);
+  sh.getRange(1, 1).setValue("VOTOS — base de datos de la votación familiar");
+  sh.getRange(2, 1).setValue("Detalle por votante y plan, y debajo la sumatoria de estrellas. El tablero reescribe esta hoja.");
+  sh.getRange(3, 1).clearContent();
+
+  const lastRow = sh.getLastRow();
+  const lastCol = Math.max(sh.getLastColumn(), 7);
+  if (lastRow >= 4) {
+    sh.getRange(4, 1, lastRow - 3, lastCol).clearContent();
   }
 
-  if (sh.getLastRow() >= 5) {
-    sh.getRange(5, 1, sh.getLastRow() - 4, 7).clearContent();
-  }
+  sh.getRange(4, 1, 1, 5).setValues([["Fecha y hora", "Votante", "ID opción", "Opción", "Estrellas (1-5)"]]);
 
   const filas = [];
   reales.forEach(function (x) {
@@ -283,10 +285,44 @@ function escribirHojas_(s) {
     CATALOGO.forEach(function (o) {
       const e = (v.estrellas && v.estrellas[o.id]) || 0;
       if (!e) return;
-      filas.push([t, v.nombre || x.id, o.id, o.nombre, e, 0, 0]);
+      filas.push([t, v.nombre || x.id, o.id, o.nombre, e]);
     });
   });
-  if (filas.length) sh.getRange(5, 1, filas.length, 7).setValues(filas);
+
+  let r = 5;
+  if (filas.length) {
+    sh.getRange(r, 1, filas.length, 5).setValues(filas);
+    r += filas.length;
+  }
+
+  r += 1;
+  sh.getRange(r, 1).setValue("SUMATORIA DE ESTRELLAS");
+  r += 1;
+  sh.getRange(r, 1, 1, 4).setValues([["Opción", "Votos", "Suma de estrellas", "Promedio"]]);
+  r += 1;
+
+  const resumen = [];
+  let sumaTotal = 0;
+  let votosTotal = 0;
+  CATALOGO.forEach(function (o) {
+    let suma = 0;
+    let n = 0;
+    reales.forEach(function (x) {
+      const e = (x.v.estrellas && x.v.estrellas[o.id]) || 0;
+      if (!e) return;
+      suma += e;
+      n += 1;
+    });
+    sumaTotal += suma;
+    votosTotal += n;
+    resumen.push([o.nombre, n, suma, n ? Math.round((suma / n) * 10) / 10 : 0]);
+  });
+  resumen.sort(function (a, b) { return b[2] - a[2] || b[3] - a[3]; });
+  if (resumen.length) {
+    sh.getRange(r, 1, resumen.length, 4).setValues(resumen);
+    r += resumen.length;
+  }
+  sh.getRange(r, 1, 1, 4).setValues([["Total", votosTotal, sumaTotal, votosTotal ? Math.round((sumaTotal / votosTotal) * 10) / 10 : 0]]);
 }
 
 function responder_(e, payload) {
