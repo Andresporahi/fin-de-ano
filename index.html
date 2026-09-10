@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#280120">
 <meta name="description" content="Tablero familiar para decidir el viaje de fin de año. 29 dic 2026 → 3 ene 2027 · 10 personas.">
 <meta property="og:title" content="Familia Fin de Año">
-<meta property="og:description" content="Doce planes, una decisión. 29 dic → 3 ene · 4 noches · 10 personas.">
+<meta property="og:description" content="Doce planes, una decisión. 29 dic → 3 ene · 5 noches · 10 personas.">
 <title>Familia Fin de Año</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -273,7 +273,7 @@ textarea{width:100%; min-height:92px; resize:vertical; line-height:1.45}
   <div class="wrap">
     <h1>Familia Fin de Año</h1>
     <div class="datos">
-      <span><b>29 dic → 3 ene</b> · 4 noches</span>
+      <span><b>29 dic → 3 ene</b> · 5 noches</span>
       <span><b>10</b> personas</span>
       <span><b>1</b> niña de 4</span>
       <span><b id="d-votos">0</b> votos</span>
@@ -324,7 +324,7 @@ textarea{width:100%; min-height:92px; resize:vertical; line-height:1.45}
   <div class="votantes" id="lista-votantes"></div>
 
   <div class="sechead">
-    <div><h2>Las 12 opciones</h2><p>Alojamiento para 10 personas y 4 noches. Clic en una fila para verla en grande; clic en un encabezado para reordenar.</p></div>
+    <div><h2>Las 12 opciones</h2><p>Alojamiento para 10 personas y 5 noches (29 dic → 3 ene). Clic en una fila para verla en grande; clic en un encabezado para reordenar.</p></div>
     <div class="inputrow"><label class="eyebrow" for="presu">Presupuesto</label><input type="number" id="presu" value="18000000" step="500000" min="0"></div>
   </div>
   <div class="tablabox"><table id="tabla">
@@ -461,7 +461,7 @@ textarea{width:100%; min-height:92px; resize:vertical; line-height:1.45}
 </section>
 
 <div class="pieaviso wrap" style="padding-left:0; padding-right:0">
-  Cotizaciones recibidas por WhatsApp, PDF y agencia entre agosto y septiembre de 2026. Los valores de alojamiento son para 10 personas y 4 noches. Donde la cotización original era de otras noches o de menos personas, se ajustó por regla de tres para comparar: no sirve para reservar. Toda opción debe recotizarse formalmente antes de abonar.
+  Cotizaciones recibidas por WhatsApp, PDF y agencia entre agosto y septiembre de 2026. Los valores de alojamiento son para 10 personas y 5 noches (29 dic → 3 ene). Donde la cotización original era de otras noches o de menos personas, se ajustó por regla de tres para comparar: no sirve para reservar. Toda opción debe recotizarse formalmente antes de abonar.
 </div>
 </main>
 
@@ -474,11 +474,11 @@ const OPCIONES = [
   {
     id:"porvenir", nombre:"Hotel El Porvenir", zona:"Coveñas · Sector El Porvenir", tipo:"Hotel de playa",
     acceso:"tierra", lat:9.43, lon:-75.70, horas:"13–15 h por carretera",
-    total:3600000, cotizado:"$90.000 por persona/noche en habitación múltiple (3–4 pers.), temporada alta",
-    detalleCosto:"3 habitaciones múltiples × 10 personas × 4 noches",
+    total:4500000, cotizado:"$90.000 por persona/noche en habitación múltiple (3–4 pers.), temporada alta",
+    detalleCosto:"3 habitaciones múltiples × 10 personas × 5 noches",
     cabe:true, comida:"No incluye desayuno (confirmar)", estado:"viva",
     si:["El más barato de toda la mesa, por un margen enorme","Piscina, asoleadoras y restaurante propio","A dos cuadras de playa de mar tranquilo — ideal para la niña","A 8 minutos del centro de Coveñas: farmacia, mercado, plan B","Carretera hasta la puerta, sin lancha ni traslados"],
-    no:["El nombre exacto del hotel está por confirmar (solo tenemos el catálogo de WhatsApp)","No se menciona desayuno incluido","Falta confirmar disponibilidad 30 dic – 3 ene"],
+    no:["El nombre exacto del hotel está por confirmar (solo tenemos el catálogo de WhatsApp)","No se menciona desayuno incluido","Falta confirmar disponibilidad para el 29 de diciembre"],
     extra:[["Check-in / check-out","2:00 p. m. / 11:00 a. m."],["Tarifa alternativa","Habitación doble $250.000/noche en temporada alta"],["Contacto","WhatsApp +57 312 895 6656"]],
     mapsq:"Sector El Porvenir Coveñas Sucre Colombia", wa:"https://wa.me/p/35325021320445529/573128956656",
     web:"https://www.booking.com/searchresults.es.html?ss=El+Porvenir+Cove%C3%B1as",
@@ -487,7 +487,7 @@ const OPCIONES = [
   {
     id:"laguna", nombre:"Laguna Beach", zona:"Santiago de Tolú · Playa El Francés", tipo:"Condominio de suites",
     acceso:"tierra", lat:9.47, lon:-75.61, horas:"13–14 h por carretera",
-    noches:5, total:21450000, cotizado:"$17.160.000 por 4 noches (1 Golden Plus cuádruple + 2 Golden triples). Plan solo alojamiento con cena y fiesta de San Silvestre",
+    total:21450000, cotizado:"$17.160.000 por 4 noches (1 Golden Plus cuádruple + 2 Golden triples). Plan solo alojamiento con cena y fiesta de San Silvestre",
     detalleCosto:"Cotización de 4 noches ($17.160.000) extendida a la quinta · 10 personas · 5 noches",
     cabe:true, comida:"Solo alojamiento + cena y fiesta de San Silvestre (31)", estado:"viva",
     si:["Se llega por carretera, sin lancha","Incluye la cena y fiesta de San Silvestre (brindis, cotillones y hora loca)","Playa El Francés es tranquila y de aguas mansas","Restaurante, bar, piscina y parqueadero por suite"],
@@ -500,11 +500,11 @@ const OPCIONES = [
   {
     id:"arena", nombre:"Hotel Arena Beach", zona:"Arroyo de Piedra · Km 22 vía al mar", tipo:"Hotel de playa",
     acceso:"tierra", lat:10.65, lon:-75.62, horas:"17–18 h por carretera",
-    total:7650000, cotizado:"$7.650.000 para 10 personas, 4 noches (30 dic – 3 ene)",
-    detalleCosto:"Cotización real para 10 personas · 4 noches",
+    total:9562500, cotizado:"$7.650.000 para 10 personas, 4 noches (30 dic – 3 ene)",
+    detalleCosto:"Cotización real para 10 personas, extendida a la quinta noche",
     cabe:true, comida:"Desayuno + cena de San Silvestre", estado:"viva",
     si:["Ya está cotizado para exactamente 10 personas: es la cifra más confiable de la tabla","Incluye la cena de San Silvestre del 31","Playa y club de playa fuera del ruido de Cartagena","Sin lancha, se llega en carro"],
-    no:["Prohíbe ingresar alimentos y bebidas: toda la comida se compra adentro y eso puede sumar millones","El abono del 50 % no es reembolsable","Está a 17 horas de Bogotá — el trayecto más largo junto con Santa Marta"],
+    no:["Prohíbe ingresar alimentos y bebidas: toda la comida se compra adentro y eso puede sumar millones","El abono del 50 % no es reembolsable","La cotización es por 4 noches; falta confirmar el 29 de diciembre","Está a 17 horas de Bogotá — el trayecto más largo junto con Santa Marta"],
     extra:[["Saldo a favor","30 días de vigencia"]],
     mapsq:"Hotel Arena Beach Arroyo de Piedra Bolivar Colombia",
     web:"https://arenabeach.co/",
@@ -513,8 +513,8 @@ const OPCIONES = [
   {
     id:"baluarte", nombre:"Baluarte Cartagena Boutique", zona:"Cartagena · Bocagrande", tipo:"Hotel urbano",
     acceso:"tierra", lat:10.40, lon:-75.56, horas:"17–18 h por carretera",
-    total:9100000, cotizado:"$5.460.000 para 6 personas, 4 noches (30 dic – 3 ene)",
-    detalleCosto:"$227.500 por persona/noche × 10 personas × 4 noches",
+    total:11375000, cotizado:"$5.460.000 para 6 personas, 4 noches (30 dic – 3 ene)",
+    detalleCosto:"$227.500 por persona/noche × 10 personas × 5 noches",
 cabe:null, comida:"Desayuno", estado:"secundaria",
     si:["Bocagrande: todo a pie, restaurantes, farmacias, centros comerciales","Desayuno incluido y hotel boutique","Sin lancha, con la ciudad entera como plan B si llueve"],
     no:["Bocagrande el 31 de diciembre es un hervidero: ruido, tráfico y playa llena","Parqueadero sin confirmar, y venimos con carros desde Bogotá","No es una playa para que la niña juegue tranquila"],
@@ -526,8 +526,8 @@ cabe:null, comida:"Desayuno", estado:"secundaria",
   {
     id:"rodadero", nombre:"Rodadero Suites", zona:"Santa Marta · El Rodadero", tipo:"Hotel urbano",
     acceso:"tierra", lat:11.20, lon:-74.23, horas:"18–19 h por carretera",
-    total:4933333, cotizado:"$2.220.000 para 6 personas, 3 noches (3 al 6 de enero)",
-    detalleCosto:"$123.333 por persona/noche × 10 personas × 4 noches",
+    total:6166667, cotizado:"$2.220.000 para 6 personas, 3 noches (3 al 6 de enero)",
+    detalleCosto:"$123.333 por persona/noche × 10 personas × 5 noches",
 cabe:null, comida:"Desayuno", estado:"secundaria",
     si:["El segundo más barato por persona y por noche","Desayuno y asistencia incluidos","Base urbana cómoda si el plan real es el Tayrona"],
     no:["Las fechas cotizadas son del 3 al 6 de enero: no cubren nuestro viaje","Está lejos del Tayrona pese a lo que sugiere el nombre","El Rodadero en temporada alta es playa de multitud"],
@@ -539,8 +539,8 @@ cabe:null, comida:"Desayuno", estado:"secundaria",
   {
     id:"mucura", nombre:"Múcura Club Hotel", zona:"Isla Múcura · San Bernardo", tipo:"Hotel de isla",
     acceso:"isla", lat:9.78, lon:-75.85, horas:"Carretera a Tolú + lancha",
-    total:12488000, cotizado:"$15.610.000 por 4 habitaciones (3+3+2+2), 5 noches, sin impuestos",
-    detalleCosto:"Cotización de 5 noches ($15.610.000) ajustada a 4 noches; la niña no paga alojamiento",
+    total:15610000, cotizado:"$15.610.000 por 4 habitaciones (3+3+2+2), 5 noches, sin impuestos",
+    detalleCosto:"Cotización real para las 10 personas; la niña no paga alojamiento",
 cabe:true, comida:"Desayuno incluido; paquete de alimentación aparte", estado:"secundaria",
     si:["Cotización armada para el grupo completo, con las cuatro habitaciones nombradas","La niña no paga alojamiento (colecho con los papás)","Desayuno, bebida de bienvenida y un kayak sin costo","Isla Múcura tiene el agua más clara de toda la lista"],
     no:["Lancha obligatoria: criterio excluyente para la mamá","Los $15.610.000 son SIN impuestos — la cifra real sube","La comida es aparte: $130.000 por persona por noche","La cena de San Silvestre se cobra aparte, $360.000 por persona, y ese precio es del año pasado: lo confirman en octubre o noviembre","La cotización dice «niña de 2 años» y la nuestra tiene 4: hay que rehacerla"],
@@ -552,8 +552,8 @@ cabe:true, comida:"Desayuno incluido; paquete de alimentación aparte", estado:"
   {
     id:"playita", nombre:"La Playita", zona:"Isla Fuerte · Bolívar", tipo:"Cabañas de isla",
     acceso:"isla", lat:9.38, lon:-76.18, horas:"Carretera a Cartagena/Paso Nuevo + lancha",
-    total:16494947, cotizado:"$13.861.300 + IVA por 4 cabañas (8 personas), 30 dic – 4 ene",
-    detalleCosto:"$412.374 por persona/noche × 10 personas × 4 noches. Las 4 cabañas de hoy solo alcanzan para 8",
+    total:20618684, cotizado:"$13.861.300 + IVA por 4 cabañas (8 personas), 30 dic – 4 ene",
+    detalleCosto:"$412.374 por persona/noche × 10 personas × 5 noches. Las 4 cabañas de hoy solo alcanzan para 8",
 cabe:false, comida:"Desayuno y café hasta las 10:30", estado:"secundaria",
     si:["Cabañas privadas con baño, no habitaciones compartidas","Isla Fuerte es de las playas más limpias del Caribe colombiano","Desayuno, café, wifi y agua potable incluidos"],
     no:["Solo hay 4 cabañas disponibles: caben 8 personas, faltan 2. La cifra de arriba asume dos cupos que hoy no existen","Hay bar y fiesta cerca de las habitaciones hasta la madrugada, sobre todo fines de semana — pésimo con una niña de 4 años","Los menores de 4 años no pagan, pero la nuestra ya tiene 4: paga completo","Los precios son sin IVA; el 19 % se paga al llegar","La tarifa vence en 24 horas","Lancha obligatoria"],
@@ -565,11 +565,11 @@ cabe:false, comida:"Desayuno y café hasta las 10:30", estado:"secundaria",
   {
     id:"coral", nombre:"Hotel Coral de Fuego", zona:"Isla Fuerte · Playa San Diego", tipo:"Hotel de isla",
     acceso:"isla", lat:9.40, lon:-76.16, horas:"Carretera + lancha",
-    total:21800000, cotizado:"$21.800.000 para 8 personas, 5 noches (30 dic – 4 ene)",
-    detalleCosto:"$545.000 por persona/noche × 10 personas × 4 noches",
+    total:27250000, cotizado:"$21.800.000 para 8 personas, 5 noches (30 dic – 4 ene)",
+    detalleCosto:"$545.000 por persona/noche × 10 personas × 5 noches",
     cabe:null, comida:"Desayuno y kayak", estado:"descartable",
     si:["Playa San Diego es preciosa y muy tranquila","Kayak incluido"],
-    no:["El más caro de toda la mesa: unos $22 millones solo en alojamiento","Traslado marítimo casi seguro","Solo incluye desayuno: la comida en isla es cara y no hay alternativas cerca"],
+    no:["El más caro de toda la mesa: casi $27 millones solo en alojamiento","Traslado marítimo casi seguro","Solo incluye desayuno: la comida en isla es cara y no hay alternativas cerca"],
     extra:[],
     mapsq:"Hotel Coral de Fuego Isla Fuerte Playa San Diego",
     web:"https://www.booking.com/hotel/co/coral-de-fuego.es.html",
@@ -578,8 +578,8 @@ cabe:false, comida:"Desayuno y café hasta las 10:30", estado:"secundaria",
   {
     id:"mulata", nombre:"Hotel Isla Mulata", zona:"Isla Grande · Islas del Rosario", tipo:"Hotel de isla",
     acceso:"isla", lat:10.18, lon:-75.75, horas:"Carretera a Cartagena + lancha",
-    total:16304806, cotizado:"$19.565.768 para 8 personas, 6 noches (30 dic – 5 ene)",
-    detalleCosto:"$407.620 por persona/noche × 10 personas × 4 noches",
+    total:20381008, cotizado:"$19.565.768 para 8 personas, 6 noches (30 dic – 5 ene)",
+    detalleCosto:"$407.620 por persona/noche × 10 personas × 5 noches",
 cabe:null, comida:"Desayuno", estado:"descartable",
     si:["Islas del Rosario, con snorkel a un paso","Cotización formal de Aviatur, con respaldo de agencia"],
     no:["Traslado marítimo obligatorio","Almuerzos y cenas no incluidos, en una isla donde no hay dónde más comer","El traslado a playa se cobra aparte"],
@@ -591,8 +591,8 @@ cabe:null, comida:"Desayuno", estado:"descartable",
   {
     id:"marazao", nombre:"Marazao Beach", zona:"Ubicación por confirmar", tipo:"Bungalows de playa",
     acceso:"isla", lat:10.17, lon:-75.68, horas:"Con transporte marítimo",
-    total:16919203, cotizado:"$16.919.203 para 8 personas, 5 noches",
-    detalleCosto:"$422.980 por persona/noche × 10 personas × 4 noches",
+    total:21149004, cotizado:"$16.919.203 para 8 personas, 5 noches",
+    detalleCosto:"$422.980 por persona/noche × 10 personas × 5 noches",
     cabe:null, comida:"Desayuno", estado:"descartable",
     si:["Bungalows independientes"],
     no:["No sabemos con certeza dónde queda: la cotización llegó como imagen, sin dirección","Penalización del 100 % por cancelación — el riesgo más alto de la lista","Transporte marítimo","Las fechas exactas no aparecen en la cotización"],
@@ -604,8 +604,8 @@ cabe:null, comida:"Desayuno", estado:"descartable",
   {
     id:"tintipan", nombre:"Hotel Tintipán", zona:"Isla Tintipán · San Bernardo", tipo:"Isla todo incluido",
     acceso:"isla", lat:9.80, lon:-75.86, horas:"Carretera + lancha",
-    total:19160000, cotizado:"$19.160.000 para 8 personas, 5 noches (30 dic – 4 ene)",
-    detalleCosto:"$479.000 por persona/noche × 10 personas × 4 noches",
+    total:23950000, cotizado:"$19.160.000 para 8 personas, 5 noches (30 dic – 4 ene)",
+    detalleCosto:"$479.000 por persona/noche × 10 personas × 5 noches",
 cabe:null, comida:"Alimentación completa + traslado náutico", estado:"descartable",
     si:["Todo incluido de verdad: comidas y traslado náutico dentro del precio","Isla Tintipán y el Mar de las Siete Colores"],
     no:["Lancha obligatoria: criterio excluyente para la mamá","La cotización se contradice: habla de 5 noches y de 3 noches / 4 días"],
@@ -617,8 +617,8 @@ cabe:null, comida:"Alimentación completa + traslado náutico", estado:"descarta
   {
     id:"river", nombre:"Hotel River City", zona:"Montería · Córdoba", tipo:"Parada en ruta",
     acceso:"ruta", lat:8.75, lon:-75.88, horas:"12–13 h desde Bogotá",
-    total:2600000, cotizado:"$130.000 por habitación/noche con 2 desayunos",
-    detalleCosto:"5 habitaciones × $130.000 × 4 noches (como destino sería absurdo; sirve como escala)",
+    total:3250000, cotizado:"$130.000 por habitación/noche con 2 desayunos",
+    detalleCosto:"5 habitaciones × $130.000 × 5 noches (como destino sería absurdo; sirve como escala)",
 cabe:true, comida:"2 desayunos por habitación", estado:"complemento",
     si:["Resuelve la noche de la mitad del camino: 12 horas hasta aquí y el resto al día siguiente","Aire acondicionado, TV y parqueadero","Barato: 5 habitaciones por $650.000 la noche"],
     no:["No es un destino, es una cama en la carretera"],
@@ -634,8 +634,9 @@ const PENDIENTES = [
   {id:"p2", prio:"alta", t:"Laguna Beach: confirmar la quinta noche", d:"La cotización es de 4 noches. Pedir tarifa del 29 dic al 3 ene (5 noches) para 1 Golden Plus cuádruple + 2 Golden triples.", q:"Angela"},
   {id:"p3", prio:"media", t:"Laguna Beach: pedir la mezcla de suites por escrito", d:"La asignación es aleatoria. Confirmar que esa combinación cabe y el abono del 30 %.", q:"Angela"},
   {id:"p4", prio:"alta", t:"Averiguar el nombre real del hotel de El Porvenir", d:"Solo tenemos el catálogo de WhatsApp. Pedir razón social y RNT.", q:"Jorge"},
+  {id:"p5", prio:"alta", t:"Recotizar Arena Beach por 5 noches desde el 29", d:"La cotización actual es de 4 noches desde el 30. Confirmar disponibilidad del 29 dic al 3 ene.", q:"Angela"},
   {id:"p6", prio:"alta", t:"Confirmar si la lancha es realmente excluyente", d:"Múcura, La Playita, Coral, Mulata, Tintipán y Marazao dependen de esta respuesta. Preguntárselo a mamá antes de la reunión, no durante.", q:"Familia"},
-  {id:"p7", prio:"media", t:"Calcular la comida en Arena Beach", d:"No dejan ingresar alimentos ni bebidas. Pedir carta y precios para 10 personas × 4 noches.", q:"Familia"},
+  {id:"p7", prio:"media", t:"Calcular la comida en Arena Beach", d:"No dejan ingresar alimentos ni bebidas. Pedir carta y precios para 10 personas × 5 noches.", q:"Familia"},
   {id:"p8", prio:"media", t:"Múcura: pedir la cotización con impuestos y con la niña de 4 años", d:"La actual dice «niña de 2 años» y es sin impuestos. Preguntar también por el precio real de San Silvestre.", q:"Angela"},
   {id:"p9", prio:"media", t:"Definir distribución de camas y privacidad", d:"Cinco habitaciones para 10 personas: quién con quién, y dónde duerme la niña.", q:"Familia"},
   {id:"p10", prio:"media", t:"Confirmar parqueadero y seguridad del vehículo", d:"Vamos por carretera desde Bogotá, probablemente en dos carros.", q:"Jorge"},
@@ -653,7 +654,7 @@ function nombresVivos(lista){
 }
 
 /* ══════════════ BASE ══════════════ */
-const PAX = 10, NOCHES = 4;
+const PAX = 10, NOCHES = 5;
 const nochesDe = o => {
   const n = +(o && o.noches);
   return n > 0 ? n : NOCHES;
@@ -973,7 +974,7 @@ function slidePortada(){
   const {nv} = calcular();
   return `<div class="portada">
     <h2>Doce planes,<br>una decisión</h2>
-    <span class="fechas">29 dic 2026 → 3 ene 2027 · 4 noches · 10 personas</span>
+    <span class="fechas">29 dic 2026 → 3 ene 2027 · 5 noches · 10 personas</span>
     <div class="reglas">
       <div class="regla"><span class="em">⭐</span><b>Califica del 1 al 5</b><span>Todos los planes. El que saque más estrellas gana.</span></div>
     </div>
