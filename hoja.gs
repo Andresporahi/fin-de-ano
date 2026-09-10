@@ -38,7 +38,7 @@ function libro_() {
 
 const CATALOGO = [
   {id:"porvenir", nombre:"Hotel El Porvenir", zona:"Coveñas · Sector El Porvenir", acceso:"tierra", total:4500000, estado:"viva", web:"https://www.booking.com/searchresults.es.html?ss=El+Porvenir+Cove%C3%B1as"},
-  {id:"laguna", nombre:"Laguna Beach", zona:"Santiago de Tolú · Playa El Francés", acceso:"tierra", total:21450000, estado:"viva", web:"https://www.booking.com/searchresults.es.html?ss=Laguna+Beach+Ecohotel+Playa+El+Franc%C3%A9s+Tol%C3%BA"},
+  {id:"laguna", nombre:"Laguna Beach", zona:"Santiago de Tolú · Playa El Francés", acceso:"tierra", total:17160000, estado:"viva", web:"https://www.booking.com/searchresults.es.html?ss=Laguna+Beach+Ecohotel+Playa+El+Franc%C3%A9s+Tol%C3%BA"},
   {id:"arena", nombre:"Hotel Arena Beach", zona:"Arroyo de Piedra · Km 22 vía al mar", acceso:"tierra", total:9562500, estado:"viva", web:"https://arenabeach.co/"},
   {id:"baluarte", nombre:"Baluarte Cartagena Boutique", zona:"Cartagena · Bocagrande", acceso:"tierra", total:11375000, estado:"secundaria", web:"https://www.booking.com/hotel/co/san-pietro.es.html"},
   {id:"rodadero", nombre:"Rodadero Suites", zona:"Santa Marta · El Rodadero", acceso:"tierra", total:6166667, estado:"secundaria", web:"https://www.google.com/maps/search/?api=1&query=SGH+Rodadero+Suites+Calle+7+El+Rodadero+Santa+Marta"},
@@ -52,7 +52,7 @@ const CATALOGO = [
 ];
 
 const TAREAS = [
-  {id:"p2", prio:"alta", t:"Laguna Beach: confirmar la quinta noche (29 dic – 3 ene)", q:"Angela"},
+  {id:"p2", prio:"media", t:"Laguna Beach: definir la noche que falta (el plan es de 4 noches)", q:"Angela"},
   {id:"p3", prio:"media", t:"Laguna Beach: pedir la mezcla de suites por escrito", q:"Angela"},
   {id:"p4", prio:"alta", t:"Averiguar el nombre real del hotel de El Porvenir", q:"Jorge"},
   {id:"p5", prio:"alta", t:"Recotizar Arena Beach por 5 noches desde el 29", q:"Angela"},
@@ -162,6 +162,8 @@ function limpiarPlan_(data) {
     return [textoCorto_(p, 80), ""];
   }).filter(function (p) { return p[0] || p[1]; }) : [];
   const total = Number(data.total);
+  const nRaw = Number(data.noches);
+  const noches = isFinite(nRaw) && nRaw >= 1 && nRaw <= 14 ? Math.round(nRaw) : 5;
   let cabe = null;
   if (data.cabe === true || data.cabe === 1 || data.cabe === "1") cabe = true;
   if (data.cabe === false || data.cabe === 0 || data.cabe === "0") cabe = false;
@@ -174,6 +176,7 @@ function limpiarPlan_(data) {
     acceso: ["tierra", "isla", "ruta"].indexOf(acceso) >= 0 ? acceso : "tierra",
     horas: textoCorto_(data.horas, 80),
     total: isFinite(total) && total >= 0 ? total : null,
+    noches: noches,
     cotizado: textoCorto_(data.cotizado, 500),
     detalleCosto: textoCorto_(data.detalleCosto, 500),
     comida: textoCorto_(data.comida, 160),
@@ -192,7 +195,7 @@ function limpiarPlan_(data) {
 function escribirPlanes_(planes) {
   const ss = libro_();
   const sh = hoja_(ss, "Planes");
-  const headers = ["id", "nombre", "zona", "tipo", "acceso", "horas", "total", "cotizado", "detalle_costo", "comida", "estado", "caben_10", "fuente", "maps", "whatsapp", "web", "a_favor", "alertas", "letra_menuda"];
+  const headers = ["id", "nombre", "zona", "tipo", "acceso", "horas", "noches", "total", "cotizado", "detalle_costo", "comida", "estado", "caben_10", "fuente", "maps", "whatsapp", "web", "a_favor", "alertas", "letra_menuda"];
   const filas = [headers];
   CATALOGO.forEach(function (cat) {
     const o = planes[cat.id] || {};
@@ -211,6 +214,7 @@ function escribirPlanes_(planes) {
       o.tipo || "",
       o.acceso || cat.acceso || "",
       o.horas || "",
+      o.noches != null ? o.noches : 5,
       o.total != null ? o.total : (cat.total != null ? cat.total : ""),
       o.cotizado || "",
       o.detalleCosto || "",

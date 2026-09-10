@@ -324,7 +324,7 @@ textarea{width:100%; min-height:92px; resize:vertical; line-height:1.45}
   <div class="votantes" id="lista-votantes"></div>
 
   <div class="sechead">
-    <div><h2>Las 12 opciones</h2><p>Alojamiento normalizado a 10 personas y 5 noches. Clic en una fila para verla en grande; clic en un encabezado para reordenar.</p></div>
+    <div><h2>Las 12 opciones</h2><p>Alojamiento para 10 personas, según las noches de cada cotización (Laguna Beach: 4; el resto, 5 salvo que se indique). Clic en una fila para verla en grande; clic en un encabezado para reordenar.</p></div>
     <div class="inputrow"><label class="eyebrow" for="presu">Presupuesto</label><input type="number" id="presu" value="18000000" step="500000" min="0"></div>
   </div>
   <div class="tablabox"><table id="tabla">
@@ -332,7 +332,7 @@ textarea{width:100%; min-height:92px; resize:vertical; line-height:1.45}
       <th data-s="nombre">Plan <span class="ar">↕</span></th>
       <th data-s="zona">Zona <span class="ar">↕</span></th>
       <th data-s="acceso">Acceso <span class="ar">↕</span></th>
-      <th data-s="total" style="text-align:right">Alojamiento 10p/5n <span class="ar">↕</span></th>
+      <th data-s="total" style="text-align:right">Alojamiento 10p <span class="ar">↕</span></th>
       <th data-s="pppn" style="text-align:right">Por persona/noche <span class="ar">↕</span></th>
       <th data-s="brecha" style="text-align:right">Vs. presupuesto <span class="ar">↕</span></th>
       <th data-s="prom" style="text-align:right">Estrellas <span class="ar">↕</span></th>
@@ -418,17 +418,18 @@ textarea{width:100%; min-height:92px; resize:vertical; line-height:1.45}
           <label><b>Trayecto</b><input type="text" id="adm-horas" maxlength="80"></label>
         </div>
         <div class="dos">
-          <label><b>Alojamiento 10 personas / 5 noches</b><input type="number" id="adm-total" min="0" step="10000"></label>
-          <label><b>Estado</b>
-            <select id="adm-estado">
-              <option value="viva">Viva</option>
-              <option value="secundaria">Secundaria</option>
-              <option value="descartable">Descartable</option>
-              <option value="descartada">Descartada</option>
-              <option value="complemento">Complemento</option>
-            </select>
-          </label>
+          <label><b>Alojamiento 10 personas</b><input type="number" id="adm-total" min="0" step="10000"></label>
+          <label><b>Noches de la cotización</b><input type="number" id="adm-noches" min="1" max="14" step="1"></label>
         </div>
+        <label><b>Estado</b>
+          <select id="adm-estado">
+            <option value="viva">Viva</option>
+            <option value="secundaria">Secundaria</option>
+            <option value="descartable">Descartable</option>
+            <option value="descartada">Descartada</option>
+            <option value="complemento">Complemento</option>
+          </select>
+        </label>
         <label><b>Cotizado (texto original)</b><input type="text" id="adm-cotizado" maxlength="500"></label>
         <label><b>Detalle del costo</b><input type="text" id="adm-detalle" maxlength="500"></label>
         <div class="dos">
@@ -460,7 +461,7 @@ textarea{width:100%; min-height:92px; resize:vertical; line-height:1.45}
 </section>
 
 <div class="pieaviso wrap" style="padding-left:0; padding-right:0">
-  Cotizaciones recibidas por WhatsApp, PDF y agencia entre agosto y septiembre de 2026. Los valores de «alojamiento 10 personas / 5 noches» son <b>estimados por regla de tres</b> sobre cada cotización original: sirven para comparar, no para reservar. Toda opción debe recotizarse formalmente para 10 personas y 5 noches antes de abonar.
+  Cotizaciones recibidas por WhatsApp, PDF y agencia entre agosto y septiembre de 2026. Los valores de alojamiento son los de cada cotización (Laguna Beach: 4 noches; el resto, en general 5). Donde se prorrateó, sirve para comparar, no para reservar. Toda opción debe recotizarse formalmente antes de abonar.
 </div>
 </main>
 
@@ -486,11 +487,11 @@ const OPCIONES = [
   {
     id:"laguna", nombre:"Laguna Beach", zona:"Santiago de Tolú · Playa El Francés", tipo:"Condominio de suites",
     acceso:"tierra", lat:9.47, lon:-75.61, horas:"13–14 h por carretera",
-    total:21450000, cotizado:"$17.160.000 por 4 noches (1 Golden Plus cuádruple + 2 Golden triples). Plan solo alojamiento con cena y fiesta de San Silvestre",
-    detalleCosto:"Mezcla más barata para 10 personas en 4 noches, extendida a la quinta",
+    noches:4, total:17160000, cotizado:"$17.160.000 por 4 noches (1 Golden Plus cuádruple + 2 Golden triples). Plan solo alojamiento con cena y fiesta de San Silvestre",
+    detalleCosto:"1 Golden Plus cuádruple + 2 Golden triples · 10 personas · 4 noches",
     cabe:true, comida:"Solo alojamiento + cena y fiesta de San Silvestre (31)", estado:"viva",
     si:["Se llega por carretera, sin lancha","Incluye la cena y fiesta de San Silvestre (brindis, cotillones y hora loca)","Playa El Francés es tranquila y de aguas mansas","Restaurante, bar, piscina y parqueadero por suite"],
-    no:["La cotización es de 4 noches (ingreso 29 o 30, salida 2 o 3); la quinta noche va prorrateada y hay que confirmarla","La suite se asigna al azar dentro de la categoría: las fotos son referenciales","No se pueden ingresar alimentos ni bebidas a las zonas húmedas","Cada solicitud de cambio o cancelación cuesta $80.000 aparte de la penalidad","Plan solo alojamiento: el resto de comidas se paga aparte"],
+    no:["Son 4 noches, no 5 (ingreso 29 o 30, salida 2 o 3). El viaje familiar contempla 5 noches: hay que resolver la noche que falta","La suite se asigna al azar dentro de la categoría: las fotos son referenciales","No se pueden ingresar alimentos ni bebidas a las zonas húmedas","Cada solicitud de cambio o cancelación cuesta $80.000 aparte de la penalidad","Plan solo alojamiento: el resto de comidas se paga aparte"],
     extra:[["Mezcla usada para comparar","1 Golden Plus cuádruple $6.760.000 + 2 Golden triples $5.200.000 c/u = $17.160.000 / 4 noches"],["Otras tarifas 4 noches","Golden doble $4.640.000 · Golden triple $5.200.000 · Golden Plus cuádruple $6.760.000 · Premium cuádruple $7.840.000 · Premium quíntuple $9.200.000"],["Reserva","Abono del 30 %; la reserva se confirma solo con el pago. Canales oficiales"],["San Silvestre","Cena y fiesta del 31 incluidas: brindis de medianoche, cotillones y hora loca"],["Cancelación en temporada alta","24 dic – 20 ene: 30+ días antes, penalidad 10 %; entre 29 y 10 días, 50 %; menos de 10 días, sin devolución"],["No show","100 % del valor de la reserva"],["Extras","Jacuzzi privado $100.000 · reposición de llave $50.000 · fumar en la suite $1.000.000"],["Horarios","Check-in 3:00 p. m. · check-out 11:00 a. m. · piscina 9–21 h · restaurante 7–21 h"],["Políticas","Carpeta de Drive que envió Angelita"],["Correo de reservas","reservasecohotellagunabeach@gmail.com · Tel. 311 763 4809"]],
     mapsq:"Ecohotel Laguna Beach Playa El Frances Santiago de Tolu Sucre",
     web:"https://www.booking.com/searchresults.es.html?ss=Laguna+Beach+Ecohotel+Playa+El+Franc%C3%A9s+Tol%C3%BA",
@@ -630,7 +631,7 @@ cabe:true, comida:"2 desayunos por habitación", estado:"complemento",
 const BASE_OPCIONES = OPCIONES.map(o => JSON.parse(JSON.stringify(o)));
 
 const PENDIENTES = [
-  {id:"p2", prio:"alta", t:"Laguna Beach: confirmar la quinta noche (29 dic – 3 ene)", d:"La cotización es de 4 noches. Pedir tarifa del 29 al 3 y si hay 1 Golden Plus cuádruple + 2 Golden triples.", q:"Angela"},
+  {id:"p2", prio:"media", t:"Laguna Beach: definir la noche que falta", d:"El plan cotizado es de 4 noches. El viaje familiar es de 5. Decidir ingreso el 29 o salida el 3, o dónde pasar la noche extra.", q:"Angela"},
   {id:"p3", prio:"media", t:"Laguna Beach: pedir la mezcla de suites por escrito", d:"La asignación es aleatoria. Confirmar que esa combinación cabe y el abono del 30 %.", q:"Angela"},
   {id:"p4", prio:"alta", t:"Averiguar el nombre real del hotel de El Porvenir", d:"Solo tenemos el catálogo de WhatsApp. Pedir razón social y RNT.", q:"Jorge"},
   {id:"p5", prio:"alta", t:"Recotizar Arena Beach por 5 noches desde el 29", d:"La cotización actual es de 4 noches desde el 30. Confirmar disponibilidad del 29.", q:"Angela"},
@@ -654,6 +655,10 @@ function nombresVivos(lista){
 
 /* ══════════════ BASE ══════════════ */
 const PAX = 10, NOCHES = 5;
+const nochesDe = o => {
+  const n = +(o && o.noches);
+  return n > 0 ? n : NOCHES;
+};
 const ORDEN = ["porvenir","laguna","arena","baluarte","rodadero","mucura","playita","coral","mulata","marazao","tintipan","river"];
 const cop = n => "$" + new Intl.NumberFormat("es-CO",{maximumFractionDigits:0}).format(Math.round(n));
 const copCorto = n => Math.abs(n) >= 1e6 ? "$"+(n/1e6).toFixed(1).replace(".",",")+" M" : cop(n);
@@ -815,7 +820,7 @@ function aplicarPlanes(planes){
 function planPayload(o){
   return {
     id: o.id, nombre: o.nombre, zona: o.zona, tipo: o.tipo, acceso: o.acceso, horas: o.horas,
-    total: o.total, cotizado: o.cotizado, detalleCosto: o.detalleCosto, comida: o.comida,
+    total: o.total, noches: nochesDe(o), cotizado: o.cotizado, detalleCosto: o.detalleCosto, comida: o.comida,
     estado: o.estado, cabe: o.cabe, fuente: o.fuente, mapsq: o.mapsq, wa: o.wa || "", web: o.web || "",
     si: o.si || [], no: o.no || [], extra: o.extra || []
   };
@@ -843,6 +848,7 @@ function llenarFormPlan(id){
   document.getElementById("adm-acceso").value = o.acceso || "tierra";
   document.getElementById("adm-horas").value = o.horas || "";
   document.getElementById("adm-total").value = o.total != null ? o.total : "";
+  document.getElementById("adm-noches").value = nochesDe(o);
   document.getElementById("adm-estado").value = o.estado || "viva";
   document.getElementById("adm-cotizado").value = o.cotizado || "";
   document.getElementById("adm-detalle").value = o.detalleCosto || "";
@@ -861,6 +867,7 @@ function leerFormPlan(){
   const id = document.getElementById("adm-id").value;
   const cabeRaw = document.getElementById("adm-cabe").value;
   const total = +document.getElementById("adm-total").value;
+  const noches = Math.max(1, +document.getElementById("adm-noches").value || NOCHES);
   return {
     id,
     nombre: document.getElementById("adm-nombre").value.trim(),
@@ -869,6 +876,7 @@ function leerFormPlan(){
     acceso: document.getElementById("adm-acceso").value,
     horas: document.getElementById("adm-horas").value.trim(),
     total: isFinite(total) && total >= 0 ? total : null,
+    noches,
     estado: document.getElementById("adm-estado").value,
     cotizado: document.getElementById("adm-cotizado").value.trim(),
     detalleCosto: document.getElementById("adm-detalle").value.trim(),
@@ -906,7 +914,8 @@ function slideOpcion(o){
   const cap = o.cabe === true ? '<span class="chip c-ok">👨‍👩‍👧 Caben los 10</span>'
             : o.cabe === false ? '<span class="chip c-crit">👨‍👩‍👧 Solo caben 8</span>'
             : '<span class="chip c-warn">👨‍👩‍👧 Capacidad por confirmar</span>';
-  const pppn = o.total ? o.total/(PAX*NOCHES) : null;
+  const n = nochesDe(o);
+  const pppn = o.total ? o.total/(PAX*n) : null;
   const oculto = !config.revelar;
   const extras = o.extra.map(e => `<div><b>${esc(e[0])}:</b> ${esc(e[1])}</div>`).join("");
   const resto = [
@@ -923,6 +932,7 @@ function slideOpcion(o){
       <div class="chips">
         <span class="chip ${a[0]}">${a[1]}</span>
         ${cap}
+        <span class="chip c-neu">🌙 ${n} noche${n===1?"":"s"}</span>
         <span class="chip c-neu">🍽️ ${esc(o.comida)}</span>
       </div>
       <div class="puntos">
@@ -934,7 +944,7 @@ function slideOpcion(o){
     <div class="der">
       <div class="tarifa">
         ${o.total
-          ? `<div class="val">${cop(o.total)}</div><div class="cap">Alojamiento estimado · 10 personas · 5 noches</div>
+          ? `<div class="val">${cop(o.total)}</div><div class="cap">Alojamiento estimado · 10 personas · ${n} noche${n===1?"":"s"}</div>
              <div class="pppn">${cop(pppn)} por persona por noche</div>`
           : `<div class="val na">Sin cotizar</div><div class="cap">${esc(o.detalleCosto)}</div>`}
         <div class="cot"><b>Cotizado:</b> ${esc(o.cotizado)}</div>
@@ -1057,7 +1067,7 @@ function pintarPodio(){
 
 function pintarTabla(){
   const {res} = calcular(), presu = config.presupuesto;
-  let filas = OPCIONES.map(o => ({...o, ...res[o.id], pppn: o.total ? o.total/(PAX*NOCHES) : null, brecha: o.total ? presu - o.total : null}));
+  let filas = OPCIONES.map(o => ({...o, ...res[o.id], pppn: o.total ? o.total/(PAX*nochesDe(o)) : null, brecha: o.total ? presu - o.total : null}));
   filas.sort((a,b)=>{
     let x = a[orden.campo], y = b[orden.campo];
     if(x == null) x = orden.dir > 0 ? Infinity : -Infinity;
@@ -1069,7 +1079,7 @@ function pintarTabla(){
       <td><b>${esc(f.nombre)}</b></td>
       <td>${esc(f.zona)}</td>
       <td>${f.acceso==="isla"?'<span class="pill c-crit">Lancha</span>':(f.acceso==="ruta"?'<span class="pill c-neu">Ruta</span>':'<span class="pill c-ok">Carretera</span>')}</td>
-      <td class="num">${f.total?cop(f.total):"—"}</td>
+      <td class="num">${f.total?cop(f.total)+(nochesDe(f)!==NOCHES?` · ${nochesDe(f)}n`:""):"—"}</td>
       <td class="num">${f.pppn?cop(f.pppn):"—"}</td>
       <td class="num" style="color:${f.brecha===null?"var(--ink-faint)":(f.brecha>=0?"var(--ok)":"var(--crit)")}">${f.brecha===null?"—":(f.brecha>=0?"+":"")+copCorto(f.brecha)}</td>
       <td class="num"><b>${config.revelar ? (f.notas?f.prom.toFixed(1)+"★":"—") : "🙈"}</b></td>
@@ -1093,7 +1103,7 @@ function pintarScatter(){
   for(let i=0;i<=5;i++){ const v=i, y=py(v);
     s += `<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" stroke="#4A1257" stroke-width="1"></line>`;
     s += `<text x="${L-9}" y="${y+4}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="#C79BDE">${v}</text>`; }
-  s += `<text x="${L}" y="${H-10}" font-family="IBM Plex Mono, monospace" font-size="10" fill="#FFF1FB" letter-spacing="1.1">COSTO DE ALOJAMIENTO · 10 PERSONAS · 5 NOCHES</text>`;
+  s += `<text x="${L}" y="${H-10}" font-family="IBM Plex Mono, monospace" font-size="10" fill="#FFF1FB" letter-spacing="1.1">COSTO DE ALOJAMIENTO · 10 PERSONAS</text>`;
   s += `<text x="14" y="${T+6}" font-family="IBM Plex Mono, monospace" font-size="10" fill="#FFF1FB" letter-spacing="1.1" transform="rotate(-90 14 ${T+6})" text-anchor="end">ESTRELLAS DE LA FAMILIA</text>`;
   const LGX = W-R-168, LGY = T+2;
   const cajas = [[LGX-10, LGY-6, W-R, LGY+44]];
@@ -1289,9 +1299,10 @@ function baseDatos(){
     ["votantes", nv],
     ["regla_puntaje","Gana el promedio de estrellas (1 a 5)"]
   ];
-  const opciones = [["id","nombre","tipo","zona","acceso","lat","lon","horas_trayecto","total_10p_5n","por_persona_noche","cotizado_original","detalle_costo","caben_10","comida","estado","fuente","maps_query","whatsapp","web"]];
+  const opciones = [["id","nombre","tipo","zona","acceso","lat","lon","horas_trayecto","noches","total_10p","por_persona_noche","cotizado_original","detalle_costo","caben_10","comida","estado","fuente","maps_query","whatsapp","web"]];
   for(const o of OPCIONES){
-    opciones.push([o.id, o.nombre, o.tipo, o.zona, o.acceso, o.lat, o.lon, o.horas, o.total, o.total ? Math.round(o.total/(PAX*NOCHES)) : null, o.cotizado, o.detalleCosto, o.cabe === true ? 1 : o.cabe === false ? 0 : null, o.comida, o.estado, o.fuente, o.mapsq, o.wa || null, o.web || null]);
+    const n = nochesDe(o);
+    opciones.push([o.id, o.nombre, o.tipo, o.zona, o.acceso, o.lat, o.lon, o.horas, n, o.total, o.total ? Math.round(o.total/(PAX*n)) : null, o.cotizado, o.detalleCosto, o.cabe === true ? 1 : o.cabe === false ? 0 : null, o.comida, o.estado, o.fuente, o.mapsq, o.wa || null, o.web || null]);
   }
   const aFavor = [["id_opcion","orden","texto"]], alertas = [["id_opcion","orden","texto"]], detalle = [["id_opcion","clave","valor"]];
   for(const o of OPCIONES){
@@ -1313,10 +1324,11 @@ function baseDatos(){
   for(const v of reales){
     votantes.push([slug(v.nombre||""), v.nombre || "—", tsTexto(v.ts), Object.values(v.estrellas||{}).filter(n => n > 0).length]);
   }
-  const resultados = [["puesto","id","nombre","zona","acceso","estado","total_10p_5n","por_persona_noche","brecha_vs_presupuesto","promedio_estrellas","n_calificaciones"]];
+  const resultados = [["puesto","id","nombre","zona","acceso","estado","noches","total_10p","por_persona_noche","brecha_vs_presupuesto","promedio_estrellas","n_calificaciones"]];
   ordenados().forEach((o,i) => {
     const r = res[o.id];
-    resultados.push([i+1, o.id, o.nombre, o.zona, o.acceso, o.estado, o.total, o.total ? Math.round(o.total/(PAX*NOCHES)) : null, o.total != null ? presu - o.total : null, r.notas ? Math.round(r.prom*100)/100 : null, r.notas]);
+    const n = nochesDe(o);
+    resultados.push([i+1, o.id, o.nombre, o.zona, o.acceso, o.estado, n, o.total, o.total ? Math.round(o.total/(PAX*n)) : null, o.total != null ? presu - o.total : null, r.notas ? Math.round(r.prom*100)/100 : null, r.notas]);
   });
   const cuenta = [["id_plan_lider","plan_lider","rubro","ajustado","probable","holgado","nota"]];
   for(const r of rub) cuenta.push([lider.id, lider.nombre, r[0], r[1], r[2], r[3], r[4]]);
