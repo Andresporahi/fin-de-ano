@@ -674,7 +674,6 @@ let adminOk = false;
 let planDirty = false;
 const TOTAL_SLIDES = ORDEN.length + 2;
 const API = (new URLSearchParams(location.search).get("api") || HOJA_API || "").trim();
-const QUIERE_ADMIN = new URLSearchParams(location.search).has("admin");
 
 const LS = {
   get(k,d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
@@ -710,6 +709,26 @@ const ordenados = () => {
 
 /* ══════════════ HOJA COMPARTIDA (el Excel único) ══════════════ */
 function jsonp(op, data, extra){
+  const payload = data != null ? JSON.stringify(data) : "";
+  if(op === "plan" || payload.length > 1200){
+    return postHoja(op, data, extra).catch(() => jsonpGet(op, data, extra));
+  }
+  return jsonpGet(op, data, extra);
+}
+function postHoja(op, data, extra){
+  return fetch(API, {
+    method:"POST",
+    redirect:"follow",
+    headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body: JSON.stringify({op, data, ...(extra || {})})
+  }).then(r => r.text()).then(t => {
+    const s = String(t || "").trim();
+    const i = s.indexOf("{");
+    if(i < 0) throw new Error("red");
+    return JSON.parse(s.slice(i));
+  });
+}
+function jsonpGet(op, data, extra){
   return new Promise((resolve, reject) => {
     const cb = "ffaCB" + Date.now() + Math.floor(Math.random()*1e6);
     const s = document.createElement("script");
@@ -812,7 +831,6 @@ function extraDeTexto(s){
   });
 }
 function mostrarAdminUI(){
-  document.body.classList.toggle("soy-admin", QUIERE_ADMIN);
   document.getElementById("admin-login").hidden = adminOk;
   document.getElementById("admin-editor").hidden = !adminOk;
 }
@@ -868,19 +886,14 @@ function leerFormPlan(){
 }
 function pintarAdmin(){
   mostrarAdminUI();
-  if(!QUIERE_ADMIN || !adminOk) return;
+  if(!adminOk) return;
   const sel = document.getElementById("adm-id");
   const actual = sel.value;
-  if(!sel.options.length){
-    sel.innerHTML = OPCIONES.map(o => `<option value="${esc(o.id)}">${esc(o.nombre)}</option>`).join("");
-    if(actual && OP(actual)) sel.value = actual;
-    llenarFormPlan(sel.value);
-  }else if(!planDirty){
-    const keep = actual;
-    sel.innerHTML = OPCIONES.map(o => `<option value="${esc(o.id)}">${esc(o.nombre)}</option>`).join("");
-    if(keep && OP(keep)) sel.value = keep;
-    llenarFormPlan(sel.value);
-  }
+  const needsFill = !sel.options.length || sel.options.length !== OPCIONES.length;
+  if(!needsFill) return;
+  sel.innerHTML = OPCIONES.map(o => `<option value="${esc(o.id)}">${esc(o.nombre)}</option>`).join("");
+  if(actual && OP(actual)) sel.value = actual;
+  if(!planDirty) llenarFormPlan(sel.value);
 }
 
 /* ══════════════ DIAPOSITIVAS ══════════════ */
@@ -1471,6 +1484,7 @@ document.getElementById("admin-entrar").addEventListener("click", async () => {
     adminClave = clave;
     adminOk = true;
     sessionStorage.setItem("ffa-admin", clave);
+    pintarAdmin();
     aplicarRemoto(s);
     irA("admin");
     document.getElementById("admin-clave").value = "";
@@ -1540,11 +1554,8 @@ document.getElementById("admin-guardar").addEventListener("click", async () => {
     if(inp) inp.value = config.presupuesto;
   }
   config.nombres = nombresVivos(config.nombres);
-  if(QUIERE_ADMIN){
-    document.body.classList.add("soy-admin");
-    const guardada = sessionStorage.getItem("ffa-admin") || "";
-    if(guardada){ adminClave = guardada; }
-  }
+  const guardada = sessionStorage.getItem("ffa-admin") || "";
+  if(guardada) adminClave = guardada;
   persistir();
   render();
 })();
@@ -1565,7 +1576,7 @@ document.getElementById("admin-guardar").addEventListener("click", async () => {
     dot.className = "dot live";
     txt.textContent = "Votación en vivo. Elige tu nombre en Mi voto y califica.";
     setInterval(() => { jsonp("leer").then(aplicarRemoto).catch(() => {}); }, 5000);
-    if(QUIERE_ADMIN && adminClave && !adminOk){
+    if(adminClave && !adminOk){
       jsonp("admin", null, {clave: adminClave}).then(r => {
         if(r && r.ok !== false && r.error !== "clave"){ adminOk = true; aplicarRemoto(r); }
         else { adminClave = ""; sessionStorage.removeItem("ffa-admin"); mostrarAdminUI(); }

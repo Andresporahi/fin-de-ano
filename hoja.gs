@@ -13,7 +13,7 @@
  * Cada voto reescribe la hoja Votos: detalle por persona/plan y sumatoria de estrellas.
  * Sin columnas de joya ni veto. No toca Resultados ni Resumen decisión.
  * La ficha de cada hotel se guarda en la hoja Planes (solo con la clave ADMIN_CLAVE).
- * Después de pegar este archivo: Guardar → Implementar → Nueva implementación (o nueva versión).
+ * Después de pegar este archivo: Guardar → Implementar → Nueva implementación (hace falta para guardar fichas largas).
  */
 
 const PAX = 10;
@@ -336,8 +336,38 @@ function responder_(e, payload) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+function params_(e) {
+  const p = {};
+  const src = (e && e.parameter) || {};
+  Object.keys(src).forEach(function (k) {
+    p[k] = src[k];
+  });
+  if (e && e.postData && e.postData.contents) {
+    try {
+      const j = JSON.parse(e.postData.contents);
+      if (j && typeof j === "object") {
+        Object.keys(j).forEach(function (k) {
+          if (k === "data" && j.data != null && typeof j.data !== "string") {
+            p.data = JSON.stringify(j.data);
+          } else if (p[k] == null || p[k] === "") {
+            p[k] = j[k];
+          }
+        });
+      }
+    } catch (err) {}
+  }
+  return p;
+}
+
 function doGet(e) {
-  const p = (e && e.parameter) || {};
+  return despachar_(params_(e), e);
+}
+
+function doPost(e) {
+  return despachar_(params_(e), e);
+}
+
+function despachar_(p, e) {
   const s = estado_();
   let data = p.data;
   if (typeof data === "string" && data) {
