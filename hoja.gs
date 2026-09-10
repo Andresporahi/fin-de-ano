@@ -17,7 +17,7 @@
  */
 
 const PAX = 10;
-const NOCHES = 5;
+const NOCHES = 4;
 const PRESU_DEF = 18000000;
 const SPREADSHEET_ID = "1SMBdOflN67BmDHENLx1Jb82sPYEqC_Rz9IUvFXGoUMg";
 
@@ -37,25 +37,23 @@ function libro_() {
 }
 
 const CATALOGO = [
-  {id:"porvenir", nombre:"Hotel El Porvenir", zona:"Coveñas · Sector El Porvenir", acceso:"tierra", total:4500000, estado:"viva", web:"https://www.booking.com/searchresults.es.html?ss=El+Porvenir+Cove%C3%B1as"},
+  {id:"porvenir", nombre:"Hotel El Porvenir", zona:"Coveñas · Sector El Porvenir", acceso:"tierra", total:3600000, estado:"viva", web:"https://www.booking.com/searchresults.es.html?ss=El+Porvenir+Cove%C3%B1as"},
   {id:"laguna", nombre:"Laguna Beach", zona:"Santiago de Tolú · Playa El Francés", acceso:"tierra", total:17160000, estado:"viva", web:"https://www.booking.com/searchresults.es.html?ss=Laguna+Beach+Ecohotel+Playa+El+Franc%C3%A9s+Tol%C3%BA"},
-  {id:"arena", nombre:"Hotel Arena Beach", zona:"Arroyo de Piedra · Km 22 vía al mar", acceso:"tierra", total:9562500, estado:"viva", web:"https://arenabeach.co/"},
-  {id:"baluarte", nombre:"Baluarte Cartagena Boutique", zona:"Cartagena · Bocagrande", acceso:"tierra", total:11375000, estado:"secundaria", web:"https://www.booking.com/hotel/co/san-pietro.es.html"},
-  {id:"rodadero", nombre:"Rodadero Suites", zona:"Santa Marta · El Rodadero", acceso:"tierra", total:6166667, estado:"secundaria", web:"https://www.google.com/maps/search/?api=1&query=SGH+Rodadero+Suites+Calle+7+El+Rodadero+Santa+Marta"},
-  {id:"mucura", nombre:"Múcura Club Hotel", zona:"Isla Múcura · San Bernardo", acceso:"isla", total:15610000, estado:"secundaria", web:"https://www.mucuraclubhotel.com/"},
-  {id:"playita", nombre:"La Playita", zona:"Isla Fuerte · Bolívar", acceso:"isla", total:20618684, estado:"secundaria", web:"https://www.booking.com/hotel/co/la-playita-isla-fuerte.es.html"},
-  {id:"coral", nombre:"Hotel Coral de Fuego", zona:"Isla Fuerte · Playa San Diego", acceso:"isla", total:27250000, estado:"descartable", web:"https://www.booking.com/hotel/co/coral-de-fuego.es.html"},
-  {id:"mulata", nombre:"Hotel Isla Mulata", zona:"Isla Grande · Islas del Rosario", acceso:"isla", total:20381008, estado:"descartable", web:"https://www.booking.com/hotel/co/isla-grande-islas-del-rosario.html"},
-  {id:"marazao", nombre:"Marazao Beach", zona:"Ubicación por confirmar", acceso:"isla", total:21149004, estado:"descartable", web:""},
-  {id:"tintipan", nombre:"Hotel Tintipán", zona:"Isla Tintipán · San Bernardo", acceso:"isla", total:23950000, estado:"descartable", web:"https://hoteltintipan.com/"},
-  {id:"river", nombre:"Hotel River City", zona:"Montería · Córdoba", acceso:"ruta", total:3250000, estado:"complemento", web:"https://www.google.com/maps/search/?api=1&query=Hotel+River+City+Carrera+5+34-68+Monteria"}
+  {id:"arena", nombre:"Hotel Arena Beach", zona:"Arroyo de Piedra · Km 22 vía al mar", acceso:"tierra", total:7650000, estado:"viva", web:"https://arenabeach.co/"},
+  {id:"baluarte", nombre:"Baluarte Cartagena Boutique", zona:"Cartagena · Bocagrande", acceso:"tierra", total:9100000, estado:"secundaria", web:"https://www.booking.com/hotel/co/san-pietro.es.html"},
+  {id:"rodadero", nombre:"Rodadero Suites", zona:"Santa Marta · El Rodadero", acceso:"tierra", total:4933333, estado:"secundaria", web:"https://www.google.com/maps/search/?api=1&query=SGH+Rodadero+Suites+Calle+7+El+Rodadero+Santa+Marta"},
+  {id:"mucura", nombre:"Múcura Club Hotel", zona:"Isla Múcura · San Bernardo", acceso:"isla", total:12488000, estado:"secundaria", web:"https://www.mucuraclubhotel.com/"},
+  {id:"playita", nombre:"La Playita", zona:"Isla Fuerte · Bolívar", acceso:"isla", total:16494947, estado:"secundaria", web:"https://www.booking.com/hotel/co/la-playita-isla-fuerte.es.html"},
+  {id:"coral", nombre:"Hotel Coral de Fuego", zona:"Isla Fuerte · Playa San Diego", acceso:"isla", total:21800000, estado:"descartable", web:"https://www.booking.com/hotel/co/coral-de-fuego.es.html"},
+  {id:"mulata", nombre:"Hotel Isla Mulata", zona:"Isla Grande · Islas del Rosario", acceso:"isla", total:16304806, estado:"descartable", web:"https://www.booking.com/hotel/co/isla-grande-islas-del-rosario.html"},
+  {id:"marazao", nombre:"Marazao Beach", zona:"Ubicación por confirmar", acceso:"isla", total:16919203, estado:"descartable", web:""},
+  {id:"tintipan", nombre:"Hotel Tintipán", zona:"Isla Tintipán · San Bernardo", acceso:"isla", total:19160000, estado:"descartable", web:"https://hoteltintipan.com/"},
+  {id:"river", nombre:"Hotel River City", zona:"Montería · Córdoba", acceso:"ruta", total:2600000, estado:"complemento", web:"https://www.google.com/maps/search/?api=1&query=Hotel+River+City+Carrera+5+34-68+Monteria"}
 ];
 
 const TAREAS = [
-  {id:"p2", prio:"media", t:"Laguna Beach: definir la noche que falta (el plan es de 4 noches)", q:"Angela"},
   {id:"p3", prio:"media", t:"Laguna Beach: pedir la mezcla de suites por escrito", q:"Angela"},
   {id:"p4", prio:"alta", t:"Averiguar el nombre real del hotel de El Porvenir", q:"Jorge"},
-  {id:"p5", prio:"alta", t:"Recotizar Arena Beach por 5 noches desde el 29", q:"Angela"},
   {id:"p6", prio:"alta", t:"Confirmar si la lancha es realmente excluyente", q:"Familia"},
   {id:"p7", prio:"media", t:"Calcular la comida en Arena Beach", q:"Familia"},
   {id:"p8", prio:"media", t:"Múcura: pedir la cotización con impuestos y con la niña de 4 años", q:"Angela"},
@@ -163,7 +161,7 @@ function limpiarPlan_(data) {
   }).filter(function (p) { return p[0] || p[1]; }) : [];
   const total = Number(data.total);
   const nRaw = Number(data.noches);
-  const noches = isFinite(nRaw) && nRaw >= 1 && nRaw <= 14 ? Math.round(nRaw) : 5;
+  const noches = isFinite(nRaw) && nRaw >= 1 && nRaw <= 14 ? Math.round(nRaw) : 4;
   let cabe = null;
   if (data.cabe === true || data.cabe === 1 || data.cabe === "1") cabe = true;
   if (data.cabe === false || data.cabe === 0 || data.cabe === "0") cabe = false;
@@ -214,7 +212,7 @@ function escribirPlanes_(planes) {
       o.tipo || "",
       o.acceso || cat.acceso || "",
       o.horas || "",
-      o.noches != null ? o.noches : 5,
+      o.noches != null ? o.noches : 4,
       o.total != null ? o.total : (cat.total != null ? cat.total : ""),
       o.cotizado || "",
       o.detalleCosto || "",
